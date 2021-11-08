@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "marking-api.Data", "marking-api.Data\marking-api.Data.csproj", "{6B65DA51-C670-4130-B61C-C91266CD636B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "marking-api.Data", "marking-api.Data\marking-api.Data.csproj", "{6B65DA51-C670-4130-B61C-C91266CD636B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "marking-api.DataModel", "marking-api.DataModel\marking-api.DataModel.csproj", "{49B60336-572D-4927-BE9A-64EC807D00DD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "marking-api.DataModel", "marking-api.DataModel\marking-api.DataModel.csproj", "{49B60336-572D-4927-BE9A-64EC807D00DD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "marking-api.Global", "marking-api.Global\marking-api.Global.csproj", "{32663CE1-632B-4ADD-96DB-180781265BA8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "marking-api.Global", "marking-api.Global\marking-api.Global.csproj", "{32663CE1-632B-4ADD-96DB-180781265BA8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "marking-api.API", "marking-api.API\marking-api.API.csproj", "{422F1EA0-382E-4F4F-B45D-00F3E4279306}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "marking-api.API", "marking-api.API\marking-api.API.csproj", "{422F1EA0-382E-4F4F-B45D-00F3E4279306}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
