@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,14 +24,16 @@ namespace marking_api.API
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, IWebHostEnvironment env)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env, MarkingDbContext dbContext)
         {
             Configuration = configuration;
             Env = env;
+            _dbContext = dbContext;
         }
 
         public IConfiguration Configuration { get; }
         public IWebHostEnvironment Env { get; set; }
+        private MarkingDbContext _dbContext { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -64,12 +67,14 @@ namespace marking_api.API
 
             if (Env.IsDevelopment())
             {
-                services.AddDbContext<MarkingDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
+                RelationalDatabaseFacadeExtensions.SetConnectionString(new DatabaseFacade(_dbContext), Configuration.GetConnectionString("DbConnection"));
+                services.AddDbContext<MarkingDbContext>(options => options.UseMySql(ServerVersion.AutoDetect(Configuration.GetConnectionString("DbConnection"))));
                 hangfireConnection = "DbConnection";
+                //options.UseSqlServer(Configuration.GetConnectionString("DbConnection"))
             } else
             {
-                services.AddDbContext<MarkingDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DbConnection"),
-                    options => options.CommandTimeout(300)));
+                RelationalDatabaseFacadeExtensions.SetConnectionString(new DatabaseFacade(_dbContext), Configuration.GetConnectionString("DbConnection"));
+                services.AddDbContext<MarkingDbContext>(options => options.UseMySql(ServerVersion.AutoDetect(Configuration.GetConnectionString("DbConnection"))));
                 hangfireConnection = "DbConnection";
             }
 
