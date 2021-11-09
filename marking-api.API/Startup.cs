@@ -4,21 +4,16 @@ using marking_api.Data;
 using marking_api.DataModel.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace marking_api.API
 {
@@ -69,12 +64,13 @@ namespace marking_api.API
             {
                 RelationalDatabaseFacadeExtensions.SetConnectionString(new DatabaseFacade(_dbContext), Configuration.GetConnectionString("DbConnection"));
                 services.AddDbContext<MarkingDbContext>(options => options.UseMySql(ServerVersion.AutoDetect(Configuration.GetConnectionString("DbConnection"))));
+                //services.AddDbContext<MarkingDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
                 hangfireConnection = "DbConnection";
-                //options.UseSqlServer(Configuration.GetConnectionString("DbConnection"))
             } else
             {
                 RelationalDatabaseFacadeExtensions.SetConnectionString(new DatabaseFacade(_dbContext), Configuration.GetConnectionString("DbConnection"));
                 services.AddDbContext<MarkingDbContext>(options => options.UseMySql(ServerVersion.AutoDetect(Configuration.GetConnectionString("DbConnection"))));
+                //services.AddDbContext<MarkingDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
                 hangfireConnection = "DbConnection";
             }
 
