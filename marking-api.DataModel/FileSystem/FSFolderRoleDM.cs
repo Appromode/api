@@ -1,23 +1,26 @@
 ﻿using marking_api.DataModel.CustomAttributes;
+using marking_api.DataModel.Enums;
+using marking_api.DataModel.Identity;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace marking_api.DataModel.FileSystem
 {
-    [Table("FSFolderFiles", Schema = "dbo")]
-    public class FSFolderFileDM : BaseDataModel
+    [Table("FSFolderRoles", Schema = "dbo")]
+    public class FSFolderRoleDM : BaseDataModel
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Int64 FSFolderFileId { get; set; }
+        public Int64 FolderRoleId { get; set; }
 
-        [ForeignKey("FSFileId")]
-        public Int64 FileId { get; set; }
+        [ForeignKey("RoleId")]
+        public Int64 RoleId { get; set; }
         [SwaggerExclude]
-        public FSFileDM File { get; set; }
+        public Role Role { get; set; }
 
-        [ForeignKey("FSFolderId")]
+        [ForeignKey("FSFoleId")]
         public Int64 FolderId { get; set; }
         [SwaggerExclude]
         public FSFolderDM Folder { get; set; }

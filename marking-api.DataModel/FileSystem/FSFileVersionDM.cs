@@ -22,14 +22,14 @@ namespace marking_api.DataModel.FileSystem
         [MaxLength(255)]
         public string UploadFileName { get; set; }
 
-        [SwaggerExclude]
         [ForeignKey("FSFileId")]
         public Int64? FileId { get; set; }
+        [SwaggerExclude]
         public virtual FSFileDM File { get; set; }
 
-        [SwaggerExclude]
         [ForeignKey("FSStateId")]
         public Int64? FileStateId { get; set; }
+        [SwaggerExclude]
         public FSFileStateDM FileState { get; set; }
     }
 }
