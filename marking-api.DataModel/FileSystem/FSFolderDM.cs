@@ -19,8 +19,8 @@ namespace marking_api.DataModel.FileSystem
         [MaxLength(255)]
         public string FolderDescription { get; set; }
 
-        [SwaggerExclude]
         public Int64? ParentFolderId { get; set; }
+        [SwaggerExclude]
         public virtual FSFolderDM ParentFolder { get; set; }
 
         [SwaggerExclude]

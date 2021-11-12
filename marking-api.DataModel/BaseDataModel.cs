@@ -10,6 +10,9 @@ namespace marking_api.DataModel
     {
         public bool canDelete { get; set; }
         public bool deleted { get; set; }
+        public DateTime createdAt { get; set; }
+        public DateTime updatedAt { get; set; }
+        public DateTime deletedAt { get; set; }
 
         public virtual bool Delete()
         {

@@ -1,25 +1,27 @@
 ﻿using marking_api.DataModel.CustomAttributes;
+using marking_api.DataModel.FileSystem;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace marking_api.DataModel.FileSystem
+namespace marking_api.DataModel.Project
 {
-    [Table("FSFolderFiles", Schema = "dbo")]
-    public class FSFolderFileDM : BaseDataModel
+    [Table("Projects", Schema = "dbo")]
+    public class ProjectDM : BaseDataModel
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Int64 FSFolderFileId { get; set; }
+        public Int64 ProjectId { get; set; }
+
+        public string ProjectName { get; set; }
+        public bool IsClosed { get; set; }
+        public bool EthicsAccepted { get; set; }
 
         [ForeignKey("FSFileId")]
         public Int64 FileId { get; set; }
         [SwaggerExclude]
         public FSFileDM File { get; set; }
 
-        [ForeignKey("FSFolderId")]
-        public Int64 FolderId { get; set; }
-        [SwaggerExclude]
-        public FSFolderDM Folder { get; set; }
+
     }
 }

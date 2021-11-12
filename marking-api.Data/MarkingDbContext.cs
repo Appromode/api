@@ -37,6 +37,8 @@ namespace marking_api.Data
         public DbSet<UserLogin> IdUserLogins { get; set; }
         public DbSet<Role> IdRoles { get; set; }
         public DbSet<RoleClaim> IdRoleClaims { get; set; }
+        public DbSet<RolePermission> IdRolePermissions { get; set; }
+        public DbSet<SiteArea> IdSiteAreas { get; set; }
 
         //File System
         public DbSet<FSFileDM> FSFiles { get; set; }
@@ -44,6 +46,7 @@ namespace marking_api.Data
         public DbSet<FSFileVersionDM> FSFileVersions { get; set; }
         public DbSet<FSFolderDM> FSFolders { get; set; }
         public DbSet<FSFolderFileDM> FSFolderFiles { get; set; }
+        public DbSet<FSFolderRoleDM> FSFolderRoles { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
