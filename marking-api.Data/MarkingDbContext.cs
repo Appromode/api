@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using marking_api.DataModel.Project;
 
 namespace marking_api.Data
 {
@@ -47,6 +48,9 @@ namespace marking_api.Data
         public DbSet<FSFolderDM> FSFolders { get; set; }
         public DbSet<FSFolderFileDM> FSFolderFiles { get; set; }
         public DbSet<FSFolderRoleDM> FSFolderRoles { get; set; }
+
+        //Project
+        public DbSet<GradeDM> Grades { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

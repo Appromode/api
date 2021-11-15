@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace marking_api.DataModel.FileSystem
 {
+    [GeneratedController("api/fsfolderroles")]
     [Table("FSFolderRoles", Schema = "dbo")]
     public class FSFolderRoleDM : BaseDataModel
     {

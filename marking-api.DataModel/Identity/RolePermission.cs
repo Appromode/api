@@ -9,6 +9,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace marking_api.DataModel.Identity
 {
+    [GeneratedController("api/rolepermission")]
     [Table("IdRolePermission", Schema = "dbo")]
     public class RolePermission : BaseDataModel
     {

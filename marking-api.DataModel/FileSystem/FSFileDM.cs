@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace marking_api.DataModel.FileSystem
 {
+    [GeneratedController("api/fsfile")]
     [Table("FSFiles", Schema = "dbo")]
     public class FSFileDM
     {

@@ -2,12 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using marking_api.DataModel.CustomAttributes;
 
 namespace marking_api.DataModel.Identity
 {
+    [GeneratedController("api/usertoken")]
+    [Table("IdUserTokens", Schema = "dbo")]
     public class UserToken : IdentityUserToken<string>
     {
         public UserToken() : base() { }

@@ -1,19 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using marking_api.DataModel.CustomAttributes;
 
 namespace marking_api.DataModel.Project
 {
-    [GeneratedController("api/group")]
-    [Table("Groups", Schema = "dbo")]
-    public class GroupDM : BaseDataModel
+    [GeneratedController("api/tag")]
+    [Table("Tags", Schema = "dbo")]
+    public class TagDM : BaseDataModel
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Int64 GroupId { get; set; }
+        public Int64 TagId { get; set; }
 
-        public string GroupName { get; set; }
-        public bool IsClosed { get; set; }
+        public string TagName { get; set; }
     }
 }

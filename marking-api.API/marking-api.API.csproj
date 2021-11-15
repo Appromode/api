@@ -37,9 +37,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Config\" />
-    <Folder Include="Controllers\Identity\" />
     <Folder Include="Controllers\FileSystem\" />
+    <Folder Include="Controllers\Project\" />
   </ItemGroup>
 
 </Project>
