@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace marking_api.DataModel.Project
 {
+    [GeneratedController("api/project")]
     [Table("Projects", Schema = "dbo")]
     public class ProjectDM : BaseDataModel
     {

@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace marking_api.DataModel.Project
 {
+    [GeneratedController("api/usergroup")]
     [Table("UserGroups", Schema = "dbo")]
     public class UserGroupDM : BaseDataModel
     {

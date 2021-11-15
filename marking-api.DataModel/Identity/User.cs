@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using marking_api.DataModel.CustomAttributes;
 using Microsoft.AspNetCore.Identity;
 
 namespace marking_api.DataModel.Identity
 {
+    [GeneratedController("api/user")]
     [Table("IdUsers", Schema = "dbo")]
     public class User : IdentityUser
     {

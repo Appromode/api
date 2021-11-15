@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using marking_api.DataModel.CustomAttributes;
 
 namespace marking_api.DataModel.Identity
 {
+    [GeneratedController("api/userlogin")]
+    [Table("IdUserLogins", Schema = "dbo")]
     public class UserLogin : IdentityUserLogin<string>
     {
         public UserLogin() : base() { }

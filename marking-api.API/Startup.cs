@@ -1,7 +1,9 @@
 using Hangfire;
 using Hangfire.SqlServer;
+using marking_api.API.Config;
 using marking_api.Data;
 using marking_api.DataModel.Identity;
+using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -19,16 +21,14 @@ namespace marking_api.API
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, IWebHostEnvironment env, MarkingDbContext dbContext)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
             Env = env;
-            _dbContext = dbContext;
         }
 
         public IConfiguration Configuration { get; }
         public IWebHostEnvironment Env { get; set; }
-        private MarkingDbContext _dbContext { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -60,21 +60,21 @@ namespace marking_api.API
                 });
             });
 
+            var serverVersion = new MySqlServerVersion(new Version(8, 0, 27));
+
             if (Env.IsDevelopment())
-            {
-                RelationalDatabaseFacadeExtensions.SetConnectionString(new DatabaseFacade(_dbContext), Configuration.GetConnectionString("DbConnection"));
-                services.AddDbContext<MarkingDbContext>(options => options.UseMySql(ServerVersion.AutoDetect(Configuration.GetConnectionString("DbConnection"))));
-                //services.AddDbContext<MarkingDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
+            {                
+                services.AddDbContext<MarkingDbContext>(options => options.UseMySql(Configuration.GetConnectionString("DbConnection"), serverVersion));
                 hangfireConnection = "DbConnection";
             } else
             {
-                RelationalDatabaseFacadeExtensions.SetConnectionString(new DatabaseFacade(_dbContext), Configuration.GetConnectionString("DbConnection"));
-                services.AddDbContext<MarkingDbContext>(options => options.UseMySql(ServerVersion.AutoDetect(Configuration.GetConnectionString("DbConnection"))));
-                //services.AddDbContext<MarkingDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
+                services.AddDbContext<MarkingDbContext>(options => options.UseMySql(Configuration.GetConnectionString("DbConnection"), serverVersion));
                 hangfireConnection = "DbConnection";
             }
 
             services.AddMvc(options => options.Filters.Add(typeof(AppInitialiserFilter)));
+            services.AddMvc(options => options.Conventions.Add(new GenericControllerRouteConvention()))
+                .ConfigureApplicationPartManager(m => m.FeatureProviders.Add(new GenericTypeControllerFeatureProvider()));
 
             services.AddIdentity<User, Role>(options => 
             options.SignIn.RequireConfirmedAccount = true)
@@ -100,10 +100,14 @@ namespace marking_api.API
             }));
 
             services.AddHangfireServer();
+
+            services.AddTransient(typeof(IGenericModelRepository<>), typeof(GenericModelRepository<>));
+            services.AddTransient(typeof(IGenericViewRepository<>), typeof(GenericViewRepository<>));
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, MarkingDbSeeder dbSeeder)
         {
             if (env.IsDevelopment())
             {
@@ -111,6 +115,9 @@ namespace marking_api.API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "marking_api.API v1"));
             }
+
+            if (dbSeeder != null)
+                dbSeeder.Migrate();
 
             app.UseHttpsRedirection();
 

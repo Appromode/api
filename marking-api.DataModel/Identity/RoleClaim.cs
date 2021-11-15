@@ -2,12 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using marking_api.DataModel.CustomAttributes;
 
 namespace marking_api.DataModel.Identity
 {
+    [GeneratedController("api/roleclaim")]
     [Table("IdRoleClaims", Schema = "dbo")]
     public class RoleClaim : IdentityRoleClaim<string>
     {

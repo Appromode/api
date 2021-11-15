@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace marking_api.DataModel.FileSystem
 {
+    [GeneratedController("api/fsfolderfile")]
     [Table("FSFolderFiles", Schema = "dbo")]
     public class FSFolderFileDM : BaseDataModel
     {
