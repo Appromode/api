@@ -16,14 +16,13 @@ using marking_api.DataModel.Project;
 
 namespace marking_api.Data
 {
-    public class MarkingDbContext: IdentityDbContext<User, Role, string, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
+    public class MarkingDbContext : IdentityDbContext<User, Role, string, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
     {
-        private readonly IWebHostEnvironment env;
         public string UserId { get; set; }
 
-        public MarkingDbContext(DbContextOptions<MarkingDbContext> options, IWebHostEnvironment env) :base(options)
+        public MarkingDbContext(DbContextOptions<MarkingDbContext> options) :base(options)
         {
-            this.env = env;
+
         }
 
         public MarkingDbContext()
@@ -51,19 +50,25 @@ namespace marking_api.Data
 
         //Project
         public DbSet<GradeDM> Grades { get; set; }
+        public DbSet<GroupDM> Groups { get; set; }
+        public DbSet<GroupMarkerDM> GroupMarkers { get; set; }
+        public DbSet<ProjectDM> Projects { get; set; }
+        public DbSet<TagDM> Tags { get; set; }
+        public DbSet<UserGradeDM> UserGrades { get; set; }
+        public DbSet<UserGroupDM> UserGroups { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
+            //    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            //    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables()
                 .Build();
 
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(configuration.GetConnectionString("DbConnection"));
+                optionsBuilder.UseMySql(ServerVersion.AutoDetect(configuration.GetConnectionString("DbConnection")));
             }
         }
 

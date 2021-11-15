@@ -60,17 +60,15 @@ namespace marking_api.API
                 });
             });
 
+            var serverVersion = new MySqlServerVersion(new Version(8, 0, 27));
+
             if (Env.IsDevelopment())
-            {
-                RelationalDatabaseFacadeExtensions.SetConnectionString(new DatabaseFacade(MarkingDbContext), Configuration.GetConnectionString("DbConnection"));
-                services.AddDbContext<MarkingDbContext>(options => options.UseMySql(ServerVersion.AutoDetect(Configuration.GetConnectionString("DbConnection"))));
-                services.AddDbContext<MarkingDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
+            {                
+                services.AddDbContext<MarkingDbContext>(options => options.UseMySql(Configuration.GetConnectionString("DbConnection"), serverVersion));
                 hangfireConnection = "DbConnection";
             } else
             {
-                RelationalDatabaseFacadeExtensions.SetConnectionString(new DatabaseFacade(MarkingDbContext), Configuration.GetConnectionString("DbConnection"));
-                services.AddDbContext<MarkingDbContext>(options => options.UseMySql(ServerVersion.AutoDetect(Configuration.GetConnectionString("DbConnection"))));
-                services.AddDbContext<MarkingDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
+                services.AddDbContext<MarkingDbContext>(options => options.UseMySql(Configuration.GetConnectionString("DbConnection"), serverVersion));
                 hangfireConnection = "DbConnection";
             }
 
@@ -109,7 +107,7 @@ namespace marking_api.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, MarkingDbSeeder dbSeeder)
         {
             if (env.IsDevelopment())
             {
@@ -117,6 +115,9 @@ namespace marking_api.API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "marking_api.API v1"));
             }
+
+            if (dbSeeder != null)
+                dbSeeder.Migrate();
 
             app.UseHttpsRedirection();
 
