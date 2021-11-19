@@ -65,11 +65,11 @@ namespace marking_api.API
             if (Env.IsDevelopment())
             {                
                 services.AddDbContext<MarkingDbContext>(options => options.UseMySql(Configuration.GetConnectionString("DbConnection"), serverVersion));
-                hangfireConnection = "DbConnection";
+                //hangfireConnection = "DbConnection";
             } else
             {
                 services.AddDbContext<MarkingDbContext>(options => options.UseMySql(Configuration.GetConnectionString("DbConnection"), serverVersion));
-                hangfireConnection = "DbConnection";
+                //hangfireConnection = "DbConnection";
             }
 
             services.AddMvc(options => options.Filters.Add(typeof(AppInitialiserFilter)));
@@ -83,23 +83,23 @@ namespace marking_api.API
 
             services.AddHttpContextAccessor();
 
-            services.AddHangfire(configuration => configuration.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
-            .UseSimpleAssemblyNameTypeSerializer()
-            .UseSerializerSettings(new JsonSerializerSettings 
-            {
-                ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
-                PreserveReferencesHandling = PreserveReferencesHandling.Objects
-            })
-            .UseSqlServerStorage(Configuration.GetConnectionString(hangfireConnection), new SqlServerStorageOptions 
-            {
-                CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
-                SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
-                QueuePollInterval = TimeSpan.Zero,
-                UseRecommendedIsolationLevel = true,
-                DisableGlobalLocks = true
-            }));
+            //services.AddHangfire(configuration => configuration.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+            //.UseSimpleAssemblyNameTypeSerializer()
+            //.UseSerializerSettings(new JsonSerializerSettings 
+            //{
+            //    ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+            //    PreserveReferencesHandling = PreserveReferencesHandling.Objects
+            //})
+            //.UseSqlServerStorage(Configuration.GetConnectionString(hangfireConnection), new SqlServerStorageOptions 
+            //{
+            //    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+            //    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+            //    QueuePollInterval = TimeSpan.Zero,
+            //    UseRecommendedIsolationLevel = true,
+            //    DisableGlobalLocks = true
+            //}));
 
-            services.AddHangfireServer();
+            //services.AddHangfireServer();
 
             services.AddTransient(typeof(IGenericModelRepository<>), typeof(GenericModelRepository<>));
             services.AddTransient(typeof(IGenericViewRepository<>), typeof(GenericViewRepository<>));
