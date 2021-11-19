@@ -5,7 +5,9 @@ using marking_api.Data;
 using marking_api.DataModel.Identity;
 using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -14,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System;
 using System.Collections.Generic;
 
@@ -33,42 +36,42 @@ namespace marking_api.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var hangfireConnection = "";
+            //var hangfireConnection = "";
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "marking_api.API", Version = "v1" });
                 c.SchemaFilter<SwaggerExcludeFilter>();
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    Description = "JWT Authorisation header using the bearer scheme",
-                    Name = "Authorisation",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey
-                });
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    { new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference
-                        {
-                            Id = "Bearer",
-                            Type = ReferenceType.SecurityScheme
-                        }
-                    }, new List<string>() }
-                });
+                //c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                //{
+                //    Description = "JWT Authorisation header using the bearer scheme",
+                //    Name = "Authorisation",
+                //    In = ParameterLocation.Header,
+                //    Type = SecuritySchemeType.ApiKey
+                //});
+                //c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                //{
+                //    { new OpenApiSecurityScheme
+                //    {
+                //        Reference = new OpenApiReference
+                //        {
+                //            Id = "Bearer",
+                //            Type = ReferenceType.SecurityScheme
+                //        }
+                //    }, new List<string>() }
+                //});
             });
 
             var serverVersion = new MySqlServerVersion(new Version(8, 0, 27));
 
             if (Env.IsDevelopment())
             {                
-                services.AddDbContext<MarkingDbContext>(options => options.UseMySql(Configuration.GetConnectionString("DbConnection"), serverVersion));
+                services.AddDbContext<MarkingDbContext>(options => options.UseMySql(Configuration.GetConnectionString("DbConnection"), serverVersion, o => o.SchemaBehavior(MySqlSchemaBehavior.Ignore)));
                 //hangfireConnection = "DbConnection";
             } else
             {
-                services.AddDbContext<MarkingDbContext>(options => options.UseMySql(Configuration.GetConnectionString("DbConnection"), serverVersion));
+                services.AddDbContext<MarkingDbContext>(options => options.UseMySql(Configuration.GetConnectionString("DbConnection"), serverVersion, o => o.SchemaBehavior(MySqlSchemaBehavior.Ignore)));
                 //hangfireConnection = "DbConnection";
             }
 
@@ -101,6 +104,8 @@ namespace marking_api.API
 
             //services.AddHangfireServer();
 
+            services.AddScoped<MarkingDbSeeder>();
+
             services.AddTransient(typeof(IGenericModelRepository<>), typeof(GenericModelRepository<>));
             services.AddTransient(typeof(IGenericViewRepository<>), typeof(GenericViewRepository<>));
             services.AddTransient<IUnitOfWork, UnitOfWork>();
@@ -113,11 +118,20 @@ namespace marking_api.API
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "marking_api.API v1"));
+                app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "marking_api.API v1"); });
             }
 
             if (dbSeeder != null)
+            {
                 dbSeeder.Migrate();
+            }
+
+            app.UseExceptionHandler(c => c.Run(async context => 
+            {
+                var exception = context.Features.Get<IExceptionHandlerPathFeature>().Error;
+                var response = new { error = exception.Message };
+                await context.Response.WriteAsJsonAsync(response);
+            }));
 
             app.UseHttpsRedirection();
 

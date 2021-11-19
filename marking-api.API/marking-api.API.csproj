@@ -7,6 +7,10 @@
     <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile></DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Hangfire.AspNetCore" Version="1.7.27" />
     <PackageReference Include="Hangfire.Core" Version="1.7.27" />
