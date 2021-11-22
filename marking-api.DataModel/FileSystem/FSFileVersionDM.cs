@@ -12,7 +12,7 @@ namespace marking_api.DataModel.FileSystem
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Int64 FSFileVersionId { get; set; }
+        public Int64 FileVersionId { get; set; }
 
         public Byte[] FileData { get; set; }
 
@@ -23,12 +23,12 @@ namespace marking_api.DataModel.FileSystem
         [MaxLength(255)]
         public string UploadFileName { get; set; }
 
-        [ForeignKey("FSFileId")]
+        [ForeignKey("FileId")]
         public Int64? FileId { get; set; }
         [SwaggerExclude]
         public virtual FSFileDM File { get; set; }
 
-        [ForeignKey("FSStateId")]
+        [ForeignKey("StateId")]
         public Int64? FileStateId { get; set; }
         [SwaggerExclude]
         public FSFileStateDM FileState { get; set; }

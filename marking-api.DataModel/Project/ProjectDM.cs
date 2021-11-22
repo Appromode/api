@@ -18,10 +18,10 @@ namespace marking_api.DataModel.Project
         public bool IsClosed { get; set; }
         public bool EthicsAccepted { get; set; }
 
-        [ForeignKey("FSFileId")]
-        public Int64 FileId { get; set; }
+        [ForeignKey("FileId")]
+        public Int64 EthicsFormId { get; set; }
         [SwaggerExclude]
-        public FSFileDM File { get; set; }
+        public FSFileDM EthicsForm { get; set; }
 
 
     }

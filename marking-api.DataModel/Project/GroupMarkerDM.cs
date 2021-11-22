@@ -12,7 +12,7 @@ namespace marking_api.DataModel.Project
 {
     [GeneratedController("api/groupmarker")]
     [Table("GroupMarkers", Schema = "dbo")]
-    public class GroupMarkerDM
+    public class GroupMarkerDM : BaseDataModel
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -22,5 +22,10 @@ namespace marking_api.DataModel.Project
         public Int64 UserId { get; set; }
         [SwaggerExclude]
         public virtual User User { get; set; }
+
+        [ForeignKey("GroupId")]
+        public Int64 GroupId { get; set; }
+        [SwaggerExclude]
+        public virtual GroupDM Group { get; set; }
     }
 }

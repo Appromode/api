@@ -8,11 +8,11 @@ namespace marking_api.DataModel.FileSystem
 {
     [GeneratedController("api/fsfile")]
     [Table("FSFiles", Schema = "dbo")]
-    public class FSFileDM
+    public class FSFileDM : BaseDataModel
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Int64 FSFileId { get; set; }
+        public Int64 FileId { get; set; }
 
         [MaxLength(255)]
         public string FileName { get; set; }
@@ -20,7 +20,7 @@ namespace marking_api.DataModel.FileSystem
         [MaxLength(255)]
         public string FileDescription { get; set; }
 
-        [ForeignKey("FSFolderId")]
+        [ForeignKey("FolderId")]
         public Int64? FolderID { get; set; }
         [SwaggerExclude]
         public virtual FSFolderDM Folder { get; set; }

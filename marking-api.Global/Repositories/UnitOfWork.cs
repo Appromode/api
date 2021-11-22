@@ -18,9 +18,19 @@ namespace marking_api.Global.Repositories
         IFSFileVersionRepository FSFileVersions { get; }
         IFSFolderFileRepository FSFolderFiles { get; }
         IFSFolderRepository FSFolders { get; }
+        IFSFolderRoleRepository FSFolderRoles { get; }
+        IGradeRepository Grades { get; }
+        IGroupMarkerRepository GroupMarkers { get; }
+        IGroupRepository Groups { get; }
+        IProjectRepository Projects { get; }
         IRoleClaimRepository RoleClaims { get; }
         IRoleRepository Roles { get; }
+        IRolePermissionRepository RolePermissions { get; }
+        ISiteAreaRepository SiteAreas { get; }
+        ITagRepository Tags { get; }
         IUserClaimRepository UserClaims { get; }
+        IUserGradeRepository UserGrades { get; }
+        IUserGroupRepository UserGroups { get; }
         IUserLoginRepository UserLogins { get; }
         IUserRepository Users { get; }
         IUserRoleRepository UserRoles { get; }
@@ -48,9 +58,19 @@ namespace marking_api.Global.Repositories
             FSFileVersions = new FSFileVersionRepository(dbContext);
             FSFolderFiles = new FSFolderFileRepository(dbContext);
             FSFolders = new FSFolderRepository(dbContext);
+            FSFolderRoles = new FSFolderRoleRepository(dbContext);
+            Grades = new GradeRepository(dbContext);
+            GroupMarkers = new GroupMarkerRepository(dbContext);
+            Groups = new GroupRepository(dbContext);
+            Projects = new ProjectRepository(dbContext);
             RoleClaims = new RoleClaimRepository(dbContext);
+            RolePermissions = new RolePermissionRepository(dbContext);
             Roles = new RoleRepository(dbContext);
+            SiteAreas = new SiteAreaRepository(dbContext);
+            Tags = new TagRepository(dbContext);
             UserClaims = new UserClaimRepository(dbContext);
+            UserGrades = new UserGradeRepository(dbContext);
+            UserGroups = new UserGroupRepository(dbContext);
             UserLogins = new UserLoginRepository(dbContext);
             Users = new UserRepository(dbContext);
             UserRoles = new UserRoleRepository(dbContext);
@@ -65,9 +85,19 @@ namespace marking_api.Global.Repositories
         public IFSFileVersionRepository FSFileVersions { get; private set; }
         public IFSFolderFileRepository FSFolderFiles { get; private set; }
         public IFSFolderRepository FSFolders { get; private set; }
+        public IFSFolderRoleRepository FSFolderRoles { get; private set; }
+        public IGradeRepository Grades { get; private set; }
+        public IGroupMarkerRepository GroupMarkers { get; private set; }
+        public IGroupRepository Groups { get; private set; }
+        public IProjectRepository Projects { get; private set; }
         public IRoleClaimRepository RoleClaims { get; private set; }
+        public IRolePermissionRepository RolePermissions { get; private set; }
         public IRoleRepository Roles { get; private set; }
+        public ISiteAreaRepository SiteAreas { get; private set; }
+        public ITagRepository Tags { get; private set; }
         public IUserClaimRepository UserClaims { get; private set; }
+        public IUserGradeRepository UserGrades { get; private set; }
+        public IUserGroupRepository UserGroups { get; private set; }
         public IUserLoginRepository UserLogins { get; private set; }
         public IUserRepository Users { get; private set; }
         public IUserRoleRepository UserRoles { get; private set; }

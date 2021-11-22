@@ -12,7 +12,7 @@ namespace marking_api.DataModel.FileSystem
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Int64 FSFolderId { get; set; }
+        public Int64 FolderId { get; set; }
 
         [MaxLength(255)]
         public string FolderName { get; set; }

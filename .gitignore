@@ -6,7 +6,7 @@
 # User-specific files
 *.rsuser
 *.suo
-.suo
+.suo/
 *.user
 *.userosscache
 *.sln.docstates
@@ -101,6 +101,7 @@ StyleCopReport.xml
 *.pidb
 *.svclog
 *.scc
+appsettings.*
 
 # Chutzpah Test files
 _Chutzpah*

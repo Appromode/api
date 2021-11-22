@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using marking_api.Data;
 
 namespace marking_api.Data.Migrations
 {
     [DbContext(typeof(MarkingDbContext))]
-    partial class MarkingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211122131006_AddBaseDMToFileDM")]
+    partial class AddBaseDMToFileDM
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -636,33 +638,13 @@ namespace marking_api.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    b.Property<long>("GroupId")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("UserId1")
                         .HasColumnType("varchar(255)");
 
-                    b.Property<bool>("canDelete")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime>("createdAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("deleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime>("deletedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("updatedAt")
-                        .HasColumnType("datetime(6)");
-
                     b.HasKey("GroupMarkerId");
-
-                    b.HasIndex("GroupId");
 
                     b.HasIndex("UserId1");
 
@@ -755,21 +737,6 @@ namespace marking_api.Data.Migrations
 
                     b.Property<string>("UserId1")
                         .HasColumnType("varchar(255)");
-
-                    b.Property<bool>("canDelete")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime>("createdAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("deleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime>("deletedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("updatedAt")
-                        .HasColumnType("datetime(6)");
 
                     b.HasKey("UserGradeId");
 
@@ -1007,18 +974,10 @@ namespace marking_api.Data.Migrations
 
             modelBuilder.Entity("marking_api.DataModel.Project.GroupMarkerDM", b =>
                 {
-                    b.HasOne("marking_api.DataModel.Project.GroupDM", "Group")
-                        .WithMany()
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("marking_api.DataModel.Identity.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId1")
                         .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Group");
 
                     b.Navigation("User");
                 });
