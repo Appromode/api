@@ -40,4 +40,8 @@
     <ProjectReference Include="..\marking-api.Global\marking-api.Global.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\DbViews\" />
+  </ItemGroup>
+
 </Project>

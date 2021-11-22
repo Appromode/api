@@ -8,7 +8,7 @@ namespace marking_api.DataModel.Project
 {
     [GeneratedController("api/usergrade")]
     [Table("UserGrades", Schema = "dbo")]
-    public class UserGradeDM
+    public class UserGradeDM : BaseDataModel
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
