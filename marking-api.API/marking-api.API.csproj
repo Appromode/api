@@ -40,9 +40,4 @@
     <ProjectReference Include="..\marking-api.Global\marking-api.Global.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\FileSystem\" />
-    <Folder Include="Controllers\Project\" />
-  </ItemGroup>
-
 </Project>

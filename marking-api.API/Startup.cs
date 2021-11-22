@@ -19,6 +19,7 @@ using Newtonsoft.Json;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace marking_api.API
 {
@@ -43,6 +44,7 @@ namespace marking_api.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "marking_api.API", Version = "v1" });
                 c.SchemaFilter<SwaggerExcludeFilter>();
+                c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
                 //c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 //{
                 //    Description = "JWT Authorisation header using the bearer scheme",
@@ -75,14 +77,22 @@ namespace marking_api.API
                 //hangfireConnection = "DbConnection";
             }
 
-            services.AddMvc(options => options.Filters.Add(typeof(AppInitialiserFilter)));
-            services.AddMvc(options => options.Conventions.Add(new GenericControllerRouteConvention()))
-                .ConfigureApplicationPartManager(m => m.FeatureProviders.Add(new GenericTypeControllerFeatureProvider()));
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(typeof(AppInitialiserFilter));
+                //options.Conventions.Add(new GenericControllerRouteConvention());
+            }).AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });//.ConfigureApplicationPartManager(m => 
+            //{
+            //    m.FeatureProviders.Add(new GenericTypeControllerFeatureProvider());
+            //});
 
-            services.AddIdentity<User, Role>(options => 
-            options.SignIn.RequireConfirmedAccount = true)
-                .AddDefaultTokenProviders()
-                .AddEntityFrameworkStores<MarkingDbContext>();
+            services.AddIdentity<User, Role>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = true;
+            }).AddDefaultTokenProviders().AddEntityFrameworkStores<MarkingDbContext>();
 
             services.AddHttpContextAccessor();
 
@@ -118,7 +128,10 @@ namespace marking_api.API
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "marking_api.API v1"); });
+                app.UseSwaggerUI(c => 
+                { 
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "marking_api.API v1"); 
+                });
             }
 
             if (dbSeeder != null)

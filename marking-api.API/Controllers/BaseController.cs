@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace marking_api.API.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
+    [ApiController]
     public class BaseController<T> : ControllerBase where T : class
     {
         protected IGenericModelRepository<T> _genericModelRepository;

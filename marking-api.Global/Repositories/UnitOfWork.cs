@@ -20,6 +20,7 @@ namespace marking_api.Global.Repositories
         IFSFolderRepository FSFolders { get; }
         IRoleClaimRepository RoleClaims { get; }
         IRoleRepository Roles { get; }
+        ISiteAreaRepository SiteAreas { get; }
         IUserClaimRepository UserClaims { get; }
         IUserLoginRepository UserLogins { get; }
         IUserRepository Users { get; }
@@ -50,6 +51,7 @@ namespace marking_api.Global.Repositories
             FSFolders = new FSFolderRepository(dbContext);
             RoleClaims = new RoleClaimRepository(dbContext);
             Roles = new RoleRepository(dbContext);
+            SiteAreas = new SiteAreaRepository(dbContext);
             UserClaims = new UserClaimRepository(dbContext);
             UserLogins = new UserLoginRepository(dbContext);
             Users = new UserRepository(dbContext);
@@ -67,6 +69,7 @@ namespace marking_api.Global.Repositories
         public IFSFolderRepository FSFolders { get; private set; }
         public IRoleClaimRepository RoleClaims { get; private set; }
         public IRoleRepository Roles { get; private set; }
+        public ISiteAreaRepository SiteAreas { get; private set; }
         public IUserClaimRepository UserClaims { get; private set; }
         public IUserLoginRepository UserLogins { get; private set; }
         public IUserRepository Users { get; private set; }
