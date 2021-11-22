@@ -11,14 +11,14 @@ namespace marking_api.DataModel.FileSystem
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Int64 FSFolderFileId { get; set; }
+        public Int64 FolderFileId { get; set; }
 
-        [ForeignKey("FSFileId")]
+        [ForeignKey("FileId")]
         public Int64 FileId { get; set; }
         [SwaggerExclude]
         public FSFileDM File { get; set; }
 
-        [ForeignKey("FSFolderId")]
+        [ForeignKey("FolderId")]
         public Int64 FolderId { get; set; }
         [SwaggerExclude]
         public FSFolderDM Folder { get; set; }

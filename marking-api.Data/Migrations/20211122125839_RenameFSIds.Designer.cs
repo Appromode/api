@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using marking_api.Data;
 
 namespace marking_api.Data.Migrations
 {
     [DbContext(typeof(MarkingDbContext))]
-    partial class MarkingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211122125839_RenameFSIds")]
+    partial class RenameFSIds
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,21 +35,6 @@ namespace marking_api.Data.Migrations
 
                     b.Property<long?>("FolderID")
                         .HasColumnType("bigint");
-
-                    b.Property<bool>("canDelete")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime>("createdAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("deleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime>("deletedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("updatedAt")
-                        .HasColumnType("datetime(6)");
 
                     b.HasKey("FileId");
 

@@ -21,7 +21,7 @@ namespace marking_api.DataModel.FileSystem
         [SwaggerExclude]
         public Role Role { get; set; }
 
-        [ForeignKey("FSFoleId")]
+        [ForeignKey("FolderId")]
         public Int64 FolderId { get; set; }
         [SwaggerExclude]
         public FSFolderDM Folder { get; set; }
