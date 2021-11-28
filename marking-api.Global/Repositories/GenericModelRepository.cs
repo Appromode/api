@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using marking_api.Data;
+using marking_api.Global.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 
@@ -16,10 +17,14 @@ namespace marking_api.Global.Repositories
         void Add(T obj);
         void AddRange(IEnumerable<T> obj);
         void Update(T obj);
+        void AddOrUpdate(T obj);
+        void AddOrUpdateRange(IEnumerable<T> obj);
+        void AddUpdateDeleteRange(IEnumerable<T> obj, IEnumerable<T> existing);
         void Delete(T obj);
         void Delete(object id);
         void DeleteRange(IEnumerable<T> obj);
         void Save();
+        public bool IsBeingTracked<TType>(T entity);
     }
 
     public class GenericModelRepository<T> : IGenericModelRepository<T> where T : class
@@ -46,7 +51,7 @@ namespace marking_api.Global.Repositories
             if (orderBy != null)
                 query = orderBy(query);
 
-            return query.ToList();
+            return query.AsNoTracking().ToList();
         }
 
         public T GetById<Type>(Type id, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
@@ -91,6 +96,55 @@ namespace marking_api.Global.Repositories
             _dbContext.Entry(obj).State = EntityState.Modified;
         }
 
+        public void AddOrUpdate(T entity)
+        {
+            if (entity == null)
+                throw new ArgumentNullException("Entity is null");
+
+            var idName = _dbContext.Model.FindEntityType(typeof(T)).FindPrimaryKey().Properties.Single().Name;
+            var id = typeof(T).GetProperty(idName).GetValue(entity, null);
+
+            var a = _entities.Find(id);
+            if (a == null)
+                _entities.Add(a);
+            else
+                _dbContext.Entry(a).CurrentValues.SetValues(entity);
+
+            Save();
+        }
+
+        public void AddOrUpdateRange(IEnumerable<T> objList)
+        {
+            if (objList == null)
+                throw new ArgumentNullException("objList is null");
+
+            var idName = _dbContext.Model.FindEntityType(typeof(T)).FindPrimaryKey().Properties.Single().Name;
+            var idProp = typeof(T).GetProperty(idName);
+            foreach (var entity in objList)
+            {
+                var id = idProp.GetValue(entity, null);
+                var a = _entities.Find(id);
+                if (a == null)
+                    _entities.Add(a);
+                else
+                    _dbContext.Entry(a).CurrentValues.SetValues(entity);
+            }
+            Save();
+        }
+
+        public void AddUpdateDeleteRange(IEnumerable<T> objList, IEnumerable<T> existing)
+        {
+            var idName = _dbContext.Model.FindEntityType(typeof(T)).FindPrimaryKey().Properties.Single().Name;
+
+            AddOrUpdateRange(objList);
+            foreach (var entity in existing)
+            {
+                if (existing.Any(x => x.GetType().GetProperty(idName) == entity.GetType().GetProperty(idName)))
+                    Delete(entity);
+            }
+            Save();
+        }
+
         public void Delete(T obj)
         {
             if (obj == null)
@@ -118,6 +172,23 @@ namespace marking_api.Global.Repositories
         public void Save()
         {
             _dbContext.SaveChanges();
+        }        
+
+        public bool IsBeingTracked<TType>(T entity)
+        {
+            try
+            {
+                var idKey = _dbContext.Model.FindEntityType(typeof(T)).FindPrimaryKey();
+                var idName = idKey.Properties.Single().Name;
+                var entityId = entity.GetPropertyValue<TType>(idName);
+                var entries = _dbContext.ChangeTracker.Entries<T>().ToList();
+                var isTracked = entries.Any(x => x.Entity.GetPropertyValue<TType>(idName).Equals(entityId));
+
+                return isTracked;
+            } catch (Exception ex)
+            {
+                return true;
+            }
         }
     }
 }

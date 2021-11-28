@@ -1,8 +1,8 @@
 ﻿using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using marking_api.DataModel.Identity;
 using marking_api.Global.Extensions;
+using marking_api.DataModel.DTOs;
 
 namespace marking_api.API.Controllers.Identity
 {
@@ -18,14 +18,14 @@ namespace marking_api.API.Controllers.Identity
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(User)))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserDTO)))]
         public IActionResult Get()
         {
             return Ok(_unitOfWork.Users.Get());
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(User)))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserDTO)))]
         public IActionResult Get(string id)
         {
             var user = _unitOfWork.Users.GetById(id);
@@ -36,8 +36,8 @@ namespace marking_api.API.Controllers.Identity
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(User)))]
-        public IActionResult Post([FromBody]User user)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserDTO)))]
+        public IActionResult Post([FromBody] UserDTO user)
         {
             if (user == null)
                 return BadRequest();
@@ -52,8 +52,8 @@ namespace marking_api.API.Controllers.Identity
         }
 
         [HttpPut]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(User)))]
-        public IActionResult Put(string id, [FromBody] User user)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserDTO)))]
+        public IActionResult Put(string id, [FromBody] UserDTO user)
         {
             if (user == null)
                 return BadRequest();
@@ -71,7 +71,7 @@ namespace marking_api.API.Controllers.Identity
         }
 
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(User)))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserDTO)))]
         public IActionResult Delete(string id)
         {
             var user = _unitOfWork.Users.GetById(id);
