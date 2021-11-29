@@ -35,40 +35,40 @@ namespace marking_api.API.Controllers.Identity
                 return Ok(user);
         }
 
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserDTO)))]
-        public IActionResult Post([FromBody] UserDTO user)
-        {
-            if (user == null)
-                return BadRequest();
+        //[HttpPost]
+        //[ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserDTO)))]
+        //public IActionResult Post([FromBody] UserDTO user)
+        //{
+        //    if (user == null)
+        //        return BadRequest();
 
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState.GetErrorMessages());
+        //    if (!ModelState.IsValid)
+        //        return BadRequest(ModelState.GetErrorMessages());
 
-            _unitOfWork.Users.Update(user);
-            _unitOfWork.Save();
+        //    _unitOfWork.Users.Update(user);
+        //    _unitOfWork.Save();
 
-            return Ok(user);
-        }
+        //    return Ok(user);
+        //}
 
-        [HttpPut]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserDTO)))]
-        public IActionResult Put(string id, [FromBody] UserDTO user)
-        {
-            if (user == null)
-                return BadRequest();
+        //[HttpPut]
+        //[ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserDTO)))]
+        //public IActionResult Put(string id, [FromBody] UserDTO user)
+        //{
+        //    if (user == null)
+        //        return BadRequest();
 
-            if (id != user.Id)
-                return BadRequest("Id Mismatch");
+        //    if (id != user.Id)
+        //        return BadRequest("Id Mismatch");
 
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState.GetErrorMessages());
+        //    if (!ModelState.IsValid)
+        //        return BadRequest(ModelState.GetErrorMessages());
 
-            _unitOfWork.Users.Update(user);
-            _unitOfWork.Save();
+        //    _unitOfWork.Users.Update(user);
+        //    _unitOfWork.Save();
 
-            return Ok(user);
-        }
+        //    return Ok(user);
+        //}
 
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserDTO)))]
