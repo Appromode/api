@@ -39,6 +39,8 @@ namespace marking_api.API
         {
             //var hangfireConnection = "";
 
+            services.AddCors(options => { options.AddPolicy(name: "_myAllowSpecificOrigins", builder => { builder.WithOrigins("http://localhost:3000"); }); });
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -123,7 +125,7 @@ namespace marking_api.API
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, MarkingDbSeeder dbSeeder)
-        {
+        {            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -150,6 +152,8 @@ namespace marking_api.API
 
             app.UseRouting();
 
+            app.UseCors("_myAllowSpecificOrigins");
+            
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
