@@ -36,7 +36,7 @@ namespace marking_api.API.Controllers.Project
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(TagDM)))]
-        public IActionResult Post([FromBody] TagDM tag)
+        public IActionResult Add([FromBody] TagDM tag)
         {
             if (tag == null)
                 return BadRequest();
@@ -44,7 +44,7 @@ namespace marking_api.API.Controllers.Project
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            _unitOfWork.Tags.Update(tag);
+            _unitOfWork.Tags.Add(tag);
             _unitOfWork.Save();
 
             return Ok(tag);
@@ -52,7 +52,7 @@ namespace marking_api.API.Controllers.Project
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(TagDM)))]
-        public IActionResult Put(long id, [FromBody] TagDM tag)
+        public IActionResult Update(long id, [FromBody] TagDM tag)
         {
             if (tag == null)
                 return BadRequest();

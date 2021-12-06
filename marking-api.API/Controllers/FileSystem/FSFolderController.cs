@@ -36,7 +36,7 @@ namespace marking_api.API.Controllers.FileSystem
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(FSFolderDM)))]
-        public IActionResult Post([FromBody] FSFolderDM folderRole)
+        public IActionResult Add([FromBody] FSFolderDM folderRole)
         {
             if (folderRole == null)
                 return BadRequest();
@@ -44,7 +44,7 @@ namespace marking_api.API.Controllers.FileSystem
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            _unitOfWork.FSFolders.Update(folderRole);
+            _unitOfWork.FSFolders.Add(folderRole);
             _unitOfWork.Save();
 
             return Ok(folderRole);
@@ -52,7 +52,7 @@ namespace marking_api.API.Controllers.FileSystem
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(FSFolderDM)))]
-        public IActionResult Put(long id, [FromBody] FSFolderDM folderRole)
+        public IActionResult Update(long id, [FromBody] FSFolderDM folderRole)
         {
             if (folderRole == null)
                 return BadRequest();

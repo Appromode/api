@@ -36,7 +36,7 @@ namespace marking_api.API.Controllers.FileSystem
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(FSFolderFileDM)))]
-        public IActionResult Post([FromBody] FSFolderFileDM folderFile)
+        public IActionResult Add([FromBody] FSFolderFileDM folderFile)
         {
             if (folderFile == null)
                 return BadRequest();
@@ -44,7 +44,7 @@ namespace marking_api.API.Controllers.FileSystem
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            _unitOfWork.FSFolderFiles.Update(folderFile);
+            _unitOfWork.FSFolderFiles.Add(folderFile);
             _unitOfWork.Save();
 
             return Ok(folderFile);
@@ -52,7 +52,7 @@ namespace marking_api.API.Controllers.FileSystem
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(FSFolderFileDM)))]
-        public IActionResult Put(long id, [FromBody] FSFolderFileDM folderFile)
+        public IActionResult Update(long id, [FromBody] FSFolderFileDM folderFile)
         {
             if (folderFile == null)
                 return BadRequest();

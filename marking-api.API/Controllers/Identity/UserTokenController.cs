@@ -36,7 +36,7 @@ namespace marking_api.API.Controllers.Identity
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserToken)))]
-        public IActionResult Post([FromBody] UserToken userToken)
+        public IActionResult Add([FromBody] UserToken userToken)
         {
             if (userToken == null)
                 return BadRequest();
@@ -44,7 +44,7 @@ namespace marking_api.API.Controllers.Identity
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            _unitOfWork.UserTokens.Update(userToken);
+            _unitOfWork.UserTokens.Add(userToken);
             _unitOfWork.Save();
 
             return Ok(userToken);
@@ -52,7 +52,7 @@ namespace marking_api.API.Controllers.Identity
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserToken)))]
-        public IActionResult Put(string name, [FromBody] UserToken userToken)
+        public IActionResult Update(string name, [FromBody] UserToken userToken)
         {
             if (userToken == null)
                 return BadRequest();

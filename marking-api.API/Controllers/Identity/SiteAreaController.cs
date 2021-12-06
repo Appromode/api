@@ -36,7 +36,7 @@ namespace marking_api.API.Controllers.Identity
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(SiteArea)))]
-        public IActionResult Post([FromBody] SiteArea siteArea)
+        public IActionResult Add([FromBody] SiteArea siteArea)
         {
             if (siteArea == null)
                 return BadRequest();
@@ -44,7 +44,7 @@ namespace marking_api.API.Controllers.Identity
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            _unitOfWork.SiteAreas.Update(siteArea);
+            _unitOfWork.SiteAreas.Add(siteArea);
             _unitOfWork.Save();
 
             return Ok(siteArea);
@@ -52,7 +52,7 @@ namespace marking_api.API.Controllers.Identity
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(SiteArea)))]
-        public IActionResult Put(long id, [FromBody] SiteArea siteArea)
+        public IActionResult Update(long id, [FromBody] SiteArea siteArea)
         {
             if (siteArea == null)
                 return BadRequest();
