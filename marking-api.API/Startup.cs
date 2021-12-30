@@ -4,6 +4,7 @@ using marking_api.API.Config;
 using marking_api.Data;
 using marking_api.DataModel.Identity;
 using marking_api.Global.Repositories;
+using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -38,6 +39,8 @@ namespace marking_api.API
         public void ConfigureServices(IServiceCollection services)
         {
             //var hangfireConnection = "";
+
+            services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme).AddCertificate();
 
             services.AddCors(options => { options.AddPolicy(name: "_myAllowSpecificOrigins", builder => { builder.WithOrigins("http://localhost:3000"); }); });
 
@@ -155,6 +158,8 @@ namespace marking_api.API
             app.UseCors("_myAllowSpecificOrigins");
             
             app.UseAuthorization();
+
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {

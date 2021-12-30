@@ -36,7 +36,7 @@ namespace marking_api.API.Controllers.FileSystem
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(FSFileVersionDM)))]
-        public IActionResult Add([FromBody] FSFileVersionDM fileVersion)
+        public IActionResult Post([FromBody] FSFileVersionDM fileVersion)
         {
             if (fileVersion == null)
                 return BadRequest();
@@ -44,7 +44,7 @@ namespace marking_api.API.Controllers.FileSystem
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            _unitOfWork.FSFileVersions.Add(fileVersion);
+            _unitOfWork.FSFileVersions.AddOrUpdate(fileVersion);
             _unitOfWork.Save();
 
             return Ok(fileVersion);
@@ -52,7 +52,7 @@ namespace marking_api.API.Controllers.FileSystem
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(FSFileVersionDM)))]
-        public IActionResult Update(long id, [FromBody] FSFileVersionDM fileVersion)
+        public IActionResult Put(long id, [FromBody] FSFileVersionDM fileVersion)
         {
             if (fileVersion == null)
                 return BadRequest();

@@ -36,7 +36,7 @@ namespace marking_api.API.Controllers.Identity
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(RoleClaim)))]
-        public IActionResult Add([FromBody] RoleClaim roleClaim)
+        public IActionResult Post([FromBody] RoleClaim roleClaim)
         {
             if (roleClaim == null)
                 return BadRequest();
@@ -44,7 +44,7 @@ namespace marking_api.API.Controllers.Identity
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            _unitOfWork.RoleClaims.Add(roleClaim);
+            _unitOfWork.RoleClaims.AddOrUpdate(roleClaim);
             _unitOfWork.Save();
 
             return Ok(roleClaim);
@@ -52,7 +52,7 @@ namespace marking_api.API.Controllers.Identity
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(RoleClaim)))]
-        public IActionResult Update(int id, [FromBody] RoleClaim roleClaim)
+        public IActionResult Put(int id, [FromBody] RoleClaim roleClaim)
         {
             if (roleClaim == null)
                 return BadRequest();

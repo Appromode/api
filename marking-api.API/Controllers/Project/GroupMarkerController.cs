@@ -36,7 +36,7 @@ namespace marking_api.API.Controllers.Project
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(GroupMarkerDM)))]
-        public IActionResult Add([FromBody] GroupMarkerDM groupMarker)
+        public IActionResult Post([FromBody] GroupMarkerDM groupMarker)
         {
             if (groupMarker == null)
                 return BadRequest();
@@ -44,7 +44,7 @@ namespace marking_api.API.Controllers.Project
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            _unitOfWork.GroupMarkers.Add(groupMarker);
+            _unitOfWork.GroupMarkers.AddOrUpdate(groupMarker);
             _unitOfWork.Save();
 
             return Ok(groupMarker);
@@ -52,7 +52,7 @@ namespace marking_api.API.Controllers.Project
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(GroupMarkerDM)))]
-        public IActionResult Update(long id, [FromBody] GroupMarkerDM groupMarker)
+        public IActionResult Put(long id, [FromBody] GroupMarkerDM groupMarker)
         {
             if (groupMarker == null)
                 return BadRequest();

@@ -36,7 +36,7 @@ namespace marking_api.API.Controllers.Project
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(GradeDM)))]
-        public IActionResult Add([FromBody] GradeDM grade)
+        public IActionResult Post([FromBody] GradeDM grade)
         {
             if (grade == null)
                 return BadRequest();
@@ -44,7 +44,7 @@ namespace marking_api.API.Controllers.Project
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            _unitOfWork.Grades.Add(grade);
+            _unitOfWork.Grades.AddOrUpdate(grade);
             _unitOfWork.Save();
 
             return Ok(grade);
@@ -52,7 +52,7 @@ namespace marking_api.API.Controllers.Project
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(GradeDM)))]
-        public IActionResult Update(long id, [FromBody] GradeDM grade)
+        public IActionResult Put(long id, [FromBody] GradeDM grade)
         {
             if (grade == null)
                 return BadRequest();

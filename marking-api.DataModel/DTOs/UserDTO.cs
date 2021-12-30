@@ -8,11 +8,11 @@ namespace marking_api.DataModel.DTOs
 {
     public class UserDTO
     {
-        string UserId { get; set; }
-        string NormalizedUserName { get; set; }
-        string NormalizedEmail { get; set; }
-        byte[] ProfilePicture { get; set; }
-        bool TwoFactorEnabled { get; set; }
+        public string UserId { get; set; }
+        public string NormalizedUserName { get; set; }
+        public string NormalizedEmail { get; set; }
+        public byte[] ProfilePicture { get; set; }
+        public bool TwoFactorEnabled { get; set; }
 
     }
 }

@@ -36,7 +36,7 @@ namespace marking_api.API.Controllers.Project
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(ProjectDM)))]
-        public IActionResult Add([FromBody] ProjectDM project)
+        public IActionResult Post([FromBody] ProjectDM project)
         {
             if (project == null)
                 return BadRequest();
@@ -44,7 +44,7 @@ namespace marking_api.API.Controllers.Project
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            _unitOfWork.Projects.Add(project);
+            _unitOfWork.Projects.AddOrUpdate(project);
             _unitOfWork.Save();
 
             return Ok(project);
@@ -52,7 +52,7 @@ namespace marking_api.API.Controllers.Project
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(ProjectDM)))]
-        public IActionResult Update(long id, [FromBody] ProjectDM project)
+        public IActionResult Put(long id, [FromBody] ProjectDM project)
         {
             if (project == null)
                 return BadRequest();

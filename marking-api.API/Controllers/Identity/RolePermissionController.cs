@@ -36,7 +36,7 @@ namespace marking_api.API.Controllers.Identity
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(RolePermission)))]
-        public IActionResult Add([FromBody] RolePermission rolePermission)
+        public IActionResult Post([FromBody] RolePermission rolePermission)
         {
             if (rolePermission == null)
                 return BadRequest();
@@ -52,7 +52,7 @@ namespace marking_api.API.Controllers.Identity
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(RolePermission)))]
-        public IActionResult Update(int id, [FromBody] RolePermission rolePermission)
+        public IActionResult Put(int id, [FromBody] RolePermission rolePermission)
         {
             if (rolePermission == null)
                 return BadRequest();

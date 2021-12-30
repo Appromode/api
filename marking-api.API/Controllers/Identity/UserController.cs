@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using marking_api.Global.Extensions;
 using marking_api.DataModel.DTOs;
+using marking_api.DataModel.Identity;
 
 namespace marking_api.API.Controllers.Identity
 {
@@ -28,47 +29,75 @@ namespace marking_api.API.Controllers.Identity
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserDTO)))]
         public IActionResult Get(string id)
         {
-            var user = _unitOfWork.Users.GetById(id);
+            User user = _unitOfWork.Users.GetById(id);
             if (user == null)
                 return NotFound();
             else
-                return Ok(user);
+            {
+                UserDTO userConvert = new UserDTO
+                {
+                    UserId = user.Id,
+                    NormalizedEmail = user.NormalizedEmail,
+                    NormalizedUserName = user.NormalizedUserName,
+                    ProfilePicture = user.ProfilePicture,
+                    TwoFactorEnabled = user.TwoFactorEnabled
+                };
+                return Ok(userConvert);
+            }
         }
 
-        //[HttpPost]
-        //[ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserDTO)))]
-        //public IActionResult Post([FromBody] UserDTO user)
-        //{
-        //    if (user == null)
-        //        return BadRequest();
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserDTO)))]
+        public IActionResult Post([FromBody] UserDTO user)
+        {
+            if (user == null)
+                return BadRequest();
 
-        //    if (!ModelState.IsValid)
-        //        return BadRequest(ModelState.GetErrorMessages());
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState.GetErrorMessages());
 
-        //    _unitOfWork.Users.Update(user);
-        //    _unitOfWork.Save();
+            User userConvert = new User 
+            {
+                Id = user.UserId,
+                NormalizedUserName = user.NormalizedUserName,
+                NormalizedEmail = user.NormalizedEmail,
+                ProfilePicture = user.ProfilePicture,
+                TwoFactorEnabled = user.TwoFactorEnabled
+            };
 
-        //    return Ok(user);
-        //}
+            _unitOfWork.Users.AddOrUpdate(userConvert);
+            _unitOfWork.Save();
 
-        //[HttpPut]
-        //[ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserDTO)))]
-        //public IActionResult Put(string id, [FromBody] UserDTO user)
-        //{
-        //    if (user == null)
-        //        return BadRequest();
+            return Ok(user);
+        }
 
-        //    if (id != user.Id)
-        //        return BadRequest("Id Mismatch");
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserDTO)))]
+        public IActionResult Put(string id, [FromBody] UserDTO user)
+        {
+            if (user == null)
+                return BadRequest();
 
-        //    if (!ModelState.IsValid)
-        //        return BadRequest(ModelState.GetErrorMessages());
+            if (id != user.UserId)
+                return BadRequest("Id Mismatch");
 
-        //    _unitOfWork.Users.Update(user);
-        //    _unitOfWork.Save();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState.GetErrorMessages());
 
-        //    return Ok(user);
-        //}
+            User userConvert = new User
+            {
+                Id = user.UserId,
+                NormalizedUserName = user.NormalizedUserName,
+                NormalizedEmail = user.NormalizedEmail,
+                ProfilePicture = user.ProfilePicture,
+                TwoFactorEnabled = user.TwoFactorEnabled
+            };
+
+            _unitOfWork.Users.Update(userConvert);
+            _unitOfWork.Save();
+
+            return Ok(user);
+        }
 
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserDTO)))]
@@ -82,7 +111,16 @@ namespace marking_api.API.Controllers.Identity
             _unitOfWork.Users.Update(user);
             _unitOfWork.Save();
 
-            return Ok(user);
+            UserDTO userConvert = new UserDTO
+            {
+                UserId = user.Id,
+                NormalizedEmail = user.NormalizedEmail,
+                NormalizedUserName = user.NormalizedUserName,
+                ProfilePicture = user.ProfilePicture,
+                TwoFactorEnabled = user.TwoFactorEnabled
+            };
+
+            return Ok(userConvert);
         }
     }
 }

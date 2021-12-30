@@ -36,7 +36,7 @@ namespace marking_api.API.Controllers.Project
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserGroupDM)))]
-        public IActionResult Add([FromBody] UserGroupDM userGroup)
+        public IActionResult Post([FromBody] UserGroupDM userGroup)
         {
             if (userGroup == null)
                 return BadRequest();
@@ -44,7 +44,7 @@ namespace marking_api.API.Controllers.Project
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            _unitOfWork.UserGroups.Add(userGroup);
+            _unitOfWork.UserGroups.AddOrUpdate(userGroup);
             _unitOfWork.Save();
 
             return Ok(userGroup);
@@ -52,7 +52,7 @@ namespace marking_api.API.Controllers.Project
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserGroupDM)))]
-        public IActionResult Update(long id, [FromBody] UserGroupDM userGroup)
+        public IActionResult Put(long id, [FromBody] UserGroupDM userGroup)
         {
             if (userGroup == null)
                 return BadRequest();
