@@ -12,9 +12,17 @@ namespace marking_api.DataModel.Identity
     {
         public UserRole() : base() { }
 
+        [SwaggerExclude]
+        public override string RoleId { get; set; }
+
+        [SwaggerExclude]
         [ForeignKey("RoleId")]
         public virtual Role Role { get; set; }
 
+        [SwaggerExclude]
+        public override string UserId { get; set; }
+
+        [SwaggerExclude]
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
     }

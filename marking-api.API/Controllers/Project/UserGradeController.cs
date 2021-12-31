@@ -44,7 +44,7 @@ namespace marking_api.API.Controllers.Project
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            _unitOfWork.UserGrades.Update(userGrade);
+            _unitOfWork.UserGrades.AddOrUpdate(userGrade);
             _unitOfWork.Save();
 
             return Ok(userGrade);

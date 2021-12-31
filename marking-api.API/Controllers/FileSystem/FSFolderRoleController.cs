@@ -44,7 +44,7 @@ namespace marking_api.API.Controllers.FileSystem
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            _unitOfWork.FSFolderRoles.Update(folderRole);
+            _unitOfWork.FSFolderRoles.AddOrUpdate(folderRole);
             _unitOfWork.Save();
 
             return Ok(folderRole);

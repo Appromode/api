@@ -17,13 +17,13 @@ namespace marking_api.DataModel.Project
         public int Grade { get; set; }
 
         [ForeignKey("GroupId")]
-        public Int64 GroupId { get; set; }
+        public virtual Int64 GroupId { get; set; }
         [SwaggerExclude]
-        public GroupDM Group { get; set; }
+        public virtual GroupDM Group { get; set; }
 
         [ForeignKey("UserId")]
-        public Int64 UserId { get; set; }
+        public virtual string UserId { get; set; }
         [SwaggerExclude]
-        public User User { get; set; }
+        public virtual User User { get; set; }
     }
 }

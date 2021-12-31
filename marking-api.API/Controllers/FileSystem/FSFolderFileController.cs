@@ -44,7 +44,7 @@ namespace marking_api.API.Controllers.FileSystem
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            _unitOfWork.FSFolderFiles.Update(folderFile);
+            _unitOfWork.FSFolderFiles.Add(folderFile);
             _unitOfWork.Save();
 
             return Ok(folderFile);

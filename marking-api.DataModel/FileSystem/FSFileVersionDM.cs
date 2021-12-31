@@ -29,8 +29,8 @@ namespace marking_api.DataModel.FileSystem
         public virtual FSFileDM File { get; set; }
 
         [ForeignKey("StateId")]
-        public Int64? FileStateId { get; set; }
+        public virtual Int64? FileStateId { get; set; }
         [SwaggerExclude]
-        public FSFileStateDM FileState { get; set; }
+        public virtual FSFileStateDM FileState { get; set; }
     }
 }

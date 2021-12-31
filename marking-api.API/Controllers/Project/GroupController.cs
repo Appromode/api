@@ -44,7 +44,7 @@ namespace marking_api.API.Controllers.Project
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            _unitOfWork.Groups.Update(group);
+            _unitOfWork.Groups.AddOrUpdate(group);
             _unitOfWork.Save();
 
             return Ok(group);

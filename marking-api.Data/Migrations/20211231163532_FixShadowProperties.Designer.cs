@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using marking_api.Data;
 
@@ -10,9 +11,10 @@ using marking_api.Data;
 namespace marking_api.Data.Migrations
 {
     [DbContext(typeof(MarkingDbContext))]
-    partial class MarkingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211231163532_FixShadowProperties")]
+    partial class FixShadowProperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -400,17 +402,11 @@ namespace marking_api.Data.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("FirstName")
-                        .HasColumnType("longtext");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsDisabled")
                         .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("longtext");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("tinyint(1)");
@@ -707,7 +703,7 @@ namespace marking_api.Data.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("TagName")
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("canDelete")
                         .HasColumnType("tinyint(1)");
@@ -725,9 +721,6 @@ namespace marking_api.Data.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("TagId");
-
-                    b.HasIndex("TagName")
-                        .IsUnique();
 
                     b.ToTable("Tags", "dbo");
                 });

@@ -4,11 +4,13 @@ using marking_api.API.Config;
 using marking_api.Data;
 using marking_api.DataModel.Identity;
 using marking_api.Global.Repositories;
+using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
@@ -19,6 +21,7 @@ using Newtonsoft.Json;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace marking_api.API
@@ -38,6 +41,47 @@ namespace marking_api.API
         public void ConfigureServices(IServiceCollection services)
         {
             //var hangfireConnection = "";
+            var serverVersion = new MySqlServerVersion(new Version(8, 0, 27));
+
+            if (Env.IsDevelopment())
+            {                
+                services.AddDbContext<MarkingDbContext>(options => options.UseMySql(Configuration.GetConnectionString("DbConnection"), serverVersion, o => o.SchemaBehavior(MySqlSchemaBehavior.Ignore)));
+                //hangfireConnection = "DbConnection";
+            } else
+            {
+                services.AddDbContext<MarkingDbContext>(options => options.UseMySql(Configuration.GetConnectionString("DbConnection"), serverVersion, o => o.SchemaBehavior(MySqlSchemaBehavior.Ignore)));
+                //hangfireConnection = "DbConnection";
+            }
+
+            services.Configure<RequestLocalizationOptions>(o =>
+            {
+                var supportedCultures = new[]
+                {
+                    new CultureInfo("en-GB"),
+                };
+                o.DefaultRequestCulture = new RequestCulture("en-GB");
+                o.SupportedCultures = supportedCultures;
+                o.SupportedUICultures = supportedCultures;
+            });
+
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(typeof(AppInitialiserFilter));
+            }).AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
+
+            services.AddIdentity<User, Role>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = true;
+            }).AddDefaultTokenProviders().AddEntityFrameworkStores<MarkingDbContext>();
+
+            services.AddHttpContextAccessor();
+
+            services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme).AddCertificate();
+
+            services.AddCors(options => { options.AddPolicy("open", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()); });
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -64,37 +108,6 @@ namespace marking_api.API
                 //    }, new List<string>() }
                 //});
             });
-
-            var serverVersion = new MySqlServerVersion(new Version(8, 0, 27));
-
-            if (Env.IsDevelopment())
-            {                
-                services.AddDbContext<MarkingDbContext>(options => options.UseMySql(Configuration.GetConnectionString("DbConnection"), serverVersion, o => o.SchemaBehavior(MySqlSchemaBehavior.Ignore)));
-                //hangfireConnection = "DbConnection";
-            } else
-            {
-                services.AddDbContext<MarkingDbContext>(options => options.UseMySql(Configuration.GetConnectionString("DbConnection"), serverVersion, o => o.SchemaBehavior(MySqlSchemaBehavior.Ignore)));
-                //hangfireConnection = "DbConnection";
-            }
-
-            services.AddMvc(options =>
-            {
-                options.Filters.Add(typeof(AppInitialiserFilter));
-                //options.Conventions.Add(new GenericControllerRouteConvention());
-            }).AddNewtonsoftJson(options =>
-            {
-                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            });//.ConfigureApplicationPartManager(m => 
-            //{
-            //    m.FeatureProviders.Add(new GenericTypeControllerFeatureProvider());
-            //});
-
-            services.AddIdentity<User, Role>(options =>
-            {
-                options.SignIn.RequireConfirmedAccount = true;
-            }).AddDefaultTokenProviders().AddEntityFrameworkStores<MarkingDbContext>();
-
-            services.AddHttpContextAccessor();
 
             //services.AddHangfire(configuration => configuration.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
             //.UseSimpleAssemblyNameTypeSerializer()
@@ -132,6 +145,10 @@ namespace marking_api.API
                 { 
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "marking_api.API v1"); 
                 });
+            } else
+            {
+                app.UseExceptionHandler("/Error");
+                app.UseHsts();
             }
 
             if (dbSeeder != null)
@@ -150,7 +167,11 @@ namespace marking_api.API
 
             app.UseRouting();
 
+            app.UseCors("_myAllowSpecificOrigins");
+            
             app.UseAuthorization();
+
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {

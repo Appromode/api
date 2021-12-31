@@ -44,7 +44,7 @@ namespace marking_api.API.Controllers.Project
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            _unitOfWork.Tags.Update(tag);
+            _unitOfWork.Tags.AddOrUpdate(tag);
             _unitOfWork.Save();
 
             return Ok(tag);

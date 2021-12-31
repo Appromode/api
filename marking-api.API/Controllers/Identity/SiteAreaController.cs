@@ -44,7 +44,7 @@ namespace marking_api.API.Controllers.Identity
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            _unitOfWork.SiteAreas.Update(siteArea);
+            _unitOfWork.SiteAreas.AddOrUpdate(siteArea);
             _unitOfWork.Save();
 
             return Ok(siteArea);

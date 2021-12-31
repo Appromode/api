@@ -44,7 +44,7 @@ namespace marking_api.API.Controllers.Identity
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            _unitOfWork.UserRoles.Update(userRole);
+            _unitOfWork.UserRoles.AddOrUpdate(userRole);
             _unitOfWork.Save();
 
             return Ok(userRole);

@@ -19,12 +19,12 @@ namespace marking_api.DataModel.Project
         public Int64 GroupMarkerId { get; set; }
 
         [ForeignKey("UserId")]
-        public Int64 UserId { get; set; }
+        public virtual string UserId { get; set; }
         [SwaggerExclude]
         public virtual User User { get; set; }
 
         [ForeignKey("GroupId")]
-        public Int64 GroupId { get; set; }
+        public virtual Int64 GroupId { get; set; }
         [SwaggerExclude]
         public virtual GroupDM Group { get; set; }
     }

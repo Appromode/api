@@ -17,13 +17,13 @@ namespace marking_api.DataModel.FileSystem
         public Int64 FolderRoleId { get; set; }
 
         [ForeignKey("RoleId")]
-        public Int64 RoleId { get; set; }
+        public virtual string RoleId { get; set; }
         [SwaggerExclude]
-        public Role Role { get; set; }
+        public virtual Role Role { get; set; }
 
         [ForeignKey("FolderId")]
-        public Int64 FolderId { get; set; }
+        public virtual Int64 FolderId { get; set; }
         [SwaggerExclude]
-        public FSFolderDM Folder { get; set; }
+        public virtual FSFolderDM Folder { get; set; }
     }
 }

@@ -14,13 +14,13 @@ namespace marking_api.DataModel.FileSystem
         public Int64 FolderFileId { get; set; }
 
         [ForeignKey("FileId")]
-        public Int64 FileId { get; set; }
+        public virtual Int64 FileId { get; set; }
         [SwaggerExclude]
-        public FSFileDM File { get; set; }
+        public virtual FSFileDM File { get; set; }
 
         [ForeignKey("FolderId")]
-        public Int64 FolderId { get; set; }
+        public virtual Int64 FolderId { get; set; }
         [SwaggerExclude]
-        public FSFolderDM Folder { get; set; }
+        public virtual FSFolderDM Folder { get; set; }
     }
 }

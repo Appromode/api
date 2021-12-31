@@ -44,7 +44,7 @@ namespace marking_api.API.Controllers.Identity
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            _unitOfWork.UserClaims.Update(userClaim);
+            _unitOfWork.UserClaims.AddOrUpdate(userClaim);
             _unitOfWork.Save();
 
             return Ok(userClaim);

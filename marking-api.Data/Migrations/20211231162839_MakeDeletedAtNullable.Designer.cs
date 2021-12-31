@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using marking_api.Data;
 
@@ -10,9 +11,10 @@ using marking_api.Data;
 namespace marking_api.Data.Migrations
 {
     [DbContext(typeof(MarkingDbContext))]
-    partial class MarkingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211231162839_MakeDeletedAtNullable")]
+    partial class MakeDeletedAtNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -227,7 +229,10 @@ namespace marking_api.Data.Migrations
                     b.Property<long>("FolderId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("RoleId")
+                    b.Property<long>("RoleId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("RoleId1")
                         .HasColumnType("varchar(255)");
 
                     b.Property<bool>("canDelete")
@@ -249,7 +254,7 @@ namespace marking_api.Data.Migrations
 
                     b.HasIndex("FolderId");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("RoleId1");
 
                     b.ToTable("FSFolderRoles", "dbo");
                 });
@@ -321,7 +326,10 @@ namespace marking_api.Data.Migrations
                     b.Property<int>("PermissionType")
                         .HasColumnType("int");
 
-                    b.Property<string>("RoleId")
+                    b.Property<long>("RoleId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("RoleId1")
                         .HasColumnType("varchar(255)");
 
                     b.Property<long>("SiteAreaId")
@@ -344,7 +352,7 @@ namespace marking_api.Data.Migrations
 
                     b.HasKey("RolePermissionId");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("RoleId1");
 
                     b.HasIndex("SiteAreaId");
 
@@ -400,17 +408,11 @@ namespace marking_api.Data.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("FirstName")
-                        .HasColumnType("longtext");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsDisabled")
                         .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("longtext");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("tinyint(1)");
@@ -563,7 +565,10 @@ namespace marking_api.Data.Migrations
                     b.Property<long>("GroupId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("UserId")
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("UserId1")
                         .HasColumnType("varchar(255)");
 
                     b.Property<bool>("canDelete")
@@ -587,7 +592,7 @@ namespace marking_api.Data.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId1");
 
                     b.ToTable("Grades", "dbo");
                 });
@@ -633,7 +638,10 @@ namespace marking_api.Data.Migrations
                     b.Property<long>("GroupId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("UserId")
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("UserId1")
                         .HasColumnType("varchar(255)");
 
                     b.Property<bool>("canDelete")
@@ -655,7 +663,7 @@ namespace marking_api.Data.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId1");
 
                     b.ToTable("GroupMarkers", "dbo");
                 });
@@ -707,7 +715,7 @@ namespace marking_api.Data.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("TagName")
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("canDelete")
                         .HasColumnType("tinyint(1)");
@@ -726,9 +734,6 @@ namespace marking_api.Data.Migrations
 
                     b.HasKey("TagId");
 
-                    b.HasIndex("TagName")
-                        .IsUnique();
-
                     b.ToTable("Tags", "dbo");
                 });
 
@@ -744,7 +749,10 @@ namespace marking_api.Data.Migrations
                     b.Property<long>("GroupId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("UserId")
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("UserId1")
                         .HasColumnType("varchar(255)");
 
                     b.Property<bool>("canDelete")
@@ -766,7 +774,7 @@ namespace marking_api.Data.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId1");
 
                     b.ToTable("UserGrades", "dbo");
                 });
@@ -780,7 +788,10 @@ namespace marking_api.Data.Migrations
                     b.Property<long>("GroupId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("UserId")
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("UserId1")
                         .HasColumnType("varchar(255)");
 
                     b.Property<bool>("canDelete")
@@ -802,7 +813,7 @@ namespace marking_api.Data.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId1");
 
                     b.ToTable("UserGroups", "dbo");
                 });
@@ -873,7 +884,7 @@ namespace marking_api.Data.Migrations
 
                     b.HasOne("marking_api.DataModel.Identity.Role", "Role")
                         .WithMany()
-                        .HasForeignKey("RoleId")
+                        .HasForeignKey("RoleId1")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Folder");
@@ -896,7 +907,7 @@ namespace marking_api.Data.Migrations
                 {
                     b.HasOne("marking_api.DataModel.Identity.Role", "Role")
                         .WithMany()
-                        .HasForeignKey("RoleId")
+                        .HasForeignKey("RoleId1")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("marking_api.DataModel.Identity.SiteArea", "SiteArea")
@@ -978,7 +989,7 @@ namespace marking_api.Data.Migrations
 
                     b.HasOne("marking_api.DataModel.Identity.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("UserId1")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Feedback");
@@ -998,7 +1009,7 @@ namespace marking_api.Data.Migrations
 
                     b.HasOne("marking_api.DataModel.Identity.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("UserId1")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Group");
@@ -1027,7 +1038,7 @@ namespace marking_api.Data.Migrations
 
                     b.HasOne("marking_api.DataModel.Identity.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("UserId1")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Group");
@@ -1045,7 +1056,7 @@ namespace marking_api.Data.Migrations
 
                     b.HasOne("marking_api.DataModel.Identity.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("UserId1")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Group");

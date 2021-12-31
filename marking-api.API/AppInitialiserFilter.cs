@@ -26,7 +26,7 @@ namespace marking_api.API
             var claimsIdentity = (ClaimsIdentity)context.HttpContext.User.Identity;
             var claimUserId = claimsIdentity.Claims.SingleOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
             
-            if (claimsIdentity != null)
+            if (claimUserId != null)
             {
                 userId = claimUserId.Value;
             }
