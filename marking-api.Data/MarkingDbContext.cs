@@ -18,11 +18,13 @@ namespace marking_api.Data
 {
     public class MarkingDbContext : IdentityDbContext<User, Role, string, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
     {
+        private readonly IWebHostEnvironment env;
+
         public string UserId { get; set; }
 
-        public MarkingDbContext(DbContextOptions<MarkingDbContext> options) :base(options)
+        public MarkingDbContext(DbContextOptions<MarkingDbContext> options, IWebHostEnvironment env) :base(options)
         {
-
+            this.env = env;
         }
 
         public MarkingDbContext()
@@ -61,8 +63,8 @@ namespace marking_api.Data
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-            //    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            //    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables()
                 .Build();
 
@@ -142,6 +144,11 @@ namespace marking_api.Data
                 .WithOne(x => x.Role)
                 .HasForeignKey(a => a.RoleId)
                 .IsRequired();
+
+                entity.HasMany(e => e.UserRoles)
+                .WithOne(x => x.Role)
+                .HasForeignKey(a => a.RoleId)
+                .IsRequired();
             });
 
             builder.Entity<RoleClaim>(entity =>
@@ -158,11 +165,60 @@ namespace marking_api.Data
 
         public override int SaveChanges()
         {
+            ChangeTracker.DetectChanges();
+            foreach(var entry in ChangeTracker.Entries())
+            {
+                Type t = entry.Entity.GetType();
+                if (entry.State == EntityState.Added)
+                {
+                    if (t.GetProperty("createdAt") != null)
+                    {
+                        var field = entry.Entity.GetType().GetProperty("createdAt");
+                        var createdAt = field.GetValue(entry.Entity);
+                        if (createdAt == null)
+                        {
+                            field.SetValue(entry.Entity, DateTime.Now);
+                        }
+                    }
+                } else if (entry.State == EntityState.Modified)
+                {
+                    if (t.GetProperty("updatedAt") != null)
+                    {
+                        var field = entry.Entity.GetType().GetProperty("updatedAt");
+                        field.SetValue(entry.Entity, DateTime.Now);
+                    }
+                }              
+            }
             return base.SaveChanges();
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken)) 
         {
+            ChangeTracker.DetectChanges();
+            foreach (var entry in ChangeTracker.Entries())
+            {
+                Type t = entry.Entity.GetType();
+                if (entry.State == EntityState.Added)
+                {
+                    if (t.GetProperty("createdAt") != null)
+                    {
+                        var field = entry.Entity.GetType().GetProperty("createdAt");
+                        var createdAt = field.GetValue(entry.Entity);
+                        if (createdAt == null)
+                        {
+                            field.SetValue(entry.Entity, DateTime.Now);
+                        }
+                    }
+                }
+                else if (entry.State == EntityState.Modified)
+                {
+                    if (t.GetProperty("updatedAt") != null)
+                    {
+                        var field = entry.Entity.GetType().GetProperty("updatedAt");
+                        field.SetValue(entry.Entity, DateTime.Now);
+                    }
+                }
+            }
             return await base.SaveChangesAsync(true, cancellationToken);
         }
     }

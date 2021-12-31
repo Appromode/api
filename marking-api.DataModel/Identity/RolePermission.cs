@@ -21,13 +21,13 @@ namespace marking_api.DataModel.Identity
         public string PermissionSecurity { get; set; }
 
         [ForeignKey("RoleId")]
-        public Int64 RoleId { get; set; }
+        public virtual string RoleId { get; set; }
         [SwaggerExclude]
-        public Role Role { get; set; }
+        public virtual Role Role { get; set; }
 
         [ForeignKey("SiteAreaId")]
-        public Int64 SiteAreaId { get; set; }
+        public virtual Int64 SiteAreaId { get; set; }
         [SwaggerExclude]
-        public SiteArea SiteArea { get; set; }
+        public virtual SiteArea SiteArea { get; set; }
     }
 }

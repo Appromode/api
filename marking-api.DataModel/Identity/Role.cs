@@ -13,6 +13,9 @@ namespace marking_api.DataModel.Identity
         [StringLength(255)]
         public string RoleDescription { get; set; }
 
+        [SwaggerExclude]
         public virtual ICollection<RoleClaim> RoleClaims { get; set; }
+        [SwaggerExclude]
+        public virtual ICollection<UserRole> UserRoles { get; set; }
     }
 }
