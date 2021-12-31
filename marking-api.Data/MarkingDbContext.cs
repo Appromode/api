@@ -157,6 +157,11 @@ namespace marking_api.Data
                 entity.Property(e => e.RoleId).HasColumnName("RoleId");
             });
 
+            builder.Entity<TagDM>(entity =>
+            {
+                entity.HasIndex(i => i.TagName).IsUnique(true);
+            });
+
             //Example override for view
             //If There is a single table that the view originates from then use the primary key from that table otherwise no.
             //The binding model would go in marking-api.DataModel

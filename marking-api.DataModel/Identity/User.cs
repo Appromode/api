@@ -14,6 +14,8 @@ namespace marking_api.DataModel.Identity
         public bool IsDisabled { get; set; }
         public bool IsDeleted { get; set; }
         public byte[] ProfilePicture { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
 
         [SwaggerExclude]
         public virtual ICollection<UserClaim> UserClaims { get; set; }
