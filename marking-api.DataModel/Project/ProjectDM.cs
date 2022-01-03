@@ -19,7 +19,7 @@ namespace marking_api.DataModel.Project
         public bool EthicsAccepted { get; set; }
 
         [ForeignKey("FileId")]
-        public Int64 EthicsFormId { get; set; }
+        public Int64? EthicsFormId { get; set; }
         [SwaggerExclude]
         public FSFileDM EthicsForm { get; set; }
 
