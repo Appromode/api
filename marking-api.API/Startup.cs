@@ -28,6 +28,8 @@ namespace marking_api.API
 {
     public class Startup
     {
+        private readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
@@ -81,7 +83,16 @@ namespace marking_api.API
 
             services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme).AddCertificate();
 
-            services.AddCors(options => { options.AddPolicy("open", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()); });
+            services.AddCors(options => 
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins, (builder) => 
+                {
+                    builder
+                        .WithOrigins(Configuration["FrontendCors"])
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                }); 
+            });
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -167,7 +178,7 @@ namespace marking_api.API
 
             app.UseRouting();
 
-            app.UseCors("_myAllowSpecificOrigins");
+            app.UseCors(MyAllowSpecificOrigins);
             
             app.UseAuthorization();
 

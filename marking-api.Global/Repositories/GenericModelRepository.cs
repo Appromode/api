@@ -105,8 +105,9 @@ namespace marking_api.Global.Repositories
             var id = typeof(T).GetProperty(idName).GetValue(entity, null);
 
             var a = _entities.Find(id);
+
             if (a == null)
-                _entities.Add(a);
+                _entities.Add(entity);
             else
                 _dbContext.Entry(a).CurrentValues.SetValues(entity);
 
@@ -167,7 +168,10 @@ namespace marking_api.Global.Repositories
         public void DeleteRange(IEnumerable<T> objs)
         {
             if (objs == null)
-                throw new ArgumentNullException("Obj is null");            _entities.RemoveRange(objs);        }
+                throw new ArgumentNullException("Obj is null");
+
+            _entities.RemoveRange(objs);
+        }
 
         public void Save()
         {
