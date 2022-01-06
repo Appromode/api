@@ -1,8 +1,10 @@
-﻿using marking_api.DataModel.Project;
+﻿using System;
+using marking_api.DataModel.Project;
 using marking_api.Global.Extensions;
 using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace marking_api.API.Controllers.Project
 {
@@ -20,7 +22,18 @@ namespace marking_api.API.Controllers.Project
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(CommentDM)))]
         public IActionResult Get()
         {
-            return Ok(_unitOfWork.Comments.Get());
+            List<Object> projectComments = new List<Object>();
+
+            foreach(CommentDM comment in _unitOfWork.Comments.Get()) {
+                var project = _unitOfWork.Projects.GetById(comment.ProjectId);
+
+                projectComments.Add(new {
+                    project,
+                    comment
+                });
+            }
+
+            return Ok(projectComments);
         }
 
         [HttpGet("{id}")]
