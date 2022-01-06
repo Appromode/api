@@ -51,6 +51,7 @@ namespace marking_api.Data
         public DbSet<FSFolderRoleDM> FSFolderRoles { get; set; }
 
         //Project
+        public DbSet<CommentDM> Comments { get; set; }
         public DbSet<GradeDM> Grades { get; set; }
         public DbSet<GroupDM> Groups { get; set; }
         public DbSet<GroupMarkerDM> GroupMarkers { get; set; }
