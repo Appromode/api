@@ -19,6 +19,7 @@ namespace marking_api.Global.Repositories
         IFSFolderFileRepository FSFolderFiles { get; }
         IFSFolderRepository FSFolders { get; }
         IFSFolderRoleRepository FSFolderRoles { get; }
+        ICommentRepository Comments { get; }
         IGradeRepository Grades { get; }
         IGroupMarkerRepository GroupMarkers { get; }
         IGroupRepository Groups { get; }
@@ -59,6 +60,7 @@ namespace marking_api.Global.Repositories
             FSFolderFiles = new FSFolderFileRepository(dbContext);
             FSFolders = new FSFolderRepository(dbContext);
             FSFolderRoles = new FSFolderRoleRepository(dbContext);
+            Comments = new CommentRepository(dbContext);
             Grades = new GradeRepository(dbContext);
             GroupMarkers = new GroupMarkerRepository(dbContext);
             Groups = new GroupRepository(dbContext);
@@ -86,6 +88,7 @@ namespace marking_api.Global.Repositories
         public IFSFolderFileRepository FSFolderFiles { get; private set; }
         public IFSFolderRepository FSFolders { get; private set; }
         public IFSFolderRoleRepository FSFolderRoles { get; private set; }
+        public ICommentRepository Comments { get; private set; }
         public IGradeRepository Grades { get; private set; }
         public IGroupMarkerRepository GroupMarkers { get; private set; }
         public IGroupRepository Groups { get; private set; }
