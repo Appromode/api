@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using marking_api.DataModel.CustomAttributes;
+using marking_api.DataModel.Identity;
 
 namespace marking_api.DataModel.Project
 {
@@ -12,6 +14,8 @@ namespace marking_api.DataModel.Project
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Int64 GroupId { get; set; }
+
+        public List<UserGroupDM> GroupUsers { get; set; }
 
         public string GroupName { get; set; }
         public bool IsClosed { get; set; }

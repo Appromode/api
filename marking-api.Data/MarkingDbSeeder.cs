@@ -22,5 +22,10 @@ namespace marking_api.Data
                 _dbContext.Database.Migrate();
             }
         }
+
+        public void SeedData()
+        {
+
+        }
     }
 }

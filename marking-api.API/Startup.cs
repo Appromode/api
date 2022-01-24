@@ -4,6 +4,7 @@ using marking_api.API.Config;
 using marking_api.Data;
 using marking_api.DataModel.Identity;
 using marking_api.Global.Repositories;
+using marking_api.Global.Services;
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
@@ -57,8 +58,8 @@ namespace marking_api.API
             {
                 services.AddDbContext<MarkingDbContext>(options => options.UseMySql(Configuration.GetConnectionString("DbConnection"), serverVersion, o => 
                 { 
-                    o.SchemaBehavior(MySqlSchemaBehavior.Ignore); 
-                    o.EnableRetryOnFailure() 
+                    o.SchemaBehavior(MySqlSchemaBehavior.Ignore);
+                    o.EnableRetryOnFailure(); 
                 }));
                 //hangfireConnection = "DbConnection";
             }
@@ -89,16 +90,16 @@ namespace marking_api.API
 
             services.AddHttpContextAccessor();
 
-            services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme).AddCertificate(options =>
-            {
-                options.Events = new CertificateAuthenticationEvents
-                {
-                    OnCertificateValidated = context =>
-                    {
-                        var validationService = context.HttpContext.RequestServices.GetRequiredService<ICertificateValidationService>();
-                    }
-                };
-            });
+            //services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme).AddCertificate(options =>
+            //{
+            //    options.Events = new CertificateAuthenticationEvents
+            //    {
+            //        OnCertificateValidated = context =>
+            //        {
+            //            var validationService = context.HttpContext.RequestServices.GetRequiredService<CertificateValidationService>();
+            //        }
+            //    };
+            //});
 
 
             services.AddCors(options => 
