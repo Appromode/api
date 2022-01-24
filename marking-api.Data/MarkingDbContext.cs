@@ -188,11 +188,11 @@ namespace marking_api.Data
                         var field2 = entry.Entity.GetType().GetProperty("updatedAt");
                         var createdAt = field.GetValue(entry.Entity);
                         var updateAt = field2.GetValue(entry.Entity);
-                        if (!IsDateTimeNullOrEmpty(Convert.ToDateTime(createdAt)))
+                        if (IsDateTimeNullOrEmpty(Convert.ToDateTime(createdAt)))
                         {
                             field.SetValue(entry.Entity, DateTime.Now);
                         }
-                        if (!IsDateTimeNullOrEmpty(Convert.ToDateTime(updateAt)))
+                        if (IsDateTimeNullOrEmpty(Convert.ToDateTime(updateAt)))
                         {
                             field2.SetValue(entry.Entity, DateTime.Now);
                         }
