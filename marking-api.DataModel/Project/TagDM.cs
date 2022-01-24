@@ -16,16 +16,16 @@ namespace marking_api.DataModel.Project
 
         public string TagName { get; set; }
 
-        public bool GroupTag { get; set; }
-        public bool ProjectTag { get; set; }
+        public bool GroupTag { get; set; } = false;
+        public bool ProjectTag { get; set; } = false;
 
         [ForeignKey("GroupId")]
-        public virtual Int64 GroupId { get; set; }
+        public virtual Int64? GroupId { get; set; }
         [SwaggerExclude]
         public virtual GroupDM Group { get; set; }
 
         [ForeignKey("ProjectId")]
-        public virtual Int64 ProjectId { get; set; }
+        public virtual Int64? ProjectId { get; set; }
         [SwaggerExclude]
         public virtual ProjectDM Project { get; set; }
     }

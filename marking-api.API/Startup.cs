@@ -184,6 +184,7 @@ namespace marking_api.API
             if (dbSeeder != null)
             {
                 dbSeeder.Migrate();
+                dbSeeder.SeedData();
             }
 
             app.UseExceptionHandler(c => c.Run(async context => 
