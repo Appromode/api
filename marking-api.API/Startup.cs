@@ -47,11 +47,19 @@ namespace marking_api.API
 
             if (Env.IsDevelopment())
             {                
-                services.AddDbContext<MarkingDbContext>(options => options.UseMySql(Configuration.GetConnectionString("DbConnection"), serverVersion, o => o.SchemaBehavior(MySqlSchemaBehavior.Ignore)));
+                services.AddDbContext<MarkingDbContext>(options => options.UseMySql(Configuration.GetConnectionString("DbConnection"), serverVersion, o => 
+                {
+                    o.SchemaBehavior(MySqlSchemaBehavior.Ignore);
+                    o.EnableRetryOnFailure();
+                }));
                 //hangfireConnection = "DbConnection";
             } else
             {
-                services.AddDbContext<MarkingDbContext>(options => options.UseMySql(Configuration.GetConnectionString("DbConnection"), serverVersion, o => o.SchemaBehavior(MySqlSchemaBehavior.Ignore)));
+                services.AddDbContext<MarkingDbContext>(options => options.UseMySql(Configuration.GetConnectionString("DbConnection"), serverVersion, o => 
+                { 
+                    o.SchemaBehavior(MySqlSchemaBehavior.Ignore); 
+                    o.EnableRetryOnFailure() 
+                }));
                 //hangfireConnection = "DbConnection";
             }
 

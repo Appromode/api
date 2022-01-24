@@ -15,5 +15,8 @@ namespace marking_api.DataModel.Project
         public Int64 TagId { get; set; }
 
         public string TagName { get; set; }
+
+        public bool GroupTag { get; set; }
+        public bool ProjectTag { get; set; }
     }
 }
