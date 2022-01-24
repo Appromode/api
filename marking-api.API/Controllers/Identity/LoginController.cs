@@ -42,6 +42,8 @@ namespace marking_api.API.Controllers.Identity
             return true;
         }
 
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(bool)))]
         public bool Verify(string username, string password)
         {
             var cm = new LoginCM(_signInManager, _unitOfWork);
