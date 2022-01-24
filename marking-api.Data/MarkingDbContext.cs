@@ -191,14 +191,6 @@ namespace marking_api.Data
                     }
                 } else if (entry.State == EntityState.Modified)
                 {
-                    if (t.GetProperty("createdAt") != null)
-                    {
-                        var field = entry.Entity.GetType().GetField("createdAt");
-                        var dbObj = entry.GetDatabaseValues();
-                        var createdAtField = dbObj.GetType().GetField("createdAt").GetValue(dbObj);
-                        field.SetValue(entry.Entity, createdAtField);
-                    }
-
                     if (t.GetProperty("updatedAt") != null)
                     {
                         var field = entry.Entity.GetType().GetProperty("updatedAt");
