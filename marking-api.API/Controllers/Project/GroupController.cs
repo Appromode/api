@@ -1,4 +1,5 @@
-﻿using marking_api.DataModel.Identity;
+﻿using marking_api.API.Models.Project;
+using marking_api.DataModel.Identity;
 using marking_api.DataModel.Project;
 using marking_api.Global.Extensions;
 using marking_api.Global.Repositories;
@@ -65,8 +66,11 @@ namespace marking_api.API.Controllers.Project
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            _unitOfWork.Groups.Update(group);
-            _unitOfWork.Save();
+            var cm = new GroupCM(_unitOfWork);
+
+            cm.GenerateGroup(group);
+            //_unitOfWork.Groups.Update(group);
+            //_unitOfWork.Save();
 
             return Ok(group);
         }

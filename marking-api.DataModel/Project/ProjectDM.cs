@@ -22,7 +22,5 @@ namespace marking_api.DataModel.Project
         public Int64? EthicsFormId { get; set; }
         [SwaggerExclude]
         public FSFileDM EthicsForm { get; set; }
-
-
     }
 }
