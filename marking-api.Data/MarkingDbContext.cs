@@ -163,15 +163,15 @@ namespace marking_api.Data
                 entity.HasIndex(i => i.TagName).IsUnique(true);
             });
 
+            builder.Entity<GroupDM>(entity =>
+            {
+                entity.HasIndex(i => i.GroupName).IsUnique(true);
+            });
+
             //Example override for view
             //If There is a single table that the view originates from then use the primary key from that table otherwise no.
             //The binding model would go in marking-api.DataModel
             //builder.Entity<ModelToBindViewTo>().ToView(nameof(ViewName)).Has(No)Key();
-        }
-
-        public bool IsDateTimeNullOrEmpty(DateTime? date)
-        {
-            return !date.HasValue ? true : false;
         }
 
         public override int SaveChanges()
@@ -212,11 +212,9 @@ namespace marking_api.Data
                     if (t.GetProperty("createdAt") != null)
                     {
                         var field = entry.Entity.GetType().GetProperty("createdAt");
-                        var createdAt = field.GetValue(entry.Entity);
-                        if (createdAt == null)
-                        {
-                            field.SetValue(entry.Entity, DateTime.Now);
-                        }
+                        field.SetValue(entry.Entity, DateTime.Now);
+                        field = entry.Entity.GetType().GetProperty("updatedAt");
+                        field.SetValue(entry.Entity, DateTime.Now);
                     }
                 }
                 else if (entry.State == EntityState.Modified)

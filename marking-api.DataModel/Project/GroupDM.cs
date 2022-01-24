@@ -17,7 +17,9 @@ namespace marking_api.DataModel.Project
 
         public List<UserGroupDM> GroupUsers { get; set; }
 
+        [Required]
         public string GroupName { get; set; }
+
         public bool IsClosed { get; set; }
     }
 }

@@ -11,10 +11,5 @@ namespace marking_api.API.Models.Project
         {
             _unitOfWork = unitOfwork;
         }
-
-        public void GenerateGroup()
-        {
-
-        }
     }
 }
