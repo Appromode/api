@@ -25,7 +25,7 @@ namespace marking_api.API.Controllers.Identity
         public bool Logon(string username, string password)
         {
             var cm = new LoginCM(_signInManager, _unitOfWork);
-            if (cm.VerifyUser(username, password).Result)
+            if (cm.VerifyUser(username, password))
             {
                 cm.GenerateLogin(cm.user);
                 return true;
@@ -47,7 +47,7 @@ namespace marking_api.API.Controllers.Identity
         public bool Verify(string username, string password)
         {
             var cm = new LoginCM(_signInManager, _unitOfWork);
-            if (cm.VerifyUser(username, password).Result)
+            if (cm.VerifyUser(username, password))
                 return true;
             return false;
         }

@@ -19,14 +19,14 @@ namespace marking_api.API.Models.Identity
 
         public User user { get; set; }
 
-        public async Task<bool> VerifyUser(string username, string password)
+        public bool VerifyUser(string username, string password)
         {
             if (!string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(password))
             {
-                var result = await _signInManager.PasswordSignInAsync(username, password, true, false).ConfigureAwait(true);
+                var result = _signInManager.PasswordSignInAsync(username, password, true, false).Result;
                 if (result.Succeeded)
                 {
-                    var user = await _signInManager.UserManager.FindByNameAsync(username);
+                    var user = _signInManager.UserManager.FindByNameAsync(username).Result;
                     if (user.IsDisabled)
                     {
                         return false;
