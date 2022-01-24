@@ -19,7 +19,7 @@ namespace marking_api.API.Models.Identity
 
         public User user { get; set; }
 
-        public bool VerifyUser(string username, string password)
+        public bool Login(string username, string password)
         {
             if (!string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(password))
             {
@@ -39,6 +39,35 @@ namespace marking_api.API.Models.Identity
                     return false;
                 }
                 if (result.IsLockedOut)
+                {
+                    return false;
+                }
+                if (result.IsNotAllowed)
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        public bool VerifyUser(string username, string password)
+        {
+            if (!string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(password))
+            {
+                var result = _signInManager.CheckPasswordSignInAsync(username, password, false).Result;
+                if (result.Succeeded)
+                {
+                    return true;
+                }
+                if (result.RequiresTwoFactor)
+                {
+                    return false;
+                }
+                if (result.IsLockedOut)
+                {
+                    return false;
+                }
+                if (result.IsNotAllowed)
                 {
                     return false;
                 }
