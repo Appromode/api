@@ -193,9 +193,9 @@ namespace marking_api.Data
                 {
                     if (t.GetProperty("createdAt") != null)
                     {
-                        var field = entry.Entity.GetType().GetProperty("createdAt");
+                        var field = entry.Entity.GetType().GetField("createdAt");
                         var dbObj = entry.GetDatabaseValues();
-                        var createdAtField = dbObj.GetType().GetProperty("createdAt").GetValue(dbObj);
+                        var createdAtField = dbObj.GetType().GetField("createdAt").GetValue(dbObj);
                         field.SetValue(entry.Entity, createdAtField);
                     }
 
