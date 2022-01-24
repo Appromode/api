@@ -81,7 +81,17 @@ namespace marking_api.API
 
             services.AddHttpContextAccessor();
 
-            services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme).AddCertificate();
+            services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme).AddCertificate(options =>
+            {
+                options.Events = new CertificateAuthenticationEvents
+                {
+                    OnCertificateValidated = context =>
+                    {
+                        var validationService = context.HttpContext.RequestServices.GetRequiredService<ICertificateValidationService>();
+                    }
+                };
+            });
+
 
             services.AddCors(options => 
             {
