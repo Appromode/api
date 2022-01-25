@@ -50,11 +50,11 @@ namespace marking_api.API.Models.Identity
             return false;
         }
 
-        public bool VerifyUser(string username, string password)
+        public bool VerifyUser(User user, string password)
         {
-            if (!string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(password))
+            if (!string.IsNullOrWhiteSpace(user.UserName) && !string.IsNullOrWhiteSpace(password))
             {
-                var result = _signInManager.CheckPasswordSignInAsync(username, password, false).Result;
+                var result = _signInManager.CheckPasswordSignInAsync(user, password, false).Result;
                 if (result.Succeeded)
                 {
                     return true;
