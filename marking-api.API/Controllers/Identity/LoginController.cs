@@ -44,10 +44,10 @@ namespace marking_api.API.Controllers.Identity
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(bool)))]
-        public bool Verify(string username, string password)
+        public bool Verify(User user, string password)
         {
             var cm = new LoginCM(_signInManager, _unitOfWork);
-            if (cm.VerifyUser(username, password))
+            if (cm.VerifyUser(user, password))
                 return true;
             return false;
         }
