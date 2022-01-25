@@ -54,23 +54,15 @@ namespace marking_api.API.Models.Identity
         {
             if (!string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(password))
             {
-                var result = _signInManager.CheckPasswordSignInAsync(username, password, false).Result;
-                if (result.Succeeded)
+                User user = _signInManager.UserManager.FindByNameAsync(username).Result;
+                if (user != null)
                 {
-                    return true;
-                }
-                if (result.RequiresTwoFactor)
-                {
-                    return false;
-                }
-                if (result.IsLockedOut)
-                {
-                    return false;
-                }
-                if (result.IsNotAllowed)
-                {
-                    return false;
-                }
+                    var result = _signInManager.UserManager.CheckPasswordAsync(user, password).Result;
+                    if (result)
+                    {
+                        return true;
+                    }                    
+                }                
             }
             return false;
         }
