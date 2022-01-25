@@ -50,9 +50,9 @@ namespace marking_api.API.Models.Identity
             return false;
         }
 
-        public bool VerifyUser(User user, string password)
+        public bool VerifyUser(string username, string password)
         {
-            if (!string.IsNullOrWhiteSpace(user.UserName) && !string.IsNullOrWhiteSpace(password))
+            if (!string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(password))
             {
                 User user = _signInManager.UserManager.FindByNameAsync(username).Result;
                 if (user != null)
