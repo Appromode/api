@@ -1,6 +1,7 @@
-﻿using marking_api.DataModel.CustomAttributes;
+﻿using System;
+using System.Collections.Generic;
+using marking_api.DataModel.CustomAttributes;
 using marking_api.DataModel.FileSystem;
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -22,5 +23,7 @@ namespace marking_api.DataModel.Project
         public Int64? EthicsFormId { get; set; }
         [SwaggerExclude]
         public FSFileDM EthicsForm { get; set; }
+
+        public List<CommentDM> Comments { get; set; }
     }
 }
