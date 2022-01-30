@@ -1,4 +1,5 @@
 ﻿using marking_api.API.Models.Identity;
+using marking_api.DataModel.DTOs;
 using marking_api.DataModel.Identity;
 using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Http;
@@ -22,16 +23,16 @@ namespace marking_api.API.Controllers.Identity
         }
         
         [HttpPut]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(bool)))]
-        public bool Logon([FromBody] string email, [FromBody] string password)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserDTO)))]
+        public UserDTO Logon(string email, [FromBody] string password)
         {
             var cm = new LoginCM(_signInManager, _unitOfWork);
             if (cm.Login(email, password))
             {
                 //cm.GenerateLogin(cm.user);
-                return true;
+                return cm.user;
             }
-            return false;
+            return null;
         }
 
         [HttpPut("logout")]
@@ -45,7 +46,7 @@ namespace marking_api.API.Controllers.Identity
 
         [HttpPut("verify")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(bool)))]
-        public bool Verify([FromBody] string username, [FromBody] string password)
+        public bool Verify(string username, [FromBody] string password)
         {
             var cm = new LoginCM(_signInManager, _unitOfWork);
             if (cm.VerifyUser(username, password))

@@ -1,4 +1,5 @@
-﻿using marking_api.DataModel.Identity;
+﻿using marking_api.DataModel.DTOs;
+using marking_api.DataModel.Identity;
 using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,24 +18,26 @@ namespace marking_api.API.Models.Identity
             _unitOfWork = unitOfwork;
         }
 
-        public User user { get; set; }
+        public User rawUser { get; set; }
+        public UserDTO user { get; set; }
 
         public bool Login(string email, string password)
         {
             if (!string.IsNullOrWhiteSpace(email) && !string.IsNullOrWhiteSpace(password))
             {
-                User inituser = _signInManager.UserManager.FindByEmailAsync(email).Result; //_signInManager.PasswordSignInAsync(email, password, true, false);// .PasswordSignInAsync(username, password, true, false).Result;
+                User inituser = _signInManager.UserManager.FindByEmailAsync(email).Result;
                 if (inituser == null)
                     return false;
                 var result = _signInManager.PasswordSignInAsync(inituser.UserName, password, true, false).Result;
                 
                 if (result.Succeeded)
                 {
-                    if (user.IsDisabled)
+                    if (inituser.IsDisabled || inituser.IsDeleted)
                     {
                         return false;
                     }
-                    this.user = inituser;
+                    this.rawUser = inituser;
+                    ConvertToDTO();
                     return true;
                 }
                 if (result.RequiresTwoFactor)
@@ -82,6 +85,18 @@ namespace marking_api.API.Models.Identity
         //    });
         //    _unitOfWork.Save();
         //}
+
+        public void ConvertToDTO()
+        {
+            user = new UserDTO
+            {
+                UserId = this.rawUser.Id,                
+                NormalizedUserName = this.rawUser.NormalizedUserName,
+                NormalizedEmail = this.rawUser.NormalizedEmail,
+                TwoFactorEnabled = this.rawUser.TwoFactorEnabled,
+                ProfilePicture = this.rawUser.ProfilePicture
+            };
+        }
 
         public async void Logout()
         {
