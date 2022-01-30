@@ -9,6 +9,10 @@ using System;
 
 namespace marking_api.API.Controllers.Identity
 {
+    public class Login {
+        public string Username;
+        public string Password;
+    }
     [ApiController]
     [Route("api/[controller]")]
     public class LoginController : ControllerBase
