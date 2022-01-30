@@ -23,7 +23,7 @@ namespace marking_api.API.Controllers.Identity
         
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(bool)))]
-        public bool Logon(string username, string password)
+        public bool Logon([FromBody] string username, [FromBody] string password)
         {
             var cm = new LoginCM(_signInManager, _unitOfWork);
             if (cm.Login(username, password))
@@ -45,7 +45,7 @@ namespace marking_api.API.Controllers.Identity
 
         [HttpPut("verify")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(bool)))]
-        public bool Verify(string username, string password)
+        public bool Verify([FromBody] string username, [FromBody] string password)
         {
             var cm = new LoginCM(_signInManager, _unitOfWork);
             if (cm.VerifyUser(username, password))
