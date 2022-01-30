@@ -19,19 +19,22 @@ namespace marking_api.API.Models.Identity
 
         public User user { get; set; }
 
-        public bool Login(string username, string password)
+        public bool Login(string email, string password)
         {
-            if (!string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(password))
+            if (!string.IsNullOrWhiteSpace(email) && !string.IsNullOrWhiteSpace(password))
             {
-                var result = _signInManager.PasswordSignInAsync(username, password, true, false).Result;
+                User inituser = _signInManager.UserManager.FindByEmailAsync(email).Result; //_signInManager.PasswordSignInAsync(email, password, true, false);// .PasswordSignInAsync(username, password, true, false).Result;
+                if (inituser == null)
+                    return false;
+                var result = _signInManager.PasswordSignInAsync(inituser.UserName, password, true, false).Result;
+                
                 if (result.Succeeded)
                 {
-                    var user = _signInManager.UserManager.FindByNameAsync(username).Result;
                     if (user.IsDisabled)
                     {
                         return false;
                     }
-                    this.user = user;
+                    this.user = inituser;
                     return true;
                 }
                 if (result.RequiresTwoFactor)
