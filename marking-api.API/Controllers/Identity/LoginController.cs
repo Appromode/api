@@ -8,6 +8,10 @@ using System;
 
 namespace marking_api.API.Controllers.Identity
 {
+    public class Login {
+        public string Username;
+        public string Password;
+    }
     [ApiController]
     [Route("api/[controller]")]
     public class LoginController : ControllerBase
@@ -21,12 +25,12 @@ namespace marking_api.API.Controllers.Identity
             _signInManager = signInManager;
         }
         
-        [HttpPut]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(bool)))]
-        public bool Logon([FromBody] string username, [FromBody] string password)
+        public bool Logon(Login login)
         {
             var cm = new LoginCM(_signInManager, _unitOfWork);
-            if (cm.Login(username, password))
+            if (cm.Login(login.Username, login.Password))
             {
                 //cm.GenerateLogin(cm.user);
                 return true;
