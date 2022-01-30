@@ -3,6 +3,7 @@ using marking_api.Global.Extensions;
 using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace marking_api.API.Controllers.Project
 {
@@ -32,6 +33,19 @@ namespace marking_api.API.Controllers.Project
                 return NotFound();
             else
                 return Ok(project);
+        }
+
+        [HttpGet("{projectId}/comments")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(ProjectDM)))]
+        public IActionResult Get(int projectId)
+        {
+            var projectComments = _unitOfWork.Projects.Get(
+                include: (projectDM) => projectDM
+                    .Include((projectDM) => projectDM.Comments)
+                    .ThenInclude((projectComments) => projectComments.User),
+                filter: (projectDM) => projectDM.ProjectId == projectId);
+
+            return Ok(projectComments);
         }
 
         [HttpPost]
