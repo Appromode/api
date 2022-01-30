@@ -26,9 +26,9 @@ namespace marking_api.API.Controllers.Identity
             _signInManager = signInManager;
         }
         
-        [HttpPut]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserDTO)))]
-        public UserDTO Logon(string email, [FromBody] string password)
+        public UserDTO Logon(string email, string password)
         {
             var cm = new LoginCM(_signInManager, _unitOfWork);
             if (cm.Login(email, password))
