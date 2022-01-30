@@ -10,7 +10,7 @@ using System;
 namespace marking_api.API.Controllers.Identity
 {
     public class Login {
-        public string Username;
+        public string Email;
         public string Password;
     }
     [ApiController]
@@ -28,10 +28,10 @@ namespace marking_api.API.Controllers.Identity
         
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserDTO)))]
-        public UserDTO Logon(string email, string password)
+        public UserDTO Logon(Login userLogin)
         {
             var cm = new LoginCM(_signInManager, _unitOfWork);
-            if (cm.Login(email, password))
+            if (cm.Login(userLogin.Email, userLogin.Password))
             {
                 //cm.GenerateLogin(cm.user);
                 return cm.user;
