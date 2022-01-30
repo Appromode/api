@@ -39,6 +39,9 @@ namespace marking_api.API.Controllers.Project
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(ProjectDM)))]
         public IActionResult Get(int projectId)
         {
+            //var projectComments = _unitOfWork.Projects.Get(filter: x => x.ProjectId == projectId,
+            //    include: x => x.Include(y => y.Comments).ThenInclude(y => y.User));
+
             var projectComments = _unitOfWork.Projects.Get(
                 include: (projectDM) => projectDM
                     .Include((projectDM) => projectDM.Comments)

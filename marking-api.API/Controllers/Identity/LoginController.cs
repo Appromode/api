@@ -21,7 +21,7 @@ namespace marking_api.API.Controllers.Identity
             _signInManager = signInManager;
         }
         
-        [HttpPost]
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(bool)))]
         public bool Logon(string username, string password)
         {
@@ -34,7 +34,7 @@ namespace marking_api.API.Controllers.Identity
             return false;
         }
 
-        [HttpGet]
+        [HttpPut("logout")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(bool)))]
         public bool Logout()
         {
@@ -43,7 +43,7 @@ namespace marking_api.API.Controllers.Identity
             return true;
         }
 
-        [HttpPut]
+        [HttpPut("verify")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(bool)))]
         public bool Verify(string username, string password)
         {
