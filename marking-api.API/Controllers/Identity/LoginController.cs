@@ -18,6 +18,7 @@ namespace marking_api.API.Controllers.Identity
         public LoginController(IUnitOfWork unitOfWork, SignInManager<User> signInManager)
         {
             _unitOfWork = unitOfWork;
+            _signInManager = signInManager;
         }
         
         [HttpPost]
@@ -27,13 +28,13 @@ namespace marking_api.API.Controllers.Identity
             var cm = new LoginCM(_signInManager, _unitOfWork);
             if (cm.Login(username, password))
             {
-                cm.GenerateLogin(cm.user);
+                //cm.GenerateLogin(cm.user);
                 return true;
             }
             return false;
         }
 
-        [HttpPost]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(bool)))]
         public bool Logout()
         {
@@ -42,7 +43,7 @@ namespace marking_api.API.Controllers.Identity
             return true;
         }
 
-        [HttpPost]
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(bool)))]
         public bool Verify(string username, string password)
         {

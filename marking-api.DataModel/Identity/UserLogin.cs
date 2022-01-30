@@ -10,6 +10,7 @@ namespace marking_api.DataModel.Identity
     {
         public UserLogin() : base() { }
 
+        [SwaggerExclude]
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
     }

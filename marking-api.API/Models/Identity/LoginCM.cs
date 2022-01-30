@@ -67,18 +67,18 @@ namespace marking_api.API.Models.Identity
             return false;
         }
 
-        public void GenerateLogin(User user)
-        {
-            _unitOfWork.UserLogins.Add(new UserLogin 
-            {
-                UserId = user.Id,
-                LoginProvider = "frontend",
-                ProviderDisplayName = "FrontEnd",
-                User = user,
-                ProviderKey = Guid.NewGuid().ToString()
-            });
-            _unitOfWork.Save();
-        }
+        //public void GenerateLogin(User user)
+        //{
+        //    _unitOfWork.UserLogins.Add(new UserLogin 
+        //    {
+        //        UserId = user.Id,
+        //        LoginProvider = "frontend",
+        //        ProviderDisplayName = "FrontEnd",
+        //        User = user,
+        //        ProviderKey = Guid.NewGuid().ToString()
+        //    });
+        //    _unitOfWork.Save();
+        //}
 
         public async void Logout()
         {
