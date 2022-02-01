@@ -55,6 +55,7 @@ namespace marking_api.Data
         public DbSet<GradeDM> Grades { get; set; }
         public DbSet<GroupDM> Groups { get; set; }
         public DbSet<GroupMarkerDM> GroupMarkers { get; set; }
+        public DbSet<MarkDM> Marks { get; set; }
         public DbSet<ProjectDM> Projects { get; set; }
         public DbSet<TagDM> Tags { get; set; }
         public DbSet<UserGradeDM> UserGrades { get; set; }

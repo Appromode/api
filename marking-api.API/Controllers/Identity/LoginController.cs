@@ -36,7 +36,6 @@ namespace marking_api.API.Controllers.Identity
                 //cm.GenerateLogin(cm.user);
                 return Ok(cm.user);
             }
-            //return StatusCode(StatusCodes.Status401Unauthorized, "Invalid Login Details");
             return Unauthorized();
         }
 
@@ -51,12 +50,12 @@ namespace marking_api.API.Controllers.Identity
 
         [HttpPut("verify")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(bool)))]
-        public bool Verify(string username, [FromBody] string password)
+        public IActionResult Verify(Login userLogin)
         {
             var cm = new LoginCM(_signInManager, _unitOfWork);
-            if (cm.VerifyUser(username, password))
-                return true;
-            return false;
+            if (cm.VerifyUser(userLogin.Email, userLogin.Password))
+                return Ok(true);
+            return Ok(false);
         }
     }
 }

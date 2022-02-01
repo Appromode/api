@@ -14,7 +14,10 @@ namespace marking_api.DataModel.Project
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Int64 UserGradeId { get; set; }
 
-        public int Grade { get; set; }
+        [ForeignKey("MarkId")]
+        public Int64 MarkId { get; set; }
+        [SwaggerExclude]
+        public MarkDM Mark { get; set; }
 
         [ForeignKey("GroupId")]
         public virtual Int64 GroupId { get; set; }
