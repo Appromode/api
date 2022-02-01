@@ -28,15 +28,16 @@ namespace marking_api.API.Controllers.Identity
         
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserDTO)))]
-        public UserDTO Logon(Login userLogin)
+        public IActionResult Logon(Login userLogin)
         {
             var cm = new LoginCM(_signInManager, _unitOfWork);
             if (cm.Login(userLogin.Email, userLogin.Password))
             {
                 //cm.GenerateLogin(cm.user);
-                return cm.user;
+                return Ok(cm.user);
             }
-            return null;
+            //return StatusCode(StatusCodes.Status401Unauthorized, "Invalid Login Details");
+            return Unauthorized();
         }
 
         [HttpPut("logout")]

@@ -39,6 +39,8 @@ namespace marking_api.API.Controllers.Identity
                     UserId = user.Id,
                     NormalizedEmail = user.NormalizedEmail,
                     NormalizedUserName = user.NormalizedUserName,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
                     ProfilePicture = user.ProfilePicture,
                     TwoFactorEnabled = user.TwoFactorEnabled
                 };
@@ -61,6 +63,8 @@ namespace marking_api.API.Controllers.Identity
                 Id = user.UserId,
                 NormalizedUserName = user.NormalizedUserName,
                 NormalizedEmail = user.NormalizedEmail,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
                 ProfilePicture = user.ProfilePicture,
                 TwoFactorEnabled = user.TwoFactorEnabled
             };
@@ -90,6 +94,8 @@ namespace marking_api.API.Controllers.Identity
                 NormalizedUserName = user.NormalizedUserName,
                 NormalizedEmail = user.NormalizedEmail,
                 ProfilePicture = user.ProfilePicture,
+                FirstName = user.FirstName,
+                LastName= user.LastName,
                 TwoFactorEnabled = user.TwoFactorEnabled
             };
 
@@ -117,6 +123,8 @@ namespace marking_api.API.Controllers.Identity
                 NormalizedEmail = user.NormalizedEmail,
                 NormalizedUserName = user.NormalizedUserName,
                 ProfilePicture = user.ProfilePicture,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
                 TwoFactorEnabled = user.TwoFactorEnabled
             };
 
