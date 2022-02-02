@@ -6,9 +6,6 @@ using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System;
 using System.Linq;
 
 namespace marking_api.API.Controllers.Project
