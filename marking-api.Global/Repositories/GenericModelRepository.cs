@@ -14,7 +14,7 @@ namespace marking_api.Global.Repositories
         T GetById<Type>(Type id, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);
         IEnumerable<T> GetByIds<Type>(IEnumerable<Type> ids, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);
         IEnumerable<T> Find(Expression<Func<T, bool>> expression);
-        void Add(T obj);
+        T Add(T obj);
         void AddRange(IEnumerable<T> obj);
         void Update(T obj);
         void AddOrUpdate(T obj);
@@ -71,12 +71,14 @@ namespace marking_api.Global.Repositories
             return _entities.Where(expression);
         }
 
-        public void Add(T obj)
+        public T Add(T obj)
         {
             if (obj == null)
                 throw new ArgumentNullException("Obj is null");
 
             _entities.Add(obj);
+
+            return obj;
         }
 
         public void AddRange(IEnumerable<T> objs)
@@ -116,6 +118,8 @@ namespace marking_api.Global.Repositories
 
         public void AddOrUpdateRange(IEnumerable<T> objList)
         {
+            Console.WriteLine(objList);
+
             if (objList == null)
                 throw new ArgumentNullException("objList is null");
 
