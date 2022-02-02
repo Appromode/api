@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System;
+using System.Linq;
 
 namespace marking_api.API.Controllers.Project
 {
@@ -47,29 +48,41 @@ namespace marking_api.API.Controllers.Project
         }
 
         [HttpPost]
-        //[ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(GroupRequest)))]
-        public IActionResult Post(GroupRequest group)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(GroupDM)))]
+        public IActionResult Post(GroupRequest groupReq)
         {
-            if (group == null)
+            if (groupReq == null)
                 return BadRequest();
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            GroupDM groupDM = _unitOfWork.Groups.Add(new GroupDM {
-                GroupName = group.GroupName,
+            GroupDM group = _unitOfWork.Groups.Add(new GroupDM {
+                GroupName = groupReq.GroupName
             });
-
-            List<UserGroupDM> userGroupList = new List<UserGroupDM>();
-            
-            group.Users.ForEach((user) => userGroupList.Add(new UserGroupDM() {
-              UserId = user.Id,
-              GroupId = groupDM.GroupId,
-            }));
-
-            _unitOfWork.UserGroups.AddOrUpdateRange(userGroupList);
-
             _unitOfWork.Save();
+
+            List<UserGroupDM> userGroups = new List<UserGroupDM>();
+            
+            foreach (var user in groupReq.Users)
+            {
+                userGroups.Add(new UserGroupDM 
+                {
+                    UserId = user.Id,
+                    GroupId = group.GroupId
+                });
+            }
+
+            //group.GroupUsers.ForEach((user) => userGroupList.Add(new UserGroupDM() {
+            //  UserId = user.UserId,
+            //  GroupId = group.GroupId,
+            //}));
+
+            _unitOfWork.UserGroups.AddRange(userGroups);
+            _unitOfWork.Save();
+
+            group.GroupUsers = new List<UserGroupDM>();
+            group.GroupUsers = _unitOfWork.UserGroups.Get(filter: x => x.GroupId == group.GroupId).ToList();
 
             return Ok(group);
         }
