@@ -28,15 +28,15 @@ namespace marking_api.API.Controllers.Identity
         
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserDTO)))]
-        public UserDTO Logon(Login userLogin)
+        public IActionResult Logon(Login userLogin)
         {
             var cm = new LoginCM(_signInManager, _unitOfWork);
             if (cm.Login(userLogin.Email, userLogin.Password))
             {
                 //cm.GenerateLogin(cm.user);
-                return cm.user;
+                return Ok(cm.user);
             }
-            return null;
+            return Unauthorized();
         }
 
         [HttpPut("logout")]
@@ -50,12 +50,12 @@ namespace marking_api.API.Controllers.Identity
 
         [HttpPut("verify")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(bool)))]
-        public bool Verify(string username, [FromBody] string password)
+        public IActionResult Verify(Login userLogin)
         {
             var cm = new LoginCM(_signInManager, _unitOfWork);
-            if (cm.VerifyUser(username, password))
-                return true;
-            return false;
+            if (cm.VerifyUser(userLogin.Email, userLogin.Password))
+                return Ok(true);
+            return Ok(false);
         }
     }
 }

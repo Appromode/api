@@ -56,11 +56,11 @@ namespace marking_api.API.Models.Identity
             return false;
         }
 
-        public bool VerifyUser(string username, string password)
+        public bool VerifyUser(string email, string password)
         {
-            if (!string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(password))
+            if (!string.IsNullOrWhiteSpace(email) && !string.IsNullOrWhiteSpace(password))
             {
-                User user = _signInManager.UserManager.FindByNameAsync(username).Result;
+                User user = _signInManager.UserManager.FindByEmailAsync(email).Result;
                 if (user != null)
                 {
                     var result = _signInManager.UserManager.CheckPasswordAsync(user, password).Result;

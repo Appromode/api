@@ -23,6 +23,7 @@ namespace marking_api.Global.Repositories
         IGradeRepository Grades { get; }
         IGroupMarkerRepository GroupMarkers { get; }
         IGroupRepository Groups { get; }
+        IMarkRepository Marks { get; }
         IProjectRepository Projects { get; }
         IRoleClaimRepository RoleClaims { get; }
         IRoleRepository Roles { get; }
@@ -64,6 +65,7 @@ namespace marking_api.Global.Repositories
             Grades = new GradeRepository(dbContext);
             GroupMarkers = new GroupMarkerRepository(dbContext);
             Groups = new GroupRepository(dbContext);
+            Marks = new MarkRepository(dbContext);
             Projects = new ProjectRepository(dbContext);
             RoleClaims = new RoleClaimRepository(dbContext);
             RolePermissions = new RolePermissionRepository(dbContext);
@@ -92,6 +94,7 @@ namespace marking_api.Global.Repositories
         public IGradeRepository Grades { get; private set; }
         public IGroupMarkerRepository GroupMarkers { get; private set; }
         public IGroupRepository Groups { get; private set; }
+        public IMarkRepository Marks { get; private set; }
         public IProjectRepository Projects { get; private set; }
         public IRoleClaimRepository RoleClaims { get; private set; }
         public IRolePermissionRepository RolePermissions { get; private set; }
