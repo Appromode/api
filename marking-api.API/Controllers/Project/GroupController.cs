@@ -6,9 +6,18 @@ using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System;
 
 namespace marking_api.API.Controllers.Project
 {
+    public class GroupRequest {
+        public string GroupName;
+        public string GroupDescription;
+        public List<User> Users; 
+    }
+
     [ApiController]
     [Route("api/[controller]")]
     public class GroupController : ControllerBase
@@ -38,8 +47,8 @@ namespace marking_api.API.Controllers.Project
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(GroupDM)))]
-        public IActionResult Post([FromBody] GroupDM group)
+        //[ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(GroupRequest)))]
+        public IActionResult Post(GroupRequest group)
         {
             if (group == null)
                 return BadRequest();
@@ -47,7 +56,19 @@ namespace marking_api.API.Controllers.Project
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            _unitOfWork.Groups.AddOrUpdate(group);
+            GroupDM groupDM = _unitOfWork.Groups.Add(new GroupDM {
+                GroupName = group.GroupName,
+            });
+
+            List<UserGroupDM> userGroupList = new List<UserGroupDM>();
+            
+            group.Users.ForEach((user) => userGroupList.Add(new UserGroupDM() {
+              UserId = user.Id,
+              GroupId = groupDM.GroupId,
+            }));
+
+            _unitOfWork.UserGroups.AddOrUpdateRange(userGroupList);
+
             _unitOfWork.Save();
 
             return Ok(group);
