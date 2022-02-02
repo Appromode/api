@@ -16,7 +16,7 @@ namespace marking_api.API.Controllers.Project
     public class GroupRequest {
         public string GroupName;
         public string GroupDescription;
-        public List<User> Users; 
+        public List<User> GroupMembers;
     }
 
     [ApiController]
@@ -64,7 +64,7 @@ namespace marking_api.API.Controllers.Project
 
             List<UserGroupDM> userGroups = new List<UserGroupDM>();
             
-            foreach (var user in groupReq.Users)
+            foreach (var user in groupReq.GroupMembers)
             {
                 userGroups.Add(new UserGroupDM 
                 {
@@ -72,11 +72,6 @@ namespace marking_api.API.Controllers.Project
                     GroupId = group.GroupId
                 });
             }
-
-            //group.GroupUsers.ForEach((user) => userGroupList.Add(new UserGroupDM() {
-            //  UserId = user.UserId,
-            //  GroupId = group.GroupId,
-            //}));
 
             _unitOfWork.UserGroups.AddRange(userGroups);
             _unitOfWork.Save();
