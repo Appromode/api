@@ -6,9 +6,16 @@ using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace marking_api.API.Controllers.Project
 {
+    public class GroupRequest {
+        public string GroupName;
+        public string GroupDescription;
+        public List<User> GroupMembers;
+    }
+
     [ApiController]
     [Route("api/[controller]")]
     public class GroupController : ControllerBase
@@ -39,16 +46,35 @@ namespace marking_api.API.Controllers.Project
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(GroupDM)))]
-        public IActionResult Post([FromBody] GroupDM group)
+        public IActionResult Post(GroupRequest groupReq)
         {
-            if (group == null)
+            if (groupReq == null)
                 return BadRequest();
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            _unitOfWork.Groups.AddOrUpdate(group);
+            GroupDM group = _unitOfWork.Groups.Add(new GroupDM {
+                GroupName = groupReq.GroupName
+            });
             _unitOfWork.Save();
+
+            List<UserGroupDM> userGroups = new List<UserGroupDM>();
+            
+            foreach (var user in groupReq.GroupMembers)
+            {
+                userGroups.Add(new UserGroupDM 
+                {
+                    UserId = user.Id,
+                    GroupId = group.GroupId
+                });
+            }
+
+            _unitOfWork.UserGroups.AddRange(userGroups);
+            _unitOfWork.Save();
+
+            group.GroupUsers = new List<UserGroupDM>();
+            group.GroupUsers = _unitOfWork.UserGroups.Get(filter: x => x.GroupId == group.GroupId).ToList();
 
             return Ok(group);
         }
