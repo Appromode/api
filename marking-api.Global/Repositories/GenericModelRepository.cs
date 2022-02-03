@@ -23,7 +23,10 @@ namespace marking_api.Global.Repositories
         void Delete(T obj);
         void Delete(object id);
         void DeleteRange(IEnumerable<T> obj);
-        void Save();
+        void StartTransaction();
+        void RollBackTransaction();
+        void CommitTransaction();
+        void Save();        
         public bool IsBeingTracked<TType>(T entity);
     }
 
@@ -171,6 +174,21 @@ namespace marking_api.Global.Repositories
                 throw new ArgumentNullException("Obj is null");
 
             _entities.RemoveRange(objs);
+        }
+
+        public void StartTransaction()
+        {
+            _dbContext.Database.BeginTransaction();
+        }
+
+        public void RollBackTransaction()
+        {
+            _dbContext.Database.RollbackTransaction();
+        }
+
+        public void CommitTransaction()
+        {
+            _dbContext.Database.CommitTransaction();
         }
 
         public void Save()
