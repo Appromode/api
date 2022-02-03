@@ -22,7 +22,7 @@ namespace marking_api.Global.Repositories
         ICommentRepository Comments { get; }
         IGradeRepository Grades { get; }
         IGroupMarkerRepository GroupMarkers { get; }
-        IGroupRepository Groups { get; }
+        IGroupRepository Groups { get; }        
         IMarkRepository Marks { get; }
         IProjectRepository Projects { get; }
         IRoleClaimRepository RoleClaims { get; }
@@ -37,10 +37,12 @@ namespace marking_api.Global.Repositories
         IUserRepository Users { get; }
         IUserRoleRepository UserRoles { get; }
         IUserTokenRepository UserTokens { get; }
-        
+
+        IGenericMethodRepository GenericMethods { get; }
+
         //Views
 
-        
+
         int Save();
     }
 
@@ -80,6 +82,8 @@ namespace marking_api.Global.Repositories
             UserRoles = new UserRoleRepository(dbContext);
             UserTokens = new UserTokenRepository(dbContext);
 
+            GenericMethods = new GenericMethodRepository(dbContext);
+
             //Views
         }
 
@@ -108,6 +112,8 @@ namespace marking_api.Global.Repositories
         public IUserRepository Users { get; private set; }
         public IUserRoleRepository UserRoles { get; private set; }
         public IUserTokenRepository UserTokens { get; private set; }
+
+        public IGenericMethodRepository GenericMethods { get; private set; }
 
         //Views
 

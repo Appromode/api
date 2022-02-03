@@ -15,17 +15,14 @@ namespace marking_api.Global.Repositories
         IEnumerable<T> GetByIds<Type>(IEnumerable<Type> ids, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);
         IEnumerable<T> Find(Expression<Func<T, bool>> expression);
         T Add(T obj);
-        void AddRange(IEnumerable<T> obj);
-        void Update(T obj);
+        IEnumerable<T> AddRange(IEnumerable<T> obj);
+        T Update(T obj);
         void AddOrUpdate(T obj);
         void AddOrUpdateRange(IEnumerable<T> obj);
         void AddUpdateDeleteRange(IEnumerable<T> obj, IEnumerable<T> existing);
         void Delete(T obj);
         void Delete(object id);
         void DeleteRange(IEnumerable<T> obj);
-        void StartTransaction();
-        void RollBackTransaction();
-        void CommitTransaction();
         void Save();        
         public bool IsBeingTracked<TType>(T entity);
     }
@@ -84,21 +81,25 @@ namespace marking_api.Global.Repositories
             return obj;
         }
 
-        public void AddRange(IEnumerable<T> objs)
+        public IEnumerable<T> AddRange(IEnumerable<T> objs)
         {
             if (objs == null)
                 throw new ArgumentNullException("Obj is null");
 
             _entities.AddRange(objs);
+
+            return objs;
         }
 
-        public void Update(T obj)
+        public T Update(T obj)
         {
             if (obj == null)
                 throw new ArgumentNullException("Obj is null");
 
             _entities.Attach(obj);
             _dbContext.Entry(obj).State = EntityState.Modified;
+
+            return obj;
         }
 
         public void AddOrUpdate(T entity)
@@ -178,21 +179,6 @@ namespace marking_api.Global.Repositories
                 throw new ArgumentNullException("Obj is null");
 
             _entities.RemoveRange(objs);
-        }
-
-        public void StartTransaction()
-        {
-            _dbContext.Database.BeginTransaction();
-        }
-
-        public void RollBackTransaction()
-        {
-            _dbContext.Database.RollbackTransaction();
-        }
-
-        public void CommitTransaction()
-        {
-            _dbContext.Database.CommitTransaction();
         }
 
         public void Save()
