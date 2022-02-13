@@ -1,11 +1,9 @@
-using Hangfire;
-using Hangfire.SqlServer;
-using marking_api.API.Config;
 using marking_api.Data;
+using marking_api.DataModel.API;
 using marking_api.DataModel.Identity;
 using marking_api.Global.Repositories;
-using marking_api.Global.Services;
-using Microsoft.AspNetCore.Authentication.Certificate;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -13,10 +11,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
@@ -24,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 
 namespace marking_api.API
 {
@@ -43,7 +42,6 @@ namespace marking_api.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //var hangfireConnection = "";
             var serverVersion = new MySqlServerVersion(new Version(8, 0, 27));
 
             if (Env.IsDevelopment())
@@ -53,7 +51,6 @@ namespace marking_api.API
                     o.SchemaBehavior(MySqlSchemaBehavior.Ignore);
                     o.EnableRetryOnFailure();
                 }));
-                //hangfireConnection = "DbConnection";
             } else
             {
                 services.AddDbContext<MarkingDbContext>(options => options.UseMySql(Configuration.GetConnectionString("DbConnection"), serverVersion, o => 
@@ -61,7 +58,6 @@ namespace marking_api.API
                     o.SchemaBehavior(MySqlSchemaBehavior.Ignore);
                     o.EnableRetryOnFailure(); 
                 }));
-                //hangfireConnection = "DbConnection";
             }
 
             services.Configure<RequestLocalizationOptions>(o =>
@@ -90,18 +86,6 @@ namespace marking_api.API
 
             services.AddHttpContextAccessor();
 
-            //services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme).AddCertificate(options =>
-            //{
-            //    options.Events = new CertificateAuthenticationEvents
-            //    {
-            //        OnCertificateValidated = context =>
-            //        {
-            //            var validationService = context.HttpContext.RequestServices.GetRequiredService<CertificateValidationService>();
-            //        }
-            //    };
-            //});
-
-
             services.AddCors(options => 
             {
                 options.AddPolicy(name: MyAllowSpecificOrigins, (builder) => 
@@ -119,43 +103,61 @@ namespace marking_api.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "marking_api.API", Version = "v1" });
                 c.SchemaFilter<SwaggerExcludeFilter>();
                 c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
-                //c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                //{
-                //    Description = "JWT Authorisation header using the bearer scheme",
-                //    Name = "Authorisation",
-                //    In = ParameterLocation.Header,
-                //    Type = SecuritySchemeType.ApiKey
-                //});
-                //c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                //{
-                //    { new OpenApiSecurityScheme
-                //    {
-                //        Reference = new OpenApiReference
-                //        {
-                //            Id = "Bearer",
-                //            Type = ReferenceType.SecurityScheme
-                //        }
-                //    }, new List<string>() }
-                //});
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorisation header using the bearer scheme",
+                    Name = "Authorisation",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    { new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Id = "Bearer",
+                            Type = ReferenceType.SecurityScheme
+                        }
+                    }, new List<string>() }
+                });
             });
 
-            //services.AddHangfire(configuration => configuration.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
-            //.UseSimpleAssemblyNameTypeSerializer()
-            //.UseSerializerSettings(new JsonSerializerSettings 
-            //{
-            //    ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
-            //    PreserveReferencesHandling = PreserveReferencesHandling.Objects
-            //})
-            //.UseSqlServerStorage(Configuration.GetConnectionString(hangfireConnection), new SqlServerStorageOptions 
-            //{
-            //    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
-            //    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
-            //    QueuePollInterval = TimeSpan.Zero,
-            //    UseRecommendedIsolationLevel = true,
-            //    DisableGlobalLocks = true
-            //}));
+            services.Configure<Jwt>(Configuration.GetSection("Jwt"));
 
-            //services.AddHangfireServer();
+            var key = Encoding.ASCII.GetBytes(Configuration["Jwt:Secret"]);
+
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateLifetime = true,
+                RequireExpirationTime = false,
+                ClockSkew = TimeSpan.Zero
+            };
+
+            services.AddSingleton(tokenValidationParameters);
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.TokenValidationParameters = tokenValidationParameters;
+            });
+
+            services.AddAuthorization(options =>
+            {
+                var authPolicyBuilder = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme);
+                authPolicyBuilder = authPolicyBuilder.RequireAuthenticatedUser();
+                options.DefaultPolicy = authPolicyBuilder.Build();
+                options.FallbackPolicy = new AuthorizationPolicyBuilder().AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme).RequireAuthenticatedUser().Build();
+            });
 
             services.AddScoped<MarkingDbSeeder>();
 
@@ -167,19 +169,11 @@ namespace marking_api.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, MarkingDbSeeder dbSeeder)
         {
-            if (env.IsDevelopment())
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
             {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => 
-                { 
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "marking_api.API v1"); 
-                });
-            } else
-            {
-                app.UseExceptionHandler("/Error");
-                app.UseHsts();
-            }
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "marking_api.API v1");
+            });
 
             if (dbSeeder != null)
             {

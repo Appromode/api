@@ -1,106 +1,183 @@
-﻿using marking_api.DataModel.DTOs;
+﻿using marking_api.Data;
+using marking_api.DataModel.API;
 using marking_api.DataModel.Identity;
-using marking_api.Global.Repositories;
+using marking_api.Global.Extensions;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace marking_api.API.Models.Identity
 {
     public class LoginCM : BaseModel
     {
-        public IUnitOfWork _unitOfWork;
+        public MarkingDbContext _markingDbContext;
         public SignInManager<User> _signInManager;
-        public LoginCM(SignInManager<User> signInManager, IUnitOfWork unitOfwork)
+        public Jwt _jwt;
+        public TokenValidationParameters _tokenValidationParameters;
+        public LoginCM(MarkingDbContext markingDbContext, SignInManager<User> signInManager, Jwt jwt, TokenValidationParameters tokenValidationParameters)
         {
+            _markingDbContext = markingDbContext;
             _signInManager = signInManager;
-            _unitOfWork = unitOfwork;
+            _jwt = jwt;
+            _tokenValidationParameters = tokenValidationParameters;            
         }
 
-        public User rawUser { get; set; }
-        public UserDTO user { get; set; }
-
-        public bool Login(string email, string password)
+        public AuthRequest GenerateJwtToken(IdentityUser user)
         {
-            if (!string.IsNullOrWhiteSpace(email) && !string.IsNullOrWhiteSpace(password))
-            {
-                User inituser = _signInManager.UserManager.FindByEmailAsync(email).Result;
-                if (inituser == null)
-                    return false;
-                var result = _signInManager.PasswordSignInAsync(inituser.UserName, password, true, false).Result;
-                
-                if (result.Succeeded)
-                {
-                    if (inituser.IsDisabled || inituser.IsDeleted)
-                    {
-                        return false;
-                    }
-                    this.rawUser = inituser;
-                    ConvertToDTO();
-                    return true;
-                }
-                if (result.RequiresTwoFactor)
-                {
-                    return false;
-                }
-                if (result.IsLockedOut)
-                {
-                    return false;
-                }
-                if (result.IsNotAllowed)
-                {
-                    return false;
-                }
-            }
-            return false;
-        }
+            var handler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_jwt.Secret);
 
-        public bool VerifyUser(string email, string password)
-        {
-            if (!string.IsNullOrWhiteSpace(email) && !string.IsNullOrWhiteSpace(password))
+            var tokenDesc = new SecurityTokenDescriptor
             {
-                User user = _signInManager.UserManager.FindByEmailAsync(email).Result;
-                if (user != null)
+                Subject = new ClaimsIdentity(new[]
                 {
-                    var result = _signInManager.UserManager.CheckPasswordAsync(user, password).Result;
-                    if (result)
-                    {
-                        return true;
-                    }                    
-                }                
-            }
-            return false;
-        }
+                    new Claim(ClaimTypes.NameIdentifier, user.Id),
+                    new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                }),
+                Expires = DateTime.Now.AddMonths(6),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
 
-        //public void GenerateLogin(User user)
-        //{
-        //    _unitOfWork.UserLogins.Add(new UserLogin 
-        //    {
-        //        UserId = user.Id,
-        //        LoginProvider = "frontend",
-        //        ProviderDisplayName = "FrontEnd",
-        //        User = user,
-        //        ProviderKey = Guid.NewGuid().ToString()
-        //    });
-        //    _unitOfWork.Save();
-        //}
+            var token = handler.CreateToken(tokenDesc);
+            var jwtToken = handler.WriteToken(token);
 
-        public void ConvertToDTO()
-        {
-            user = new UserDTO
+            var refreshToken = new RefreshTokenDM()
             {
-                UserId = this.rawUser.Id,                
-                NormalizedUserName = this.rawUser.NormalizedUserName,
-                NormalizedEmail = this.rawUser.NormalizedEmail,
-                TwoFactorEnabled = this.rawUser.TwoFactorEnabled,
-                ProfilePicture = this.rawUser.ProfilePicture
+                JwtId = token.Id,
+                IsUsed = false,
+                IsRevoked = false,
+                UserId = user.Id,
+                AddedDate = DateTime.Now,
+                ExpiryDate = DateTime.Now.AddMonths(6),
+                Token = UtilityExtensions.GenerateRefreshToken()
+            };
+
+            _markingDbContext.RefreshTokens.Add(refreshToken);
+            _markingDbContext.SaveChanges();
+
+            return new AuthRequest()
+            {
+                Token = jwtToken,
+                Success = true,
+                RefreshToken = refreshToken.Token
             };
         }
 
-        public async void Logout()
+        public async Task<AuthRequest> VerifyAndGenerateToken(TokenRequest tokenRequest)
         {
-            await _signInManager.SignOutAsync();
+            var handler = new JwtSecurityTokenHandler();
+            try
+            {
+                var tokenVerification = handler.ValidateToken(tokenRequest.BearerToken, _tokenValidationParameters, out var validatedToken);
+                if (validatedToken is JwtSecurityToken jwtSecurityToken)
+                {
+                    var result = jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase);
+                    if (result == false)
+                        return null;
+                }
+
+                var unixTimeStamp = long.Parse(tokenVerification.Claims.FirstOrDefault(x => x.Type.Equals(JwtRegisteredClaimNames.Exp)).Value);
+                var expiryDate = UtilityExtensions.UnixTimeStampToDateTime(unixTimeStamp);
+                if (expiryDate > DateTime.UtcNow)
+                {
+                    return new AuthRequest()
+                    {
+                        Success = false,
+                        Errors = new List<string>()
+                        {
+                            "Token has not yet expired"
+                        }
+                    };
+                }
+
+                var storedToken = _markingDbContext.RefreshTokens.FirstOrDefault(x => x.Token.Equals(tokenRequest.RefreshToken));
+                if (storedToken == null)
+                {
+                    return new AuthRequest()
+                    {
+                        Success = false,
+                        Errors = new List<string>()
+                        {
+                            "Token does not exist"
+                        }
+                    };
+                }
+
+                if (storedToken.IsUsed)
+                {
+                    return new AuthRequest()
+                    {
+                        Success = false,
+                        Errors = new List<string>()
+                        {
+                            "Token has been used"
+                        }
+                    };
+                }
+
+                if (storedToken.IsRevoked)
+                {
+                    return new AuthRequest()
+                    {
+                        Success = false,
+                        Errors = new List<string>()
+                        {
+                            "Token has been revoked"
+                        }
+                    };
+                }
+
+                var jti = tokenVerification.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
+                if (storedToken.JwtId != jti)
+                {
+                    return new AuthRequest()
+                    {
+                        Success = false,
+                        Errors = new List<string>()
+                        {
+                            "Token doesn't match"
+                        }
+                    };
+                }
+
+                storedToken.IsUsed = true;
+                _markingDbContext.RefreshTokens.Update(storedToken);
+                _markingDbContext.SaveChanges();
+
+                var user = await _signInManager.UserManager.FindByIdAsync(storedToken.UserId);
+                return GenerateJwtToken(user);
+            } 
+            catch (Exception ex)
+            {
+                if (ex.Message.Contains("Lifetime validation failed. This tokens is expired"))
+                {
+                    return new AuthRequest()
+                    {
+                        Success = false,
+                        Errors = new List<string>()
+                        {
+                            "Token has expired please re-login"
+                        }
+                    };
+                } else
+                {
+                    return new AuthRequest()
+                    {
+                        Success = false,
+                        Errors = new List<string>()
+                        {
+                            "Something went wrong."
+                        }
+                    };
+                }
+            }
         }
     }
 }

@@ -13,6 +13,7 @@ namespace marking_api.Global.Repositories
     public interface IUnitOfWork : IDisposable
     {
         //Models
+        IAuditRepository Audits { get; }
         IFSFileRepository FSFiles { get; }
         IFSFileStateRepository FSFileStates { get; }
         IFSFileVersionRepository FSFileVersions { get; }
@@ -20,11 +21,14 @@ namespace marking_api.Global.Repositories
         IFSFolderRepository FSFolders { get; }
         IFSFolderRoleRepository FSFolderRoles { get; }
         ICommentRepository Comments { get; }
+        IGenericMethodRepository GenericMethods { get; }
         IGradeRepository Grades { get; }
         IGroupMarkerRepository GroupMarkers { get; }
-        IGroupRepository Groups { get; }        
+        IGroupRepository Groups { get; }
+        ILogRepository Logs { get; }
         IMarkRepository Marks { get; }
         IProjectRepository Projects { get; }
+        IRefreshTokenRepository RefreshTokens { get; }
         IRoleClaimRepository RoleClaims { get; }
         IRoleRepository Roles { get; }
         IRolePermissionRepository RolePermissions { get; }
@@ -36,9 +40,7 @@ namespace marking_api.Global.Repositories
         IUserLoginRepository UserLogins { get; }
         IUserRepository Users { get; }
         IUserRoleRepository UserRoles { get; }
-        IUserTokenRepository UserTokens { get; }
-
-        IGenericMethodRepository GenericMethods { get; }
+        IUserTokenRepository UserTokens { get; }        
 
         //Views
 
@@ -57,18 +59,21 @@ namespace marking_api.Global.Repositories
             _signInManager = signInManager;
 
             //Models
+            Audits = new AuditRepository(dbContext);
+            Comments = new CommentRepository(dbContext);
             FSFiles = new FSFileRepository(dbContext);
             FSFileStates = new FSFileStateRepository(dbContext);
             FSFileVersions = new FSFileVersionRepository(dbContext);
             FSFolderFiles = new FSFolderFileRepository(dbContext);
             FSFolders = new FSFolderRepository(dbContext);
             FSFolderRoles = new FSFolderRoleRepository(dbContext);
-            Comments = new CommentRepository(dbContext);
             Grades = new GradeRepository(dbContext);
             GroupMarkers = new GroupMarkerRepository(dbContext);
             Groups = new GroupRepository(dbContext);
+            Logs = new LogRepository(dbContext);
             Marks = new MarkRepository(dbContext);
             Projects = new ProjectRepository(dbContext);
+            RefreshTokens = new RefreshTokenRepository(dbContext);
             RoleClaims = new RoleClaimRepository(dbContext);
             RolePermissions = new RolePermissionRepository(dbContext);
             Roles = new RoleRepository(dbContext);
@@ -88,18 +93,21 @@ namespace marking_api.Global.Repositories
         }
 
         //Models
+        public IAuditRepository Audits { get; set; }
+        public ICommentRepository Comments { get; private set; }
         public IFSFileRepository FSFiles { get; private set; }
         public IFSFileStateRepository FSFileStates { get; private set; }
         public IFSFileVersionRepository FSFileVersions { get; private set; }
         public IFSFolderFileRepository FSFolderFiles { get; private set; }
         public IFSFolderRepository FSFolders { get; private set; }
         public IFSFolderRoleRepository FSFolderRoles { get; private set; }
-        public ICommentRepository Comments { get; private set; }
         public IGradeRepository Grades { get; private set; }
         public IGroupMarkerRepository GroupMarkers { get; private set; }
         public IGroupRepository Groups { get; private set; }
+        public ILogRepository Logs { get; private set; }
         public IMarkRepository Marks { get; private set; }
         public IProjectRepository Projects { get; private set; }
+        public IRefreshTokenRepository RefreshTokens { get; private set; }
         public IRoleClaimRepository RoleClaims { get; private set; }
         public IRolePermissionRepository RolePermissions { get; private set; }
         public IRoleRepository Roles { get; private set; }

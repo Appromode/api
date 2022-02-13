@@ -13,6 +13,10 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using marking_api.DataModel.Project;
+using marking_api.DataModel.API;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using marking_api.Data.Audit;
+using marking_api.DataModel.Logging;
 
 namespace marking_api.Data
 {
@@ -60,6 +64,13 @@ namespace marking_api.Data
         public DbSet<TagDM> Tags { get; set; }
         public DbSet<UserGradeDM> UserGrades { get; set; }
         public DbSet<UserGroupDM> UserGroups { get; set; }
+
+        //API
+        public DbSet<RefreshTokenDM> RefreshTokens { get; set; }
+
+        //Logging
+        public DbSet<AuditDM> Audits { get; set; }
+        public DbSet<LogDM> Logs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -169,14 +180,49 @@ namespace marking_api.Data
                 entity.HasIndex(i => i.GroupName).IsUnique(true);
             });
 
+            builder.Entity<RefreshTokenDM>(entity =>
+            {
+                entity.ToTable(name: "RefreshTokens", schema: "dbo");
+                entity.Property(e => e.UserId).HasColumnName("UserId");
+            });
+
+            builder.Entity<AuditDM>(entity =>
+            {
+                entity.ToTable(name: "Audit", schema: "dbo");
+                entity.Property(e => e.UserId).HasColumnName("UserId");
+            });
+
             //Example override for view
             //If There is a single table that the view originates from then use the primary key from that table otherwise no.
             //The binding model would go in marking-api.DataModel
             //builder.Entity<ModelToBindViewTo>().ToView(nameof(ViewName)).Has(No)Key();
         }
 
+        public void AddLogs()
+        {
+            ChangeTracker.DetectChanges();
+            List<AuditHelper> entries = new List<AuditHelper>();
+            foreach (EntityEntry entry in ChangeTracker.Entries())
+            {
+                if (entry.State == EntityState.Detached || entry.State == EntityState.Unchanged
+                    || entry.State == EntityState.Unchanged)
+                {
+                    continue;
+                }
+                var auditEntry = new AuditHelper(entry, UserId);
+                entries.Add(auditEntry);
+            }
+
+            if (entries.Any())
+            {
+                var logs = entries.Select(x => x.ToAudit());
+                Audits.AddRange(logs);
+            }
+        }
+
         public override int SaveChanges()
         {
+            AddLogs();
             ChangeTracker.DetectChanges();
             foreach(var entry in ChangeTracker.Entries())
             {
@@ -204,6 +250,7 @@ namespace marking_api.Data
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken)) 
         {
+            AddLogs();
             ChangeTracker.DetectChanges();
             foreach (var entry in ChangeTracker.Entries())
             {

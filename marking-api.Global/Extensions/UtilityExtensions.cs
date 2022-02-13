@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,6 +26,24 @@ namespace marking_api.Global.Extensions
                 return default(T);
 
             return (T)property.GetValue(obj, null);
+        }
+
+        public static string GenerateRefreshToken()
+        {
+            var randomNumber = new byte[32];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(randomNumber);
+                return Convert.ToBase64String(randomNumber);
+            }
+        }
+
+        public static DateTime UnixTimeStampToDateTime(long unixTimeStamp)
+        {
+            var dateTimeVal = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            dateTimeVal = dateTimeVal.AddSeconds(unixTimeStamp);
+
+            return dateTimeVal;
         }
     }
 }

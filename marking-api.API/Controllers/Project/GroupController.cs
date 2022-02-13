@@ -1,4 +1,5 @@
 ﻿using marking_api.API.Models.Project;
+using marking_api.DataModel.API;
 using marking_api.DataModel.Identity;
 using marking_api.DataModel.Project;
 using marking_api.Global.Extensions;
@@ -10,12 +11,6 @@ using System.Linq;
 
 namespace marking_api.API.Controllers.Project
 {
-    public class GroupRequest {
-        public string GroupName;
-        public string GroupDescription;
-        public List<User> GroupMembers;
-    }
-
     [ApiController]
     [Route("api/[controller]")]
     public class GroupController : ControllerBase
