@@ -23,7 +23,7 @@ namespace marking_api.API.Controllers.Logging
             return Ok(_unitOfWork.Logs.Get());
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(LogDM)))]
         public IActionResult Get(long id)
         {

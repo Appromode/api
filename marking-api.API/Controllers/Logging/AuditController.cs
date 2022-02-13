@@ -23,7 +23,7 @@ namespace marking_api.API.Controllers.Logging
             return Ok(_unitOfWork.Audits.Get());
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(AuditDM)))]
         public IActionResult Get(long id)
         {
