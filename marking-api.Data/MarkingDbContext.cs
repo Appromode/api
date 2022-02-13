@@ -72,6 +72,10 @@ namespace marking_api.Data
         public DbSet<AuditDM> Audits { get; set; }
         public DbSet<LogDM> Logs { get; set; }
 
+        //Config
+        public DbSet<LinkDM> Links { get; set; }
+        public DbSet<RoleLinkDM> RoleLinks { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var configuration = new ConfigurationBuilder()

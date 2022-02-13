@@ -25,13 +25,15 @@ namespace marking_api.Global.Repositories
         IGradeRepository Grades { get; }
         IGroupMarkerRepository GroupMarkers { get; }
         IGroupRepository Groups { get; }
+        ILinkRepository Links { get; }
         ILogRepository Logs { get; }
         IMarkRepository Marks { get; }
         IProjectRepository Projects { get; }
         IRefreshTokenRepository RefreshTokens { get; }
         IRoleClaimRepository RoleClaims { get; }
-        IRoleRepository Roles { get; }
+        IRoleLinkRepository RoleLinks { get; }
         IRolePermissionRepository RolePermissions { get; }
+        IRoleRepository Roles { get; }        
         ISiteAreaRepository SiteAreas { get; }
         ITagRepository Tags { get; }
         IUserClaimRepository UserClaims { get; }
@@ -70,11 +72,13 @@ namespace marking_api.Global.Repositories
             Grades = new GradeRepository(dbContext);
             GroupMarkers = new GroupMarkerRepository(dbContext);
             Groups = new GroupRepository(dbContext);
+            Links = new LinkRepository(dbContext);
             Logs = new LogRepository(dbContext);
             Marks = new MarkRepository(dbContext);
             Projects = new ProjectRepository(dbContext);
             RefreshTokens = new RefreshTokenRepository(dbContext);
             RoleClaims = new RoleClaimRepository(dbContext);
+            RoleLinks = new RoleLinkRepository(dbContext);
             RolePermissions = new RolePermissionRepository(dbContext);
             Roles = new RoleRepository(dbContext);
             SiteAreas = new SiteAreaRepository(dbContext);
@@ -104,11 +108,13 @@ namespace marking_api.Global.Repositories
         public IGradeRepository Grades { get; private set; }
         public IGroupMarkerRepository GroupMarkers { get; private set; }
         public IGroupRepository Groups { get; private set; }
+        public ILinkRepository Links { get; private set; }
         public ILogRepository Logs { get; private set; }
         public IMarkRepository Marks { get; private set; }
         public IProjectRepository Projects { get; private set; }
         public IRefreshTokenRepository RefreshTokens { get; private set; }
         public IRoleClaimRepository RoleClaims { get; private set; }
+        public IRoleLinkRepository RoleLinks { get; private set; }
         public IRolePermissionRepository RolePermissions { get; private set; }
         public IRoleRepository Roles { get; private set; }
         public ISiteAreaRepository SiteAreas { get; private set; }
