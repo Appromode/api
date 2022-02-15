@@ -1,9 +1,6 @@
 ﻿using marking_api.DataModel.Identity;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace marking_api.Global.Services
 {
@@ -14,14 +11,14 @@ namespace marking_api.Global.Services
             return !date.HasValue ? true : false;
         }
 
-        public List<LinkDM> GenerateUserMenu()
+        public List<LinkDM> GenerateUserMenu(string userId)
         {
-            return null;
+            return null; //Return list of menus available to the user
         }
 
-        public void RecurseChildLinks()
+        public void RecurseChildLinks(List<LinkDM> menus, LinkDM parentMenu, Int64 parentMenuId)
         {
-
+            //Generate sub menus. One call per parent menu
         }
     }
 }
