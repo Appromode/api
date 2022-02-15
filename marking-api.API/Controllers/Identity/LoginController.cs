@@ -31,7 +31,6 @@ namespace marking_api.API.Controllers.Identity
         
         [HttpPost]
         [AllowAnonymous]
-        [Route("Login")]
         public async Task<IActionResult> Login([FromBody]LoginRequest userLogin)
         {
             if (ModelState.IsValid)

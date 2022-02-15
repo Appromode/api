@@ -1,4 +1,6 @@
 ﻿using marking_api.DataModel.Identity;
+using marking_api.Global.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 
@@ -6,6 +8,12 @@ namespace marking_api.Global.Services
 {
     public class UtilService
     {
+        private readonly IUnitOfWork _unitOfWork;
+        public UtilService(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
+
         public bool IsDateTimeNullOrEmpty(DateTime? date)
         {
             return !date.HasValue ? true : false;
@@ -13,12 +21,13 @@ namespace marking_api.Global.Services
 
         public List<LinkDM> GenerateUserMenu(string userId)
         {
-            return null; //Return list of menus available to the user
+            //List<LinkDM> userLinks = _unitOfWork.Links.Get(include: x => x.Include());
+            return null; //Generate nav menu for user
         }
 
-        public void RecurseChildLinks(List<LinkDM> menus, LinkDM parentMenu, Int64 parentMenuId)
+        public void RecurseChildLinks(List<LinkDM> userLinks, Int64 ParentLinkId, LinkDM ParentLink)
         {
-            //Generate sub menus. One call per parent menu
+            //Recurse child links per parent link
         }
     }
 }
