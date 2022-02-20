@@ -3,6 +3,7 @@ using marking_api.Global.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace marking_api.Global.Services
 {
@@ -17,6 +18,11 @@ namespace marking_api.Global.Services
         public bool IsDateTimeNullOrEmpty(DateTime? date)
         {
             return !date.HasValue ? true : false;
+        }
+
+        public bool IsUserDisabled(string userName)
+        {
+            return _unitOfWork.Users.Get(filter: x => x.UserName.Equals(userName)).FirstOrDefault().IsDisabled;
         }
 
         public List<LinkDM> GenerateUserMenu(string userId)
