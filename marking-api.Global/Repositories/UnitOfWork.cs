@@ -3,10 +3,6 @@ using marking_api.DataModel.Identity;
 using marking_api.Global.Repositories.Models;
 using Microsoft.AspNetCore.Identity;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace marking_api.Global.Repositories
 {
