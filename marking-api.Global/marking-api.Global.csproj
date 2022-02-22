@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="Csv" Version="2.0.65" />
+    <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="Hangfire.AspNetCore" Version="1.7.28" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Z.EntityFramework.Plus.EFCore" Version="6.13.9" />

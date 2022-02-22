@@ -1,4 +1,5 @@
-﻿using marking_api.DataModel.Logging;
+﻿using marking_api.API.Config;
+using marking_api.DataModel.Logging;
 using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,7 @@ namespace marking_api.API.Controllers.Logging
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(LogDM)))]
+        [ClaimRequirement(MarkingClaimTypes.Permission, "Logging")]
         public IActionResult Get()
         {
             return Ok(_unitOfWork.Logs.Get());
@@ -25,6 +27,7 @@ namespace marking_api.API.Controllers.Logging
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(LogDM)))]
+        [ClaimRequirement(MarkingClaimTypes.Permission, "Logging")]
         public IActionResult Get(long id)
         {
             var log = _unitOfWork.Logs.GetById(id);

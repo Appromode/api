@@ -29,10 +29,9 @@ namespace marking_api.DataModel.Project
         [SwaggerExclude]
         public virtual User User { get; set; }
 
-        [ForeignKey("FileId")]
+        [ForeignKey("FeedbackId")]
         public virtual Int64 FeedbackId { get; set; }
         [SwaggerExclude]
-        public virtual FSFileDM Feedback { get; set; }
-
+        public virtual FeedbackDM Feedback { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using marking_api.DataModel.API;
 using marking_api.DataModel.Identity;
 using marking_api.Global.Extensions;
+using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -16,13 +17,13 @@ namespace marking_api.API.Models.Identity
 {
     public class LoginCM : BaseModel
     {
-        public MarkingDbContext _markingDbContext;
+        public IUnitOfWork _unitOfWork;
         public SignInManager<User> _signInManager;
         public Jwt _jwt;
         public TokenValidationParameters _tokenValidationParameters;
-        public LoginCM(MarkingDbContext markingDbContext, SignInManager<User> signInManager, Jwt jwt, TokenValidationParameters tokenValidationParameters)
+        public LoginCM(IUnitOfWork unitOfWork, SignInManager<User> signInManager, Jwt jwt, TokenValidationParameters tokenValidationParameters)
         {
-            _markingDbContext = markingDbContext;
+            _unitOfWork = unitOfWork;
             _signInManager = signInManager;
             _jwt = jwt;
             _tokenValidationParameters = tokenValidationParameters;            
@@ -59,8 +60,8 @@ namespace marking_api.API.Models.Identity
                 Token = UtilityExtensions.GenerateRefreshToken()
             };
 
-            _markingDbContext.RefreshTokens.Add(refreshToken);
-            _markingDbContext.SaveChanges();
+            _unitOfWork.RefreshTokens.Add(refreshToken);
+            _unitOfWork.Save();
 
             return new AuthRequest()
             {
@@ -97,7 +98,7 @@ namespace marking_api.API.Models.Identity
                     };
                 }
 
-                var storedToken = _markingDbContext.RefreshTokens.FirstOrDefault(x => x.Token.Equals(tokenRequest.RefreshToken));
+                var storedToken = _unitOfWork.RefreshTokens.Get(filter: x => x.Token.Equals(tokenRequest.RefreshToken)).FirstOrDefault();
                 if (storedToken == null)
                 {
                     return new AuthRequest()
@@ -148,8 +149,8 @@ namespace marking_api.API.Models.Identity
                 }
 
                 storedToken.IsUsed = true;
-                _markingDbContext.RefreshTokens.Update(storedToken);
-                _markingDbContext.SaveChanges();
+                _unitOfWork.RefreshTokens.Update(storedToken);
+                _unitOfWork.Save();
 
                 var user = await _signInManager.UserManager.FindByIdAsync(storedToken.UserId);
                 return GenerateJwtToken(user);

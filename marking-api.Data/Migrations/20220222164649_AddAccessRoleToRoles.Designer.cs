@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using marking_api.Data;
 
@@ -10,9 +11,10 @@ using marking_api.Data;
 namespace marking_api.Data.Migrations
 {
     [DbContext(typeof(MarkingDbContext))]
-    partial class MarkingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220222164649_AddAccessRoleToRoles")]
+    partial class AddAccessRoleToRoles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -815,63 +817,6 @@ namespace marking_api.Data.Migrations
                     b.ToTable("Comments", "dbo");
                 });
 
-            modelBuilder.Entity("marking_api.DataModel.Project.FeedbackDM", b =>
-                {
-                    b.Property<long>("FeedbackId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("AccessRole")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CriticalReflection")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProjectContributions")
-                        .HasColumnType("int");
-
-                    b.Property<long>("ProjectId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("TaskDifficulty")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TeamworkSkills")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TechnicalAchievements")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TechnicalContributions")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<bool>("canDelete")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime>("createdAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("deleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime?>("deletedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("updatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("FeedbackId");
-
-                    b.HasIndex("ProjectId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Marks", "dbo");
-                });
-
             modelBuilder.Entity("marking_api.DataModel.Project.GradeDM", b =>
                 {
                     b.Property<long>("GradeId")
@@ -998,6 +943,63 @@ namespace marking_api.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("GroupMarkers", "dbo");
+                });
+
+            modelBuilder.Entity("marking_api.DataModel.Project.MarkDM", b =>
+                {
+                    b.Property<long>("MarkId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("AccessRole")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CriticalReflection")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProjectContributions")
+                        .HasColumnType("int");
+
+                    b.Property<long>("ProjectId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("TaskDifficulty")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TeamworkSkills")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TechnicalAchievements")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TechnicalContributions")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<bool>("canDelete")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("createdAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("deleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("deletedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("updatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("MarkId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Marks", "dbo");
                 });
 
             modelBuilder.Entity("marking_api.DataModel.Project.ProjectDM", b =>
@@ -1405,27 +1407,9 @@ namespace marking_api.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("marking_api.DataModel.Project.FeedbackDM", b =>
-                {
-                    b.HasOne("marking_api.DataModel.Project.ProjectDM", "Project")
-                        .WithMany()
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("marking_api.DataModel.Identity.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Project");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("marking_api.DataModel.Project.GradeDM", b =>
                 {
-                    b.HasOne("marking_api.DataModel.Project.FeedbackDM", "Feedback")
+                    b.HasOne("marking_api.DataModel.FileSystem.FSFileDM", "Feedback")
                         .WithMany()
                         .HasForeignKey("FeedbackId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1467,6 +1451,24 @@ namespace marking_api.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("marking_api.DataModel.Project.MarkDM", b =>
+                {
+                    b.HasOne("marking_api.DataModel.Project.ProjectDM", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("marking_api.DataModel.Identity.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Project");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("marking_api.DataModel.Project.ProjectDM", b =>
                 {
                     b.HasOne("marking_api.DataModel.FileSystem.FSFileDM", "EthicsForm")
@@ -1502,7 +1504,7 @@ namespace marking_api.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("marking_api.DataModel.Project.FeedbackDM", "Mark")
+                    b.HasOne("marking_api.DataModel.Project.MarkDM", "Mark")
                         .WithMany()
                         .HasForeignKey("MarkId")
                         .OnDelete(DeleteBehavior.Restrict)

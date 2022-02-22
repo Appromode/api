@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using marking_api.Data;
 
@@ -10,9 +11,10 @@ using marking_api.Data;
 namespace marking_api.Data.Migrations
 {
     [DbContext(typeof(MarkingDbContext))]
-    partial class MarkingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220222165048_ChangeMarkDMToFeedbackDM")]
+    partial class ChangeMarkDMToFeedbackDM
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1425,7 +1427,7 @@ namespace marking_api.Data.Migrations
 
             modelBuilder.Entity("marking_api.DataModel.Project.GradeDM", b =>
                 {
-                    b.HasOne("marking_api.DataModel.Project.FeedbackDM", "Feedback")
+                    b.HasOne("marking_api.DataModel.FileSystem.FSFileDM", "Feedback")
                         .WithMany()
                         .HasForeignKey("FeedbackId")
                         .OnDelete(DeleteBehavior.Restrict)

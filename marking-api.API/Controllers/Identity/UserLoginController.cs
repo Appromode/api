@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using marking_api.DataModel.Identity;
 using marking_api.Global.Extensions;
+using marking_api.API.Config;
 
 namespace marking_api.API.Controllers.Identity
 {
@@ -18,6 +19,7 @@ namespace marking_api.API.Controllers.Identity
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserLogin)))]
+        [ClaimRequirement(MarkingClaimTypes.Permission, "Identity")]
         public IActionResult Get()
         {
             return Ok(_unitOfWork.UserLogins.Get());
@@ -25,6 +27,7 @@ namespace marking_api.API.Controllers.Identity
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserLogin)))]
+        [ClaimRequirement(MarkingClaimTypes.Permission, "Identity")]
         public IActionResult Get(string id)
         {
             var userLogin = _unitOfWork.UserLogins.GetById(id);
@@ -36,6 +39,7 @@ namespace marking_api.API.Controllers.Identity
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserLogin)))]
+        [ClaimRequirement(MarkingClaimTypes.Permission, "Identity")]
         public IActionResult Post([FromBody] UserLogin userLogin)
         {
             if (userLogin == null)
@@ -52,6 +56,7 @@ namespace marking_api.API.Controllers.Identity
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserLogin)))]
+        [ClaimRequirement(MarkingClaimTypes.Permission, "Identity")]
         public IActionResult Put(string providerKey, [FromBody] UserLogin userLogin)
         {
             if (userLogin == null)
@@ -71,6 +76,7 @@ namespace marking_api.API.Controllers.Identity
 
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserLogin)))]
+        [ClaimRequirement(MarkingClaimTypes.Permission, "Identity")]
         public IActionResult Delete(string id)
         {
             var userLogin = _unitOfWork.UserLogins.GetById(id);

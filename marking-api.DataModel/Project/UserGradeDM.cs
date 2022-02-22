@@ -17,7 +17,7 @@ namespace marking_api.DataModel.Project
         [ForeignKey("MarkId")]
         public Int64 MarkId { get; set; }
         [SwaggerExclude]
-        public MarkDM Mark { get; set; }
+        public FeedbackDM Mark { get; set; }
 
         [ForeignKey("GroupId")]
         public virtual Int64 GroupId { get; set; }

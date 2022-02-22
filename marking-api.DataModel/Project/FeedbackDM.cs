@@ -12,11 +12,11 @@ namespace marking_api.DataModel.Project
 {
     [GeneratedController("api/mark")]
     [Table("Marks", Schema = "dbo")]
-    public class MarkDM : BaseDataModel
+    public class FeedbackDM : BaseDataModel
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Int64 MarkId { get; set; }
+        public Int64 FeedbackId { get; set; }
         public int TaskDifficulty { get; set; }
         public int TechnicalAchievements { get; set; }
         public int TechnicalContributions { get; set; }

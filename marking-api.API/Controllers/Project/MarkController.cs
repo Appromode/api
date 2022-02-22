@@ -19,17 +19,17 @@ namespace marking_api.API.Controllers.Project
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(MarkDM)))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(FeedbackDM)))]
         public IActionResult Get()
         {
-            return Ok(_unitOfWork.Marks.Get());
+            return Ok(_unitOfWork.Feedback.Get());
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(MarkDM)))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(FeedbackDM)))]
         public IActionResult Get(long id)
         {
-            var mark = _unitOfWork.Marks.GetById(id);
+            var mark = _unitOfWork.Feedback.GetById(id);
             if (mark == null)
                 return NotFound();
             else
@@ -37,8 +37,8 @@ namespace marking_api.API.Controllers.Project
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(MarkDM)))]
-        public IActionResult Post([FromBody] MarkDM mark)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(FeedbackDM)))]
+        public IActionResult Post([FromBody] FeedbackDM mark)
         {
             if (mark == null)
                 return BadRequest();
@@ -46,41 +46,41 @@ namespace marking_api.API.Controllers.Project
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            _unitOfWork.Marks.AddOrUpdate(mark);
+            _unitOfWork.Feedback.AddOrUpdate(mark);
             _unitOfWork.Save();
 
             return Ok(mark);
         }
 
         [HttpPut]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(MarkDM)))]
-        public IActionResult Put(long id, [FromBody] MarkDM mark)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(FeedbackDM)))]
+        public IActionResult Put(long id, [FromBody] FeedbackDM mark)
         {
             if (mark == null)
                 return BadRequest();
 
-            if (id != mark.MarkId)
+            if (id != mark.FeedbackId)
                 return BadRequest("Id Mismatch");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            _unitOfWork.Marks.Update(mark);
+            _unitOfWork.Feedback.Update(mark);
             _unitOfWork.Save();
 
             return Ok(mark);
         }
 
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(MarkDM)))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(FeedbackDM)))]
         public IActionResult Delete(long id)
         {
-            var mark = _unitOfWork.Marks.GetById(id);
+            var mark = _unitOfWork.Feedback.GetById(id);
             if (mark == null)
                 return NotFound();
 
             mark.deleted = true;
-            _unitOfWork.Marks.Update(mark);
+            _unitOfWork.Feedback.Update(mark);
             _unitOfWork.Save();
 
             return Ok(mark);

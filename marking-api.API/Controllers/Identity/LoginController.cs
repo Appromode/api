@@ -3,6 +3,7 @@ using marking_api.API.Models.Identity;
 using marking_api.Data;
 using marking_api.DataModel.API;
 using marking_api.DataModel.Identity;
+using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,14 +17,14 @@ namespace marking_api.API.Controllers.Identity
     [Route("api/[controller]")]
     public class LoginController : ControllerBase
     {
-        private readonly MarkingDbContext _markingDbContext;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly SignInManager<User> _signInManager;
         private readonly Jwt _jwt;
         private readonly TokenValidationParameters _tokenValidationParameters;
 
-        public LoginController(MarkingDbContext markingDbContext, SignInManager<User> signInManager, IOptionsMonitor<Jwt> optionsMonitor, TokenValidationParameters tokenValidationParameters)
+        public LoginController(IUnitOfWork unitOfWork, SignInManager<User> signInManager, IOptionsMonitor<Jwt> optionsMonitor, TokenValidationParameters tokenValidationParameters)
         {
-            _markingDbContext = markingDbContext;
+            _unitOfWork = unitOfWork;
             _signInManager = signInManager;
             _jwt = optionsMonitor.CurrentValue;
             _tokenValidationParameters = tokenValidationParameters;
@@ -48,7 +49,7 @@ namespace marking_api.API.Controllers.Identity
                     if (result.IsLockedOut)
                         return BadRequest($"Account for '{userLogin.Email}' is locked out");
 
-                    var cm = new LoginCM(_markingDbContext, _signInManager, _jwt, _tokenValidationParameters);
+                    var cm = new LoginCM(_unitOfWork, _signInManager, _jwt, _tokenValidationParameters);
 
                     return Ok(cm.GenerateJwtToken(user));
                 }            
@@ -62,7 +63,7 @@ namespace marking_api.API.Controllers.Identity
         {
             if (ModelState.IsValid)
             {
-                var cm = new LoginCM(_markingDbContext, _signInManager, _jwt, _tokenValidationParameters);
+                var cm = new LoginCM(_unitOfWork, _signInManager, _jwt, _tokenValidationParameters);
                 var result = await cm.VerifyAndGenerateToken(tokenRequest);
 
                 if (result == null)

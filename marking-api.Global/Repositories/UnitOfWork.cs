@@ -27,7 +27,7 @@ namespace marking_api.Global.Repositories
         IGroupRepository Groups { get; }
         ILinkRepository Links { get; }
         ILogRepository Logs { get; }
-        IMarkRepository Marks { get; }
+        IFeedbackRepository Feedback { get; }
         IProjectRepository Projects { get; }
         IRefreshTokenRepository RefreshTokens { get; }
         IRoleClaimRepository RoleClaims { get; }
@@ -74,7 +74,7 @@ namespace marking_api.Global.Repositories
             Groups = new GroupRepository(dbContext);
             Links = new LinkRepository(dbContext);
             Logs = new LogRepository(dbContext);
-            Marks = new MarkRepository(dbContext);
+            Feedback = new FeedbackRepository(dbContext);
             Projects = new ProjectRepository(dbContext);
             RefreshTokens = new RefreshTokenRepository(dbContext);
             RoleClaims = new RoleClaimRepository(dbContext);
@@ -110,7 +110,7 @@ namespace marking_api.Global.Repositories
         public IGroupRepository Groups { get; private set; }
         public ILinkRepository Links { get; private set; }
         public ILogRepository Logs { get; private set; }
-        public IMarkRepository Marks { get; private set; }
+        public IFeedbackRepository Feedback { get; private set; }
         public IProjectRepository Projects { get; private set; }
         public IRefreshTokenRepository RefreshTokens { get; private set; }
         public IRoleClaimRepository RoleClaims { get; private set; }

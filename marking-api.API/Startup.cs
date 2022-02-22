@@ -2,6 +2,7 @@ using marking_api.Data;
 using marking_api.DataModel.API;
 using marking_api.DataModel.Identity;
 using marking_api.Global.Repositories;
+using marking_api.Global.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -14,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
@@ -160,6 +162,7 @@ namespace marking_api.API
             });
 
             services.AddScoped<MarkingDbSeeder>();
+            services.AddScoped<UtilService>();
 
             services.AddTransient(typeof(IGenericModelRepository<>), typeof(GenericModelRepository<>));
             services.AddTransient(typeof(IGenericViewRepository<>), typeof(GenericViewRepository<>));
@@ -167,7 +170,7 @@ namespace marking_api.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, MarkingDbSeeder dbSeeder)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, MarkingDbSeeder dbSeeder, ILoggerFactory loggerFactory)
         {
             app.UseSwagger();
             app.UseSwaggerUI(c =>
@@ -202,6 +205,9 @@ namespace marking_api.API
             {
                 endpoints.MapControllers();
             });
+
+            var loggingOptions = this.Configuration.GetSection("Log4NetCore").Get<Log4NetProviderOptions>();
+            loggerFactory.AddLog4Net(loggingOptions);
         }
     }
 }

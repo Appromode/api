@@ -59,7 +59,7 @@ namespace marking_api.Data
         public DbSet<GradeDM> Grades { get; set; }
         public DbSet<GroupDM> Groups { get; set; }
         public DbSet<GroupMarkerDM> GroupMarkers { get; set; }
-        public DbSet<MarkDM> Marks { get; set; }
+        public DbSet<FeedbackDM> Feedback { get; set; }
         public DbSet<ProjectDM> Projects { get; set; }
         public DbSet<TagDM> Tags { get; set; }
         public DbSet<UserGradeDM> UserGrades { get; set; }
@@ -193,6 +193,18 @@ namespace marking_api.Data
             builder.Entity<AuditDM>(entity =>
             {
                 entity.ToTable(name: "Audit", schema: "dbo");
+                entity.Property(e => e.UserId).HasColumnName("UserId");
+            });
+
+            builder.Entity<GradeDM>(entity =>
+            {
+                entity.ToTable(name: "Grades", schema: "dbo");
+                entity.Property(e => e.UserId).HasColumnName("UserId");
+            });
+
+            builder.Entity<FeedbackDM>(entity =>
+            {
+                entity.ToTable(name: "Feedback", schema: "dbo");
                 entity.Property(e => e.UserId).HasColumnName("UserId");
             });
 

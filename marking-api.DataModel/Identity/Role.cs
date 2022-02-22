@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using marking_api.DataModel.CustomAttributes;
+using marking_api.DataModel.Enums;
 
 namespace marking_api.DataModel.Identity
 {
@@ -17,5 +18,9 @@ namespace marking_api.DataModel.Identity
         public virtual ICollection<RoleClaim> RoleClaims { get; set; }
         [SwaggerExclude]
         public virtual ICollection<UserRole> UserRoles { get; set; }
+        [SwaggerExclude]
+        public virtual ICollection<RolePermission> RolePermissions { get; set; }
+
+        public RoleType AccessRole { get; set; } = RoleType.Guest;
     }
 }
