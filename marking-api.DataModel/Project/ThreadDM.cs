@@ -31,8 +31,8 @@ namespace marking_api.DataModel.Project
         [SwaggerExclude]
         public virtual User User { get; set;}
 
-        [ForeignKey("ProjectId")]
-        public virtual Int64 ProjectId { get; set;}
+        [ForeignKey("LinkedProjectId")]
+        public virtual Int64 LinkedProjectId { get; set;}
         [SwaggerExclude]
         public virtual ProjectDM LinkedProject { get; set;}
 

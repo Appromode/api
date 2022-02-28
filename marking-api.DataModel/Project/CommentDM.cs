@@ -18,8 +18,8 @@ namespace marking_api.DataModel.Project
 
         public string CommentText { get; set; }
 
-        [ForeignKey("ThreadId")]
-        public virtual Int64 ThreadId { get; set; }
+        [ForeignKey("ParentThreadId")]
+        public virtual Int64 ParentThreadId { get; set; }
         [SwaggerExclude]
         public virtual ThreadDM ParentThread { get; set; }
 
