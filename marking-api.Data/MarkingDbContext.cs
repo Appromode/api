@@ -62,6 +62,7 @@ namespace marking_api.Data
         public DbSet<FeedbackDM> Feedback { get; set; }
         public DbSet<ProjectDM> Projects { get; set; }
         public DbSet<TagDM> Tags { get; set; }
+        public DbSet<ThreadDM> Threads { get; set; }
         public DbSet<UserGradeDM> UserGrades { get; set; }
         public DbSet<UserGroupDM> UserGroups { get; set; }
 

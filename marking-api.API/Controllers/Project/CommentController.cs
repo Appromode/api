@@ -25,12 +25,12 @@ namespace marking_api.API.Controllers.Project
         {
             List<Object> projectComments = new List<Object>();
 
-            foreach(CommentDM comment in _unitOfWork.Comments.Get()) {
-                var project = _unitOfWork.Projects.GetById(comment.ProjectId);
+            foreach(ThreadDM thread in _unitOfWork.Threads.Get()) {
+                var project = _unitOfWork.Projects.GetById(thread.LinkedProjectId);
 
                 projectComments.Add(new {
                     project,
-                    comment
+                    thread
                 });
             }
 

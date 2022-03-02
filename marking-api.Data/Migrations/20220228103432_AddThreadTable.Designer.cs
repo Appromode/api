@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using marking_api.Data;
 
@@ -10,9 +11,10 @@ using marking_api.Data;
 namespace marking_api.Data.Migrations
 {
     [DbContext(typeof(MarkingDbContext))]
-    partial class MarkingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220228103432_AddThreadTable")]
+    partial class AddThreadTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1068,9 +1070,6 @@ namespace marking_api.Data.Migrations
                     b.Property<string>("TagName")
                         .HasColumnType("varchar(255)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("varchar(255)");
-
                     b.Property<bool>("canDelete")
                         .HasColumnType("tinyint(1)");
 
@@ -1094,8 +1093,6 @@ namespace marking_api.Data.Migrations
 
                     b.HasIndex("TagName")
                         .IsUnique();
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Tags", "dbo");
                 });
@@ -1546,25 +1543,18 @@ namespace marking_api.Data.Migrations
             modelBuilder.Entity("marking_api.DataModel.Project.TagDM", b =>
                 {
                     b.HasOne("marking_api.DataModel.Project.GroupDM", "Group")
-                        .WithMany("GroupTags")
+                        .WithMany("Tags")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("marking_api.DataModel.Project.ProjectDM", "Project")
-                        .WithMany("ProjectTags")
+                        .WithMany()
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("marking_api.DataModel.Identity.User", "User")
-                        .WithMany("UserTags")
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Group");
 
                     b.Navigation("Project");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("marking_api.DataModel.Project.ThreadDM", b =>
@@ -1672,23 +1662,19 @@ namespace marking_api.Data.Migrations
 
                     b.Navigation("UserRoles");
 
-                    b.Navigation("UserTags");
-
                     b.Navigation("UserTokens");
                 });
 
             modelBuilder.Entity("marking_api.DataModel.Project.GroupDM", b =>
                 {
-                    b.Navigation("GroupTags");
-
                     b.Navigation("GroupUsers");
+
+                    b.Navigation("Tags");
                 });
 
             modelBuilder.Entity("marking_api.DataModel.Project.ProjectDM", b =>
                 {
                     b.Navigation("Comments");
-
-                    b.Navigation("ProjectTags");
                 });
 #pragma warning restore 612, 618
         }

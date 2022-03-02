@@ -32,6 +32,7 @@ namespace marking_api.Global.Repositories
         IRoleRepository Roles { get; }        
         ISiteAreaRepository SiteAreas { get; }
         ITagRepository Tags { get; }
+        IThreadRepository Threads { get; }
         IUserClaimRepository UserClaims { get; }
         IUserGradeRepository UserGrades { get; }
         IUserGroupRepository UserGroups { get; }
@@ -79,6 +80,7 @@ namespace marking_api.Global.Repositories
             Roles = new RoleRepository(dbContext);
             SiteAreas = new SiteAreaRepository(dbContext);
             Tags = new TagRepository(dbContext);
+            Threads = new ThreadRepository(dbContext);
             UserClaims = new UserClaimRepository(dbContext);
             UserGrades = new UserGradeRepository(dbContext);
             UserGroups = new UserGroupRepository(dbContext);
@@ -115,6 +117,7 @@ namespace marking_api.Global.Repositories
         public IRoleRepository Roles { get; private set; }
         public ISiteAreaRepository SiteAreas { get; private set; }
         public ITagRepository Tags { get; private set; }
+        public IThreadRepository Threads { get; private set; }
         public IUserClaimRepository UserClaims { get; private set; }
         public IUserGradeRepository UserGrades { get; private set; }
         public IUserGroupRepository UserGroups { get; private set; }
