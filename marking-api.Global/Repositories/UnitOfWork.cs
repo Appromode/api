@@ -2,6 +2,7 @@
 using marking_api.DataModel.Identity;
 using marking_api.Global.Repositories.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using System;
 
 namespace marking_api.Global.Repositories
@@ -51,11 +52,13 @@ namespace marking_api.Global.Repositories
     {
         private readonly MarkingDbContext _dbContext;
         private readonly SignInManager<User> _signInManager;
+        private readonly IConfiguration _config;
 
-        public UnitOfWork(MarkingDbContext dbContext, SignInManager<User> signInManager)
+        public UnitOfWork(MarkingDbContext dbContext, SignInManager<User> signInManager, IConfiguration config)
         {
             _dbContext = dbContext;
             _signInManager = signInManager;
+            _config = config;
 
             //Models
             Audits = new AuditRepository(dbContext);
@@ -89,7 +92,7 @@ namespace marking_api.Global.Repositories
             UserRoles = new UserRoleRepository(dbContext);
             UserTokens = new UserTokenRepository(dbContext);
 
-            GenericMethods = new GenericMethodRepository(dbContext);
+            GenericMethods = new GenericMethodRepository(dbContext, config);
 
             //Views
         }

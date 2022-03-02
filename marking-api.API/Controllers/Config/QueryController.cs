@@ -1,5 +1,4 @@
 ﻿using marking_api.API.Config;
-using marking_api.API.Models.Config;
 using marking_api.Global.Extensions;
 using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Mvc;
