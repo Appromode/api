@@ -5,6 +5,7 @@ using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace marking_api.API.Controllers.Config
 {
@@ -31,8 +32,7 @@ namespace marking_api.API.Controllers.Config
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            var cm = new QueryCM(_unitOfWork, _config);
-            List<dynamic> result = cm.ExecuteQuery(sql);
+            List<dynamic> result = _unitOfWork.GenericMethods.ExecuteQuery(sql).ToList();
 
             if (result != null)
                 return Ok(result);
