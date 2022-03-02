@@ -40,7 +40,8 @@ namespace marking_api.Global.Repositories
         IUserLoginRepository UserLogins { get; }
         IUserRepository Users { get; }
         IUserRoleRepository UserRoles { get; }
-        IUserTokenRepository UserTokens { get; }        
+        IUserTokenRepository UserTokens { get; }
+        IUserTagRepository UserTags { get; }  
 
         //Views
 
@@ -91,6 +92,7 @@ namespace marking_api.Global.Repositories
             Users = new UserRepository(dbContext);
             UserRoles = new UserRoleRepository(dbContext);
             UserTokens = new UserTokenRepository(dbContext);
+            UserTags = new UserTagRepository(dbContext);
 
             GenericMethods = new GenericMethodRepository(dbContext, config);
 
@@ -128,7 +130,7 @@ namespace marking_api.Global.Repositories
         public IUserRepository Users { get; private set; }
         public IUserRoleRepository UserRoles { get; private set; }
         public IUserTokenRepository UserTokens { get; private set; }
-
+        public IUserTagRepository UserTags { get; }
         public IGenericMethodRepository GenericMethods { get; private set; }
 
         //Views
