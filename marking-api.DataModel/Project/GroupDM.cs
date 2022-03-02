@@ -17,7 +17,8 @@ namespace marking_api.DataModel.Project
 
         public List<UserGroupDM> GroupUsers { get; set; }
 
-        public List<TagDM> Tags { get; set; }
+        [SwaggerExclude]
+        public List<TagDM> GroupTags { get; set; }
 
         [Required]
         public string GroupName { get; set; }

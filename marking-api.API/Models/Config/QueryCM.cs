@@ -19,7 +19,7 @@ namespace marking_api.API.Models.Config
             _unitOfWork = unitOfWork;
             _config = config;
         }
-        //Add migration!! This will cause errors so need to work out what is causing the issue. Then finally work on the frontend!
+
         public List<dynamic> ExecuteQuery(string sql)
         {
             List<dynamic> rows = null;

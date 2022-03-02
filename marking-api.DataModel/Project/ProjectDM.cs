@@ -26,5 +26,8 @@ namespace marking_api.DataModel.Project
         public FSFileDM EthicsForm { get; set; }
 
         public List<CommentDM> Comments { get; set; }
+
+        [SwaggerExclude]
+        public virtual ICollection<TagDM> ProjectTags { get; set; }
     }
 }
