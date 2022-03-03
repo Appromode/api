@@ -46,6 +46,7 @@
 
   <ItemGroup>
     <Folder Include="Controllers\DbViews\" />
+    <Folder Include="Models\Config\" />
   </ItemGroup>
 
 </Project>

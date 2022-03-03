@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using marking_api.DataModel.CustomAttributes;
+using marking_api.DataModel.Project;
 using Microsoft.AspNetCore.Identity;
 
 namespace marking_api.DataModel.Identity
@@ -25,5 +26,7 @@ namespace marking_api.DataModel.Identity
         public virtual ICollection<UserRole> UserRoles { get; set; }
         [SwaggerExclude]
         public virtual ICollection<UserToken> UserTokens { get; set; }
+        [SwaggerExclude]
+        public virtual ICollection<TagDM> UserTags { get; set; }
     }
 }

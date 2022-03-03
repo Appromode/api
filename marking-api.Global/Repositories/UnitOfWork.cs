@@ -2,6 +2,7 @@
 using marking_api.DataModel.Identity;
 using marking_api.Global.Repositories.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using System;
 
 namespace marking_api.Global.Repositories
@@ -39,7 +40,8 @@ namespace marking_api.Global.Repositories
         IUserLoginRepository UserLogins { get; }
         IUserRepository Users { get; }
         IUserRoleRepository UserRoles { get; }
-        IUserTokenRepository UserTokens { get; }        
+        IUserTokenRepository UserTokens { get; }
+        IUserTagRepository UserTags { get; }  
 
         //Views
 
@@ -51,11 +53,13 @@ namespace marking_api.Global.Repositories
     {
         private readonly MarkingDbContext _dbContext;
         private readonly SignInManager<User> _signInManager;
+        private readonly IConfiguration _config;
 
-        public UnitOfWork(MarkingDbContext dbContext, SignInManager<User> signInManager)
+        public UnitOfWork(MarkingDbContext dbContext, SignInManager<User> signInManager, IConfiguration config)
         {
             _dbContext = dbContext;
             _signInManager = signInManager;
+            _config = config;
 
             //Models
             Audits = new AuditRepository(dbContext);
@@ -88,8 +92,9 @@ namespace marking_api.Global.Repositories
             Users = new UserRepository(dbContext);
             UserRoles = new UserRoleRepository(dbContext);
             UserTokens = new UserTokenRepository(dbContext);
+            UserTags = new UserTagRepository(dbContext);
 
-            GenericMethods = new GenericMethodRepository(dbContext);
+            GenericMethods = new GenericMethodRepository(dbContext, config);
 
             //Views
         }
@@ -125,7 +130,7 @@ namespace marking_api.Global.Repositories
         public IUserRepository Users { get; private set; }
         public IUserRoleRepository UserRoles { get; private set; }
         public IUserTokenRepository UserTokens { get; private set; }
-
+        public IUserTagRepository UserTags { get; }
         public IGenericMethodRepository GenericMethods { get; private set; }
 
         //Views

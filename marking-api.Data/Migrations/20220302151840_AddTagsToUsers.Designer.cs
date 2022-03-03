@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using marking_api.Data;
 
@@ -10,9 +11,10 @@ using marking_api.Data;
 namespace marking_api.Data.Migrations
 {
     [DbContext(typeof(MarkingDbContext))]
-    partial class MarkingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220302151840_AddTagsToUsers")]
+    partial class AddTagsToUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -774,13 +776,16 @@ namespace marking_api.Data.Migrations
                     b.Property<string>("CommentText")
                         .HasColumnType("longtext");
 
-                    b.Property<long>("ParentThreadId")
+                    b.Property<DateTime>("CommentTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<long?>("ParentCommentId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("ProjectDMProjectId")
+                    b.Property<long>("ProjectId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("QuotedCommentId")
+                    b.Property<long>("Replies")
                         .HasColumnType("bigint");
 
                     b.Property<string>("UserId")
@@ -803,11 +808,9 @@ namespace marking_api.Data.Migrations
 
                     b.HasKey("CommentId");
 
-                    b.HasIndex("ParentThreadId");
+                    b.HasIndex("ParentCommentId");
 
-                    b.HasIndex("ProjectDMProjectId");
-
-                    b.HasIndex("QuotedCommentId");
+                    b.HasIndex("ProjectId");
 
                     b.HasIndex("UserId");
 
@@ -1100,60 +1103,6 @@ namespace marking_api.Data.Migrations
                     b.ToTable("Tags", "dbo");
                 });
 
-            modelBuilder.Entity("marking_api.DataModel.Project.ThreadDM", b =>
-                {
-                    b.Property<long>("ThreadId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("AccessRole")
-                        .HasColumnType("int");
-
-                    b.Property<long>("LinkedProjectId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("Replies")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ThreadDesc")
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("ThreadStatus")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("ThreadTitle")
-                        .HasColumnType("longtext");
-
-                    b.Property<int?>("TotalMembers")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<bool>("canDelete")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime>("createdAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("deleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime?>("deletedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("updatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("ThreadId");
-
-                    b.HasIndex("LinkedProjectId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Threads", "dbo");
-                });
-
             modelBuilder.Entity("marking_api.DataModel.Project.UserGradeDM", b =>
                 {
                     b.Property<long>("UserGradeId")
@@ -1442,20 +1391,14 @@ namespace marking_api.Data.Migrations
 
             modelBuilder.Entity("marking_api.DataModel.Project.CommentDM", b =>
                 {
-                    b.HasOne("marking_api.DataModel.Project.ThreadDM", "ParentThread")
+                    b.HasOne("marking_api.DataModel.Project.CommentDM", "ParentComment")
                         .WithMany()
-                        .HasForeignKey("ParentThreadId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("marking_api.DataModel.Project.ProjectDM", null)
-                        .WithMany("Comments")
-                        .HasForeignKey("ProjectDMProjectId")
+                        .HasForeignKey("ParentCommentId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("marking_api.DataModel.Project.CommentDM", "QuotedComment")
-                        .WithMany()
-                        .HasForeignKey("QuotedCommentId")
+                    b.HasOne("marking_api.DataModel.Project.ProjectDM", "Project")
+                        .WithMany("Comments")
+                        .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -1464,9 +1407,9 @@ namespace marking_api.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("ParentThread");
+                    b.Navigation("ParentComment");
 
-                    b.Navigation("QuotedComment");
+                    b.Navigation("Project");
 
                     b.Navigation("User");
                 });
@@ -1563,24 +1506,6 @@ namespace marking_api.Data.Migrations
                     b.Navigation("Group");
 
                     b.Navigation("Project");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("marking_api.DataModel.Project.ThreadDM", b =>
-                {
-                    b.HasOne("marking_api.DataModel.Project.ProjectDM", "LinkedProject")
-                        .WithMany()
-                        .HasForeignKey("LinkedProjectId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("marking_api.DataModel.Identity.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("LinkedProject");
 
                     b.Navigation("User");
                 });

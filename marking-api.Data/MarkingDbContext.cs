@@ -62,6 +62,7 @@ namespace marking_api.Data
         public DbSet<ThreadDM> Threads { get; set; }
         public DbSet<UserGradeDM> UserGrades { get; set; }
         public DbSet<UserGroupDM> UserGroups { get; set; }
+        public DbSet<UserTagsDM> UserTags { get; set; }
 
         //API Database Tables
         public DbSet<RefreshTokenDM> RefreshTokens { get; set; }
