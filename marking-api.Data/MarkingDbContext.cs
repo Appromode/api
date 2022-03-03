@@ -1,15 +1,12 @@
 ﻿using marking_api.DataModel.Identity;
 using marking_api.DataModel.FileSystem;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using marking_api.DataModel.Project;
@@ -20,15 +17,15 @@ using marking_api.DataModel.Logging;
 
 namespace marking_api.Data
 {
-    public class MarkingDbContext : IdentityDbContext<User, Role, string, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
+    public class MarkingDbContext : IdentityDbContext<User, Role, string, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>, IMapDbContext
     {
-        private readonly IWebHostEnvironment env;
+        private readonly IWebHostEnvironment _env;
 
         public string UserId { get; set; }
 
         public MarkingDbContext(DbContextOptions<MarkingDbContext> options, IWebHostEnvironment env) :base(options)
         {
-            this.env = env;
+            _env = env;
         }
 
         public MarkingDbContext()
@@ -36,7 +33,7 @@ namespace marking_api.Data
 
         }
 
-        //Identity
+        //Identity Database Tables
         public DbSet<User> IdUsers { get; set; }
         public DbSet<UserClaim> IdUserClaims { get; set; }
         public DbSet<UserToken> IdUserTokens { get; set; }
@@ -46,7 +43,7 @@ namespace marking_api.Data
         public DbSet<RolePermission> IdRolePermissions { get; set; }
         public DbSet<SiteArea> IdSiteAreas { get; set; }
 
-        //File System
+        //File System Database Tables
         public DbSet<FSFileDM> FSFiles { get; set; }
         public DbSet<FSFileStateDM> FSFileStates { get; set; }
         public DbSet<FSFileVersionDM> FSFileVersions { get; set; }
@@ -54,7 +51,7 @@ namespace marking_api.Data
         public DbSet<FSFolderFileDM> FSFolderFiles { get; set; }
         public DbSet<FSFolderRoleDM> FSFolderRoles { get; set; }
 
-        //Project
+        //Project Database Tables
         public DbSet<CommentDM> Comments { get; set; }
         public DbSet<GradeDM> Grades { get; set; }
         public DbSet<GroupDM> Groups { get; set; }
@@ -66,23 +63,27 @@ namespace marking_api.Data
         public DbSet<UserGradeDM> UserGrades { get; set; }
         public DbSet<UserGroupDM> UserGroups { get; set; }
 
-        //API
+        //API Database Tables
         public DbSet<RefreshTokenDM> RefreshTokens { get; set; }
 
-        //Logging
+        //Logging Database Tables
         public DbSet<AuditDM> Audits { get; set; }
         public DbSet<LogDM> Logs { get; set; }
 
-        //Config
+        //Config Database Tables
         public DbSet<LinkDM> Links { get; set; }
         public DbSet<RoleLinkDM> RoleLinks { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="optionsBuilder"></param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{_env.EnvironmentName}.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables()
                 .Build();
 
@@ -215,31 +216,9 @@ namespace marking_api.Data
             //builder.Entity<ModelToBindViewTo>().ToView(nameof(ViewName)).Has(No)Key();
         }
 
-        public void AddLogs()
-        {
-            ChangeTracker.DetectChanges();
-            List<AuditHelper> entries = new List<AuditHelper>();
-            foreach (EntityEntry entry in ChangeTracker.Entries())
-            {
-                if (entry.State == EntityState.Detached || entry.State == EntityState.Unchanged
-                    || entry.State == EntityState.Unchanged)
-                {
-                    continue;
-                }
-                var auditEntry = new AuditHelper(entry, UserId);
-                entries.Add(auditEntry);
-            }
-
-            if (entries.Any())
-            {
-                var logs = entries.Select(x => x.ToAudit());
-                Audits.AddRange(logs);
-            }
-        }
-
         public override int SaveChanges()
         {
-            AddLogs();
+            new AuditHelper(this).AddLogs(UserId);
             ChangeTracker.DetectChanges();
             foreach(var entry in ChangeTracker.Entries())
             {
@@ -267,7 +246,7 @@ namespace marking_api.Data
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken)) 
         {
-            AddLogs();
+            new AuditHelper(this).AddLogs(UserId);
             ChangeTracker.DetectChanges();
             foreach (var entry in ChangeTracker.Entries())
             {
