@@ -3,6 +3,7 @@ using marking_api.Global.Extensions;
 using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace marking_api.API.Controllers.Project
 {
@@ -83,6 +84,13 @@ namespace marking_api.API.Controllers.Project
             _unitOfWork.Save();
 
             return Ok(thread);
+        }
+
+        [HttpGet("WholeThread/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(ThreadDM)))]
+        public IActionResult WholeThread(long id)
+        {
+            return Ok(_unitOfWork.Threads.GetById(id, include: x => x.Include(x => x.LinkedProject).Include(x => x.Comments).ThenInclude(x => x.User).Include(x => x.User)));
         }
     }
 }

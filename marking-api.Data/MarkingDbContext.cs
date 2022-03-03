@@ -248,18 +248,39 @@ namespace marking_api.Data
                 {
                     if (t.GetProperty("createdAt") != null)
                     {
-                        var field = entry.Entity.GetType().GetProperty("createdAt");
+                        var field = t.GetProperty("createdAt");
                         field.SetValue(entry.Entity, DateTime.Now);
-                        field = entry.Entity.GetType().GetProperty("updatedAt");                        
+                        field = t.GetProperty("updatedAt");                        
                         field.SetValue(entry.Entity, DateTime.Now);
+                    }
+                    if (t.GetProperty("createdBy") != null)
+                    {
+                        var field = t.GetProperty("createdBy");
+                        field.SetValue (entry.Entity, UserId);
+                    }
+                    if (t.GetProperty("updatedBy") != null)
+                    {
+                        var field = t.GetProperty("updatedBy");
+                        field.SetValue(entry.Entity, UserId);
                     }
                 } else if (entry.State == EntityState.Modified)
                 {
                     if (t.GetProperty("updatedAt") != null)
                     {
-                        var field = entry.Entity.GetType().GetProperty("updatedAt");
+                        var field = t.GetProperty("updatedAt");
                         field.SetValue(entry.Entity, DateTime.Now);
                     }
+                    if (t.GetProperty("updatedBy") != null)
+                    {
+                        var field = t.GetProperty("updatedBy");
+                        field.SetValue(entry.Entity, UserId);
+                    }
+                    //Currently Errors \/\/\/
+                    //if (entry.OriginalValues.Properties.FirstOrDefault(x => x.Name.Equals("Deleted")). .EntityType.GetType().GetProperty("Deleted").GetValue(entry.Entity) != entry.CurrentValues.EntityType.GetType().GetProperty("Deleted").GetValue(entry.Entity))
+                    //{
+                    //    var field = t.GetProperty("deletedBy");
+                    //    field.SetValue(entry.Entity, UserId);
+                    //}
                 }              
             }
             return base.SaveChanges();
@@ -276,18 +297,38 @@ namespace marking_api.Data
                 {
                     if (t.GetProperty("createdAt") != null)
                     {
-                        var field = entry.Entity.GetType().GetProperty("createdAt");
+                        var field = t.GetProperty("createdAt");
                         field.SetValue(entry.Entity, DateTime.Now);
-                        field = entry.Entity.GetType().GetProperty("updatedAt");
+                        field = t.GetProperty("updatedAt");
                         field.SetValue(entry.Entity, DateTime.Now);
+                    }
+                    if (t.GetProperty("createdBy") != null)
+                    {
+                        var field = t.GetProperty("createdBy");
+                        field.SetValue(entry.Entity, UserId);
+                    }
+                    if (t.GetProperty("updatedBy") != null)
+                    {
+                        var field = t.GetProperty("updatedBy");
+                        field.SetValue(entry.Entity, UserId);
                     }
                 }
                 else if (entry.State == EntityState.Modified)
                 {
                     if (t.GetProperty("updatedAt") != null)
                     {
-                        var field = entry.Entity.GetType().GetProperty("updatedAt");
+                        var field = t.GetProperty("updatedAt");
                         field.SetValue(entry.Entity, DateTime.Now);
+                    }
+                    if (t.GetProperty("updatedBy") != null)
+                    {
+                        var field = t.GetProperty("updatedBy");
+                        field.SetValue(entry.Entity, UserId);
+                    }
+                    if (entry.OriginalValues.EntityType.GetType().GetProperty("Deleted").GetValue(entry) != entry.CurrentValues.EntityType.GetType().GetProperty("Deleted").GetValue(entry))
+                    {
+                        var field = t.GetProperty("deletedBy");
+                        field.SetValue(entry.Entity, UserId);
                     }
                 }
             }
