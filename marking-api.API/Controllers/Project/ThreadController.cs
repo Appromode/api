@@ -29,11 +29,15 @@ namespace marking_api.API.Controllers.Project
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(ThreadDM)))]
         public IActionResult Get(long id)
         {
-            var grade = _unitOfWork.Threads.GetById(id);
-            if (grade == null)
+            var thread = _unitOfWork.Threads.Get(
+                include: (thread) => thread.Include((thread) => thread.User).Include((thread) => thread.LinkedProject),
+                filter: (thread) => thread.ThreadId == id
+            );
+
+            if (thread == null)
                 return NotFound();
             else
-                return Ok(grade);
+                return Ok(thread);
         }
 
         [HttpPost]
