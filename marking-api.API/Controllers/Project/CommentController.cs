@@ -23,18 +23,7 @@ namespace marking_api.API.Controllers.Project
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(CommentDM)))]
         public IActionResult Get()
         {
-            List<Object> projectComments = new List<Object>();
-
-            foreach(ThreadDM thread in _unitOfWork.Threads.Get()) {
-                var project = _unitOfWork.Projects.GetById(thread.LinkedProjectId);
-
-                projectComments.Add(new {
-                    project,
-                    thread
-                });
-            }
-
-            return Ok(projectComments);
+            return Ok(_unitOfWork.Comments.Get());
         }
 
         [HttpGet("{id}")]
