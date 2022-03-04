@@ -40,6 +40,19 @@ namespace marking_api.API.Controllers.Project
                 return Ok(thread);
         }
 
+        [HttpGet("{threadId}/comments")]
+         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(ThreadDM)))]
+         public IActionResult Get(int threadId)
+         {
+             var threadComments = _unitOfWork.Threads.Get(
+                 include: (threadDM) => threadDM
+                     .Include((threadDM) => threadDM.Comments)
+                     .ThenInclude((threadComments) => threadComments.User),
+                 filter: (threadDM) => threadDM.ThreadId == threadId);
+
+             return Ok(threadComments);
+         }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(ThreadDM)))]
         public IActionResult Post([FromBody] ThreadDM thread)
