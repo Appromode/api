@@ -24,7 +24,9 @@ namespace marking_api.API.Controllers.Project
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(ThreadDM)))]
         public IActionResult Get()
         {
-            return Ok(_unitOfWork.Threads.Get());
+            return Ok(_unitOfWork.Threads.Get(
+                include: (thread) => thread.Include((thread) => thread.User)
+            ));
         }
 
         [HttpGet("{id}")]
