@@ -33,7 +33,7 @@ namespace marking_api.Data.Audit
         public Dictionary<string, object> OldValues { get; } = new Dictionary<string, object>();
         //List of new values that have been added or modified
         public Dictionary<string, object> NewValues { get; } = new Dictionary<string, object>();
-        //List of columns that have been modified.
+        //List of columns that have been modified
         public List<string> ChangedColumns { get; } = new List<string>();
 
         /// <summary>

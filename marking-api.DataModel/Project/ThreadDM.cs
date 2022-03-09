@@ -36,8 +36,6 @@ namespace marking_api.DataModel.Project
         [SwaggerExclude]
         public virtual ProjectDM LinkedProject { get; set;}
 
-        public List<CommentDM> Comments { get; set; }
-
         public int? TotalMembers { get; set; }
 
         public ICollection<CommentDM> Comments { get; set; }
