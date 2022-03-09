@@ -1,8 +1,10 @@
-﻿using marking_api.DataModel.Project;
+﻿using System;
+using marking_api.DataModel.Project;
 using marking_api.Global.Extensions;
 using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
 namespace marking_api.API.Controllers.Project
@@ -22,7 +24,9 @@ namespace marking_api.API.Controllers.Project
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(ThreadDM)))]
         public IActionResult Get()
         {
-            return Ok(_unitOfWork.Threads.Get());
+            return Ok(_unitOfWork.Threads.Get(
+                include: (thread) => thread.Include((thread) => thread.User)
+            ));
         }
 
         [HttpGet("{id}")]
@@ -39,6 +43,19 @@ namespace marking_api.API.Controllers.Project
             else
                 return Ok(thread);
         }
+
+        [HttpGet("{threadId}/comments")]
+         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(ThreadDM)))]
+         public IActionResult Get(int threadId)
+         {
+             var threadComments = _unitOfWork.Threads.Get(
+                 include: (threadDM) => threadDM
+                     .Include((threadDM) => threadDM.Comments)
+                     .ThenInclude((threadComments) => threadComments.User),
+                 filter: (threadDM) => threadDM.ThreadId == threadId);
+
+             return Ok(threadComments);
+         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(ThreadDM)))]
