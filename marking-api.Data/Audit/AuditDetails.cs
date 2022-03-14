@@ -11,29 +11,53 @@ using System.Threading.Tasks;
 
 namespace marking_api.Data.Audit
 {
+    /// <summary>
+    /// Convert entries to AuditDM format
+    /// </summary>
     public class AuditDetails
     {
+        /// <summary>
+        /// Set database entry and userid as well as converting the entry to AuditDM
+        /// </summary>
+        /// <param name="entry"></param>
+        /// <param name="userId"></param>
         public AuditDetails(EntityEntry entry, string userId)
         {
             Entry = entry;
             UserId = userId;
             SetChanges();
         }
-        //Database Entry
+        /// <summary>
+        /// Database Entry
+        /// </summary>
         public EntityEntry Entry { get; set; }
-        //Type of database entry. New, modified, deleted etc.
+        /// <summary>
+        ///Type of database entry. New, modified, deleted etc. 
+        /// </summary>
         public AuditType AuditType { get; set; }
-        //UserId of the user that created the database entry
+        /// <summary>
+        /// UserId of the user that created the database entry
+        /// </summary>
         public string UserId { get; set; }
-        //Table the database entry is going to affect
+        /// <summary>
+        /// Table the database entry is going to affect
+        /// </summary>
         public string TableName { get; set; }
-        //List of key values. Primary or Foreign.
+        /// <summary>
+        /// List of key values. Primary or Foreign.
+        /// </summary>
         public Dictionary<string, object> KeyValues { get; } = new Dictionary<string, object>();
-        //List of old values tha are going to be deleted or values that are going to be updated
+        /// <summary>
+        /// List of old values tha are going to be deleted or values that are going to be updated
+        /// </summary>
         public Dictionary<string, object> OldValues { get; } = new Dictionary<string, object>();
-        //List of new values that have been added or modified
+        /// <summary>
+        /// List of new values that have been added or modified
+        /// </summary>
         public Dictionary<string, object> NewValues { get; } = new Dictionary<string, object>();
-        //List of columns that have been modified
+        /// <summary>
+        /// List of columns that have been modified.
+        /// </summary>
         public List<string> ChangedColumns { get; } = new List<string>();
 
         /// <summary>

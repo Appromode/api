@@ -25,9 +25,19 @@ namespace marking_api.DataModel.Project
         [SwaggerExclude]
         public FSFileDM EthicsForm { get; set; }
 
+        [ForeignKey("LinkedThreadId")]
+        public virtual Int64? LinkedThreadId { get; set; }
+    
+        [SwaggerExclude]
+        public virtual ThreadDM LinkedThread { get; set; }
+
         public List<CommentDM> Comments { get; set; }
 
         [SwaggerExclude]
         public virtual ICollection<TagDM> ProjectTags { get; set; }
+
+        [SwaggerExclude]
+        [InverseProperty("LinkedProject")]
+        public virtual ICollection<ThreadDM> LinkedThreads { get; set; }
     }
 }

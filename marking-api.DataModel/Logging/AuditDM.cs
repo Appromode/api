@@ -22,9 +22,9 @@ namespace marking_api.DataModel.Logging
         public string ChangedColumns { get; set; }
 
         [ForeignKey("UserId")]
+        public string UserId { get; set; }
         [SwaggerExclude]
-        public virtual string UserId { get; set; }
-        public virtual User User { get; set; }
+        public User User { get; set; }
 
     }
 }

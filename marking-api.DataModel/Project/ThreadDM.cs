@@ -37,6 +37,10 @@ namespace marking_api.DataModel.Project
         public virtual ProjectDM LinkedProject { get; set;}
 
         public int? TotalMembers { get; set; }
+        
+        [SwaggerExclude]
+        [InverseProperty("LinkedThread")]
+        public virtual ICollection<ProjectDM> LinkedProjects { get; set; }
 
         public ICollection<CommentDM> Comments { get; set; }
 
