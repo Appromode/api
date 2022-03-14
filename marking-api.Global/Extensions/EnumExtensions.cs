@@ -10,23 +10,47 @@ using Microsoft.EntityFrameworkCore;
 
 namespace marking_api.Global.Extensions
 {
+    /// <summary>
+    /// Enum extension methods
+    /// </summary>
     public static class EnumExtensions
     {
-        //public static string GetEnumDisplayName(this Enum enumType)
-        //{
-        //    return enumType.GetType().GetMember(enumType.ToString()).FirstOrDefault()?.GetCustomAttributes<DisplayAttribute>()?.Name ?? enumType.ToString();
-        //}
+        /// <summary>
+        /// Get the displayname of an enum
+        /// </summary>
+        /// <param name="enumType">Enum extended from</param>
+        /// <returns>Enum displayname</returns>
+        public static string GetEnumDisplayName(this Enum enumType)
+        {
+            return enumType.GetType().GetMember(enumType.ToString()).FirstOrDefault()?.GetCustomAttribute<DisplayAttribute>()?.Name ?? enumType.ToString();
+        }
 
+        /// <summary>
+        /// Generically get select list of all items in an extended enum
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns>Select list of all items of an enum</returns>
         public static IEnumerable<SelectListItem> GetEnumSelectList<T>()
         {
             return (Enum.GetValues(typeof(T)).Cast<int>().Select(x => new SelectListItem() { Text = Enum.GetName(typeof(T), x), Value = x.ToString() })).ToList();
         }
 
-        //public static IEnumerable<SelectListItem> GetEnumSelectListUsingDisplayName<T>()
-        //{
-        //    return (Enum.GetValues(typeof(T)).Cast<Enum>().Select(x => new SelectListItem() { Text = x.GetEnumDisplayName(), Value = x.ToString() })).ToList();
-        //}
+        /// <summary>
+        /// Generically get select list of items in an enum using the display name of the enum
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns>Select list of enum items</returns>
+        public static IEnumerable<SelectListItem> GetEnumSelectListUsingDisplayName<T>()
+        {
+            return (Enum.GetValues(typeof(T)).Cast<Enum>().Select(x => new SelectListItem() { Text = x.GetEnumDisplayName(), Value = x.ToString() })).ToList();
+        }
 
+        /// <summary>
+        /// Generically get select list of items in an enum with selected value
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value">Value of selected item in the list</param>
+        /// <returns>Select list of enum items</returns>
         public static IEnumerable<SelectListItem> GetEnumSelectList<T>(T value)
         {
             var toString = Enum.GetName(typeof(T), value);

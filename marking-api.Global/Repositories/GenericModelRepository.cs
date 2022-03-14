@@ -9,6 +9,10 @@ using Microsoft.EntityFrameworkCore.Query;
 
 namespace marking_api.Global.Repositories
 {
+    /// <summary>
+    /// Generic model interface
+    /// </summary>
+    /// <typeparam name="T">Extended from a model repository</typeparam>
     public interface IGenericModelRepository<T> where T : class {
         IEnumerable<T> Get(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);
         T GetById<Type>(Type id, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);
@@ -27,6 +31,11 @@ namespace marking_api.Global.Repositories
         public bool IsBeingTracked<TType>(T entity);
     }
 
+    /// <summary>
+    /// Main repository for other model repositories. Contains methods that replace ones provided by the database context
+    /// These methods provide more options to manipulate and retrieve data from the database
+    /// </summary>
+    /// <typeparam name="T">Extended from a model repository</typeparam>
     public class GenericModelRepository<T> : IGenericModelRepository<T> where T : class
     {
         protected readonly MarkingDbContext _dbContext;
@@ -38,6 +47,13 @@ namespace marking_api.Global.Repositories
             _entities = _dbContext.Set<T>();
         }
 
+        /// <summary>
+        /// Get data from the database based on extended model repository e.g. Users or Roles.
+        /// </summary>
+        /// <param name="filter">Llambda expression to filter returned objects by. Use by filter: x => (expression))</param>
+        /// <param name="orderBy">Llamba expression to order returned list by. Use by orderby: x => (expression)</param>
+        /// <param name="include">Llambda expression to include and populate objects within the base objects retrieved. Use by include: x => (expression)</param>
+        /// <returns>List of objects</returns>
         public IEnumerable<T> Get(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
             IQueryable<T> query = _entities;
@@ -54,23 +70,48 @@ namespace marking_api.Global.Repositories
             return query.AsNoTracking().ToList();
         }
 
+        /// <summary>
+        /// Get data from the database based on the extended model repository e.g. Users or Roles and the id provided 
+        /// </summary>
+        /// <typeparam name="Type"></typeparam>
+        /// <param name="id">Id of the desired object</param>
+        /// <param name="include">Llambda expression to include and populate objects within the base objects retrieved. Use by include: x => (expression)</param>
+        /// <returns>Object</returns>
         public T GetById<Type>(Type id, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
             var idName = _dbContext.Model.FindEntityType(typeof(T)).FindPrimaryKey().Properties.Single().Name;
             return Get(filter: x => id.Equals(EF.Property<Type>(x, idName)), include: include).FirstOrDefault();
         }
 
+        /// <summary>
+        /// Get data from the database based on a list of ids and the extended model repository e.g. Users or Roles
+        /// </summary>
+        /// <typeparam name="Type"></typeparam>
+        /// <param name="ids">Ids of the desired objects</param>
+        /// <param name="include">Llambda expression to include and populate objects within the base objects retrieved. Use by include: x => (expression)</param>
+        /// <returns>List of Objects</returns>
         public IEnumerable<T> GetByIds<Type>(IEnumerable<Type> ids, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
             var idName = _dbContext.Model.FindEntityType(typeof(T)).FindPrimaryKey().Properties.Single().Name;
             return Get(filter: x => ids.ToList().Contains(EF.Property<Type>(x, idName)), include: include);
         }
 
+        /// <summary>
+        /// Get objects based on expression
+        /// </summary>
+        /// <param name="expression">Llambda expression to filter returned objects</param>
+        /// <returns>List of objects</returns>
         public IEnumerable<T> Find(Expression<Func<T, bool>> expression)
         {
             return _entities.Where(expression);
         }
 
+        /// <summary>
+        /// Add object to a table based on the extended model repository e.g. Users or Roles
+        /// </summary>
+        /// <param name="obj">Object to add to a table</param>
+        /// <returns>Added object</returns>
+        /// <exception cref="ArgumentNullException">Thrown if object is null</exception>
         public T Add(T obj)
         {
             if (obj == null)
@@ -81,6 +122,12 @@ namespace marking_api.Global.Repositories
             return obj;
         }
 
+        /// <summary>
+        /// Add list of object to a table based on the extended model repository e.g. Users or Roles
+        /// </summary>
+        /// <param name="objs">Objects to add to a table</param>
+        /// <returns>List of added objects</returns>
+        /// <exception cref="ArgumentNullException">Thrown if objects are null</exception>
         public IEnumerable<T> AddRange(IEnumerable<T> objs)
         {
             if (objs == null)
@@ -91,6 +138,12 @@ namespace marking_api.Global.Repositories
             return objs;
         }
 
+        /// <summary>
+        /// Update object in a table based on the extended model repository e.g. Users or Roles
+        /// </summary>
+        /// <param name="obj">Object to be updated</param>
+        /// <returns>Updated object</returns>
+        /// <exception cref="ArgumentNullException">Thrown if object is null</exception>
         public T Update(T obj)
         {
             if (obj == null)
@@ -102,6 +155,13 @@ namespace marking_api.Global.Repositories
             return obj;
         }
 
+        /// <summary>
+        /// Add or update object in a table based on the extended model repository e.g. Users or Roles
+        /// Adds the object if the id of the object is not found in the table
+        /// Updates the object if the id is found
+        /// </summary>
+        /// <param name="entity">Object to be added or updated</param>
+        /// <exception cref="ArgumentNullException">Thrown if the object is null</exception>
         public void AddOrUpdate(T entity)
         {
             if (entity == null)
@@ -120,6 +180,13 @@ namespace marking_api.Global.Repositories
             Save();
         }
 
+        /// <summary>
+        /// Add or update objects in a table based on the extended model repository e.g. Users or Roles
+        /// Adds the objects if the ids of the objects are not found in the table
+        /// Updates the objects if the ids are found
+        /// </summary>
+        /// <param name="objList">Objects to be added or updated</param>
+        /// <exception cref="ArgumentNullException">Thrown if the objects are null</exception>
         public void AddOrUpdateRange(IEnumerable<T> objList)
         {
             Console.WriteLine(objList);
@@ -141,6 +208,14 @@ namespace marking_api.Global.Repositories
             Save();
         }
 
+        /// <summary>
+        /// Add, update or delete list of objects based on the extended model repository e.g. Users or Roles
+        /// Adds the objects if the ids are not found in the table
+        /// Updates the objects if the ids are found
+        /// Deletes the objects if object is 
+        /// </summary>
+        /// <param name="objList"></param>
+        /// <param name="existing"></param>
         public void AddUpdateDeleteRange(IEnumerable<T> objList, IEnumerable<T> existing)
         {
             var idName = _dbContext.Model.FindEntityType(typeof(T)).FindPrimaryKey().Properties.Single().Name;
@@ -154,6 +229,11 @@ namespace marking_api.Global.Repositories
             Save();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public void Delete(T obj)
         {
             if (obj == null)
@@ -164,6 +244,11 @@ namespace marking_api.Global.Repositories
             _entities.Remove(obj);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public void Delete(object id)
         {
             if (id == null)
@@ -173,6 +258,11 @@ namespace marking_api.Global.Repositories
             Delete(existing);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="objs"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public void DeleteRange(IEnumerable<T> objs)
         {
             if (objs == null)
@@ -181,11 +271,20 @@ namespace marking_api.Global.Repositories
             _entities.RemoveRange(objs);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Save()
         {
             _dbContext.SaveChanges();
         }        
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TType"></typeparam>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public bool IsBeingTracked<TType>(T entity)
         {
             try

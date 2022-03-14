@@ -11,10 +11,18 @@ namespace marking_api.Data
 {
     public class MarkingDbSeeder
     {
+        //Database context
         private readonly MarkingDbContext _dbContext;
+        //Identity sign in manager
         private readonly SignInManager<User> _signInManager;
+        //Bool for if database is already seeded
         private bool _seeded = false;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dbContext">Database context</param>
+        /// <param name="signInManager">Identity signinmanager</param>
         public MarkingDbSeeder(MarkingDbContext dbContext, SignInManager<User> signInManager)
         {
             _dbContext = dbContext;
@@ -33,7 +41,7 @@ namespace marking_api.Data
         }
 
         /// <summary>
-        /// On projec startup will add data to the database.
+        /// On project startup will add data to the database. If the database has already been created and seed then this method will be skipped
         /// </summary>
         public async void SeedData()
         {
@@ -41,6 +49,8 @@ namespace marking_api.Data
             {
                 var existing = await _signInManager.UserManager.FindByNameAsync("sjp75");
 
+                //If the passwordhash of the above user is not null then the database has already been seeded
+                //If not then the hash will be generated and extra users seeded
                 if (existing.PasswordHash != null)
                 {
                     Console.WriteLine("Database already seeded!");
@@ -61,6 +71,9 @@ namespace marking_api.Data
             }
         }
 
+        /// <summary>
+        /// Seeds extra users within the database on creation of the database.
+        /// </summary>
         public void SeedUsers()
         {
             User user1 = new User

@@ -32,13 +32,17 @@ namespace marking_api.DataModel.Project
         public virtual User User { get; set;}
 
         [ForeignKey("LinkedProjectId")]
-        public virtual Int64 LinkedProjectId { get; set;}
+        public virtual Int64? LinkedProjectId { get; set;}
         [SwaggerExclude]
         public virtual ProjectDM LinkedProject { get; set;}
 
         public List<CommentDM> Comments { get; set; }
 
         public int? TotalMembers { get; set; }
+        
+        [SwaggerExclude]
+        [InverseProperty("LinkedThread")]
+        public virtual ICollection<ProjectDM> LinkedProjects { get; set; }
 
     }
 }

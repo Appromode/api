@@ -7,24 +7,49 @@ using System.Linq;
 
 namespace marking_api.Global.Services
 {
+    /// <summary>
+    /// Utility service that contains useful methods that are used throughout the application
+    /// </summary>
     public class UtilService
     {
+        //Used to access the database
         private readonly IUnitOfWork _unitOfWork;
+
+        /// <summary>
+        /// Setup unitofwork
+        /// </summary>
+        /// <param name="unitOfWork">Injected to access the database and include extra methods</param>
         public UtilService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
+        /// <summary>
+        /// Check whether a date is null, empty or blank
+        /// </summary>
+        /// <param name="date">Nullable DateTime</param>
+        /// <returns>True if date is null, empty or blank</returns>
         public bool IsDateTimeNullOrEmpty(DateTime? date)
         {
             return !date.HasValue ? true : false;
         }
 
+        /// <summary>
+        /// Checks whether a user is disabled
+        /// </summary>
+        /// <param name="userName">Name of a user</param>
+        /// <returns>True if user is disabled</returns>
         public bool IsUserDisabled(string userName)
         {
             return _unitOfWork.Users.Get(filter: x => x.UserName.Equals(userName)).FirstOrDefault().IsDisabled;
         }
 
+        /// <summary>
+        /// Generates a list of menu links depending on the roles the user has.
+        /// Uses security strings in the links table and sitearea table to use as permissions
+        /// </summary>
+        /// <param name="userName">Name of a user</param>
+        /// <returns>List of menu links the user has access to</returns>
         public List<LinkDM> GenerateUserMenu(string userName)
         {
             List<LinkDM> userLinks;
@@ -50,6 +75,12 @@ namespace marking_api.Global.Services
             return userMenus;
         }
 
+        /// <summary>
+        /// Recurses through all links and generates a list of child links to assign to parentlink object
+        /// </summary>
+        /// <param name="userLinks">List of all links in the database</param>
+        /// <param name="ParentLinkId">Id of the parent link</param>
+        /// <param name="ParentLink">Parent link object</param>
         public void RecurseChildLinks(List<LinkDM> userLinks, Int64 ParentLinkId, LinkDM ParentLink)
         {
             var childlinks = userLinks.Where(x => x.LinkParentId == ParentLinkId);
