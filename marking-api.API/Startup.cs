@@ -178,14 +178,17 @@ namespace marking_api.API
             {
                 options.SaveToken = true;
                 options.TokenValidationParameters = tokenValidationParameters;
-                options.Events.OnMessageReceived = context =>
+                if (options.Events != null)
                 {
-                    if (context.Request.Cookies.ContainsKey("accesstoken"))
+                    options.Events.OnMessageReceived = context =>
                     {
-                        context.Token = context.Request.Cookies["accesstoken"];
-                    }
-                    return Task.CompletedTask;                    
-                };
+                        if (context.Request.Cookies.ContainsKey("accesstoken") && !(context.Request.Path.ToUriComponent().Contains("login", StringComparison.OrdinalIgnoreCase) || context.Request.Path.ToUriComponent().Contains("refreshtoken", StringComparison.OrdinalIgnoreCase)))
+                        {
+                            context.Token = context.Request.Cookies["accesstoken"];
+                        }
+                        return Task.CompletedTask;
+                    };
+                }                
             });
 
             services.AddAuthorization(options =>
