@@ -32,16 +32,16 @@ namespace marking_api.API.Controllers.Identity
         
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody]LoginRequest userLogin)
+        public IActionResult Login([FromBody]LoginRequest userLogin)
         {
             if (ModelState.IsValid)
             {
-                User user = await _signInManager.UserManager.FindByEmailAsync(userLogin.Email);
+                User user = _signInManager.UserManager.FindByEmailAsync(userLogin.Email).Result;
                 if (user == null)
                     return BadRequest("Invalid Authentication Request");
                 else
                 {
-                    var result = await _signInManager.PasswordSignInAsync(user.UserName, userLogin.Password, false, false);
+                    var result = _signInManager.PasswordSignInAsync(user.UserName, userLogin.Password, false, false).Result;
                     if (!result.Succeeded)
                         return BadRequest("Invalid Authentication Request");
                     if (user.IsDisabled)
@@ -59,12 +59,12 @@ namespace marking_api.API.Controllers.Identity
 
         [HttpPost]
         [Route("RefreshToken")]
-        public async Task<IActionResult> RefreshToken([FromBody] TokenRequest tokenRequest)
+        public IActionResult RefreshToken([FromBody] TokenRequest tokenRequest)
         {
             if (ModelState.IsValid)
             {
                 var cm = new LoginCM(_unitOfWork, _signInManager, _jwt, _tokenValidationParameters);
-                var result = await cm.VerifyAndGenerateToken(tokenRequest);
+                var result = cm.VerifyAndGenerateToken(tokenRequest).Result;
 
                 if (result == null)
                     return BadRequest("Invalid Tokens");

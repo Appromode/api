@@ -61,7 +61,7 @@ namespace marking_api.API.Models.Identity
             };
 
             _unitOfWork.RefreshTokens.Add(refreshToken);
-            _unitOfWork.Save();
+            _unitOfWork.Save();          
 
             return new AuthRequest()
             {
