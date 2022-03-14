@@ -17,7 +17,7 @@ namespace marking_api.Global.Extensions
         /// Convert User object to userdto object
         /// </summary>
         /// <param name="user">Extended User object</param>
-        /// <returns></returns>
+        /// <returns>Converted UserDTO object</returns>
         public static UserDTO ToUserDTO(this User user)
         {
             return new UserDTO

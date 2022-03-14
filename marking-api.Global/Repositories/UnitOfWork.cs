@@ -7,54 +7,166 @@ using System;
 
 namespace marking_api.Global.Repositories
 {
+    /// <summary>
+    /// UnitOfWork interface
+    /// </summary>
     public interface IUnitOfWork : IDisposable
     {
-        //Models
+        //UnitOfWork repository interfaces
+        /// <summary>
+        /// Audit repository interface
+        /// </summary>
         IAuditRepository Audits { get; }
+        /// <summary>
+        /// File repository interface
+        /// </summary>
         IFSFileRepository FSFiles { get; }
+        /// <summary>
+        /// File state repository interface
+        /// </summary>
         IFSFileStateRepository FSFileStates { get; }
+        /// <summary>
+        /// File version repository interface
+        /// </summary>
         IFSFileVersionRepository FSFileVersions { get; }
+        /// <summary>
+        /// Folder file repository interface
+        /// </summary>
         IFSFolderFileRepository FSFolderFiles { get; }
+        /// <summary>
+        /// Folder repository interface
+        /// </summary>
         IFSFolderRepository FSFolders { get; }
+        /// <summary>
+        /// Folder role repository interface
+        /// </summary>
         IFSFolderRoleRepository FSFolderRoles { get; }
+        /// <summary>
+        /// Comment repository interface
+        /// </summary>
         ICommentRepository Comments { get; }
+        /// <summary>
+        /// Generic method repository interface
+        /// </summary>
         IGenericMethodRepository GenericMethods { get; }
+        /// <summary>
+        /// Grade repository interface
+        /// </summary>
         IGradeRepository Grades { get; }
+        /// <summary>
+        /// Group markers repository interface
+        /// </summary>
         IGroupMarkerRepository GroupMarkers { get; }
+        /// <summary>
+        /// Group repository interface
+        /// </summary>
         IGroupRepository Groups { get; }
+        /// <summary>
+        /// Link repository interface
+        /// </summary>
         ILinkRepository Links { get; }
+        /// <summary>
+        /// Log repository interface
+        /// </summary>
         ILogRepository Logs { get; }
+        /// <summary>
+        /// Feedback repository interface
+        /// </summary>
         IFeedbackRepository Feedback { get; }
+        /// <summary>
+        /// Project repository interface
+        /// </summary>
         IProjectRepository Projects { get; }
+        /// <summary>
+        /// Refresh token repository interface
+        /// </summary>
         IRefreshTokenRepository RefreshTokens { get; }
+        /// <summary>
+        /// Role claim repository interface
+        /// </summary>
         IRoleClaimRepository RoleClaims { get; }
+        /// <summary>
+        /// Role link repository interface
+        /// </summary>
         IRoleLinkRepository RoleLinks { get; }
+        /// <summary>
+        /// Role permission repository interface
+        /// </summary>
         IRolePermissionRepository RolePermissions { get; }
-        IRoleRepository Roles { get; }        
+        /// <summary>
+        /// Role repository interface
+        /// </summary>
+        IRoleRepository Roles { get; }    
+        /// <summary>
+        /// Site area repository interface
+        /// </summary>
         ISiteAreaRepository SiteAreas { get; }
+        /// <summary>
+        /// Tag repository interface
+        /// </summary>
         ITagRepository Tags { get; }
+        /// <summary>
+        /// Thread repository interface
+        /// </summary>
         IThreadRepository Threads { get; }
+        /// <summary>
+        /// User claim repository interface
+        /// </summary>
         IUserClaimRepository UserClaims { get; }
+        /// <summary>
+        /// User grade repository interface
+        /// </summary>
         IUserGradeRepository UserGrades { get; }
+        /// <summary>
+        /// User group repository interface
+        /// </summary>
         IUserGroupRepository UserGroups { get; }
+        /// <summary>
+        /// User login repository interface
+        /// </summary>
         IUserLoginRepository UserLogins { get; }
+        /// <summary>
+        /// User repository interface
+        /// </summary>
         IUserRepository Users { get; }
+        /// <summary>
+        /// User role repository interface
+        /// </summary>
         IUserRoleRepository UserRoles { get; }
+        /// <summary>
+        /// User token repository interface
+        /// </summary>
         IUserTokenRepository UserTokens { get; }
+        /// <summary>
+        /// User tag repository interface
+        /// </summary>
         IUserTagRepository UserTags { get; }  
 
         //Views
 
-
+        /// <summary>
+        /// Save method
+        /// </summary>
+        /// <returns>Base Save method</returns>
         int Save();
     }
 
+    /// <summary>
+    /// Main unitofwork class. Provides an abstraction layer between the database context and the controllers of the application
+    /// This gives more control over how the data from the database is manipulated and control what data is accessible within the database
+    /// </summary>
     public class UnitOfWork : IUnitOfWork
     {
         private readonly MarkingDbContext _dbContext;
         private readonly SignInManager<User> _signInManager;
         private readonly IConfiguration _config;
 
+        /// <summary>
+        /// Initiate repositories, database context, signin manager and config
+        /// </summary>
+        /// <param name="dbContext">Database context</param>
+        /// <param name="signInManager">Identity signin manager</param>
+        /// <param name="config">Application configuration</param>
         public UnitOfWork(MarkingDbContext dbContext, SignInManager<User> signInManager, IConfiguration config)
         {
             _dbContext = dbContext;
@@ -100,7 +212,7 @@ namespace marking_api.Global.Repositories
         }
 
         //Models
-        public IAuditRepository Audits { get; set; }
+        public IAuditRepository Audits { get; private set; }
         public ICommentRepository Comments { get; private set; }
         public IFSFileRepository FSFiles { get; private set; }
         public IFSFileStateRepository FSFileStates { get; private set; }
@@ -130,11 +242,10 @@ namespace marking_api.Global.Repositories
         public IUserRepository Users { get; private set; }
         public IUserRoleRepository UserRoles { get; private set; }
         public IUserTokenRepository UserTokens { get; private set; }
-        public IUserTagRepository UserTags { get; }
+        public IUserTagRepository UserTags { get; private set; }
         public IGenericMethodRepository GenericMethods { get; private set; }
 
         //Views
-
         public int Save() => _dbContext.SaveChanges();
         public void Dispose() => _dbContext.Dispose();
     }

@@ -39,18 +39,18 @@ namespace marking_api.Global.Extensions
         /// Generically get select list of items in an enum using the display name of the enum
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        /// <returns>Select list of enum items</returns>
         public static IEnumerable<SelectListItem> GetEnumSelectListUsingDisplayName<T>()
         {
             return (Enum.GetValues(typeof(T)).Cast<Enum>().Select(x => new SelectListItem() { Text = x.GetEnumDisplayName(), Value = x.ToString() })).ToList();
         }
 
         /// <summary>
-        /// 
+        /// Generically get select list of items in an enum with selected value
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="value"></param>
-        /// <returns></returns>
+        /// <param name="value">Value of selected item in the list</param>
+        /// <returns>Select list of enum items</returns>
         public static IEnumerable<SelectListItem> GetEnumSelectList<T>(T value)
         {
             var toString = Enum.GetName(typeof(T), value);
