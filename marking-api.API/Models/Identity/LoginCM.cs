@@ -40,8 +40,10 @@ namespace marking_api.API.Models.Identity
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id),
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                    new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName),
+                    new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName),
                     new Claim(ClaimTypes.MobilePhone, user.PhoneNumber),
-                    new Claim(ClaimTypes.OtherPhone, user.ProfilePicture.ToString()),
+                    nem Claim(ClaimTypes.OtherPhone, user.ProfilePicture.ToString())
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 }),
                 Expires = DateTime.Now.AddMonths(6),
@@ -78,6 +80,7 @@ namespace marking_api.API.Models.Identity
             var handler = new JwtSecurityTokenHandler();
             try
             {
+                Console.WriteLine("Hit validate");
                 var tokenVerification = handler.ValidateToken(tokenRequest.BearerToken, _tokenValidationParameters, out var validatedToken);
                 if (validatedToken is JwtSecurityToken jwtSecurityToken)
                 {

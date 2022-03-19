@@ -4,6 +4,7 @@ using marking_api.DataModel.Identity;
 using marking_api.DataModel.Project;
 using marking_api.Global.Repositories;
 using Microsoft.EntityFrameworkCore;
+using marking_api.DataModel.DTOs;
 using System.Linq;
 
 namespace marking_api.API.Models.Recommend
@@ -17,25 +18,41 @@ namespace marking_api.API.Models.Recommend
             _unitOfWork = unitOfWork;
         }
 
-        public void GetRecommendUsers(String userId)
+        public IEnumerable<UserDTO> GetRecommendUsers(String userId)
         {
             User user = _unitOfWork.Users.GetById(userId);
 
             var userTags = _unitOfWork.UserTags.Get(
               include: (userTags) => userTags.Include((userTags) => userTags.Tag),
               filter: (userTags) => userTags.UserId == userId
-            );
+            ).ToList();
 
             var tags = userTags.ToList().Select((userTag) => userTag.Tag).ToList();
 
-            tags.ToList().ForEach((item) => Console.WriteLine(item.TagName));
+            tags.ForEach((list) => Console.WriteLine(list));
 
-            var similarUsers = _unitOfWork.UserTags.Get(
-              include: (userTags) => userTags.Include((userTags) => userTags.Tag).Include((userTags) => userTags.User),
-              filter: (userTag) => tags.Contains(userTag.Tag)
-            );
+            var results = _unitOfWork.UserTags.Get(
+              include: (table) => (
+                table
+                  .Include((table) => table.Tag)
+                  .Include((table) => table.User)
+              ),
+              filter: (table) => tags.Contains(table.Tag)
+            )
+              .Where((user) => user.UserId != userId)
+              .GroupBy((table) => table.UserId)
+              .Select((x) => x.First())
+              .Select((table) => new UserDTO {
+                UserId = table.UserId,
+                NormalizedUserName = table.User.NormalizedUserName,
+                NormalizedEmail = table.User.NormalizedEmail,
+                FirstName = table.User.FirstName,
+                LastName = table.User.LastName,
+                ProfilePicture = table.User.ProfilePicture,
+              })
+              .Distinct();
 
-            similarUsers.ToList().ForEach((item) => Console.WriteLine(item.User.Email));
+            return results;
         }
     }
 }

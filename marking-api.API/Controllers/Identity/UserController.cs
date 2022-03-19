@@ -1,5 +1,7 @@
 ﻿using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Http;
+using marking_api.DataModel.Project;
+using marking_api.API.Models.Recommend;
 using Microsoft.AspNetCore.Mvc;
 using marking_api.Global.Extensions;
 using marking_api.DataModel.DTOs;
@@ -46,6 +48,18 @@ namespace marking_api.API.Controllers.Identity
                 };
                 return Ok(userConvert);
             }
+        }
+
+        [HttpGet("{id}/Recommended")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserGroupDM)))]
+        public IActionResult GetRecommended(string id)
+        {
+            var cm = new RecommendCM(_unitOfWork);
+
+            if (cm == null)
+                return NotFound();
+            else
+                return Ok(cm.GetRecommendUsers(id));
         }
 
         [HttpPost]
