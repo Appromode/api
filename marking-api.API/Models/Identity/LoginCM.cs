@@ -29,7 +29,7 @@ namespace marking_api.API.Models.Identity
             _tokenValidationParameters = tokenValidationParameters;            
         }
 
-        public AuthRequest GenerateJwtToken(IdentityUser user)
+        public AuthRequest GenerateJwtToken(User user)
         {
             var handler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwt.Secret);
@@ -40,6 +40,8 @@ namespace marking_api.API.Models.Identity
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id),
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                    new Claim(ClaimTypes.MobilePhone, user.PhoneNumber),
+                    new Claim(ClaimTypes.OtherPhone, user.ProfilePicture.ToString()),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 }),
                 Expires = DateTime.Now.AddMonths(6),

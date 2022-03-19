@@ -39,7 +39,7 @@ namespace marking_api.Data
         }
 
         /// <summary>
-        /// 
+        /// Default constructor
         /// </summary>
         public MarkingDbContext()
         {
@@ -200,7 +200,7 @@ namespace marking_api.Data
         /// <summary>
         /// Configures db entities and how they are created within the database
         /// </summary>
-        /// <param name="builder">An interface for configuring database entities</param>
+        /// <param name="builder">ModelBuilder - An interface for configuring database entities</param>
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -394,7 +394,7 @@ namespace marking_api.Data
         /// Asynchronously modifies the entities being tracked by the ChangeTracker to add details about who and when the entity was added / changed.
         /// Creates logs of details about the entity, who and when it was altered
         /// </summary>
-        /// <param name="cancellationToken">Used in case the task is cancelled which will throw an exception</param>
+        /// <param name="cancellationToken">CancellationToken - Used in case the task is cancelled which will throw an exception</param>
         /// <returns>SaveChangesAsync base method once modifications to entities have happened</returns>
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken)) 
         {

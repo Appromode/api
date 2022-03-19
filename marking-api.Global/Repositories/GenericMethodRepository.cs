@@ -15,9 +15,23 @@ namespace marking_api.Global.Repositories
     /// </summary>
     public interface IGenericMethodRepository
     {
+        /// <summary>
+        /// 
+        /// </summary>
         void BeginTransaction();
+        /// <summary>
+        /// 
+        /// </summary>
         void CommitTransaction();        
+        /// <summary>
+        /// 
+        /// </summary>
         void RollBackTransaction();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns></returns>
         IEnumerable<dynamic> ExecuteQuery(string sql);
         
     }
@@ -28,9 +42,14 @@ namespace marking_api.Global.Repositories
     /// </summary>
     public class GenericMethodRepository : IGenericMethodRepository
     {
-        protected readonly MarkingDbContext _dbContext;
+        private readonly MarkingDbContext _dbContext;
         private readonly IConfiguration _config;
 
+        /// <summary>
+        /// GenericMethodRepository constructor
+        /// </summary>
+        /// <param name="dbContext">MarkingDbContext</param>
+        /// <param name="config">IConfiguration - Get configuration strings from appsettings</param>
         public GenericMethodRepository(MarkingDbContext dbContext, IConfiguration config)
         {
             _dbContext = dbContext;
@@ -65,8 +84,8 @@ namespace marking_api.Global.Repositories
         /// Execute a direct query against the database
         /// Cannot use DELETE or DROP
         /// </summary>
-        /// <param name="sql">String</param>
-        /// <returns></returns>
+        /// <param name="sql">string - String</param>
+        /// <returns>List of dynamic objects</returns>
         public IEnumerable<dynamic> ExecuteQuery(string sql)
         {
             List<dynamic> rows = null;

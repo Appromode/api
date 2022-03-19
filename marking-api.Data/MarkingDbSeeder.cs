@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace marking_api.Data
 {
+    /// <summary>
+    /// Database seeder class. Seeds data into the database using the database context
+    /// </summary>
     public class MarkingDbSeeder
     {
         //Database context
@@ -19,7 +22,7 @@ namespace marking_api.Data
         private bool _seeded = false;
 
         /// <summary>
-        /// 
+        /// Database seeder constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
         /// <param name="signInManager">Identity signinmanager</param>

@@ -14,9 +14,9 @@ namespace marking_api.Data.Audit
         private readonly IAuditDbContext _context;
 
         /// <summary>
-        /// 
+        /// AuditHelper constructor. Initialises IAuditDbContext
         /// </summary>
-        /// <param name="context">Injected audit database context</param>
+        /// <param name="context">IAuditDbContext - Injected audit database context</param>
         public AuditHelper(IAuditDbContext context)
         {
             _context = context;
@@ -25,7 +25,7 @@ namespace marking_api.Data.Audit
         /// <summary>
         /// Converts all changes detected by the ChangeTracker to audit logs with details about the change
         /// </summary>
-        /// <param name="userId">Userid of the user currently using the application / altering the database</param>
+        /// <param name="userId">String - Userid of the user currently using the application / altering the database</param>
         public void AddLogs(string userId)
         {
             _context.ChangeTracker.DetectChanges();
