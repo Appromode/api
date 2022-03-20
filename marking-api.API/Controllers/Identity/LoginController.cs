@@ -49,17 +49,6 @@ namespace marking_api.API.Controllers.Identity
 
                     var cm = new LoginCM(_unitOfWork, _signInManager, _jwt, _tokenValidationParameters);
 
-                    //Response.Cookies.Append(
-                    //    "t",
-                    //    cm.GenerateJwtToken(user).Token,
-                    //    new CookieOptions()
-                    //    {
-                    //        HttpOnly = true,
-                    //        Secure = true,
-                    //        SameSite = SameSiteMode.None,
-                    //    }
-                    //);
-
                     return Ok(cm.GenerateJwtToken(user));
                 }
             }
