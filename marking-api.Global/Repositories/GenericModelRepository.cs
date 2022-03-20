@@ -39,66 +39,66 @@ namespace marking_api.Global.Repositories
         /// <returns></returns>
         IEnumerable<T> GetByIds<Type>(IEnumerable<Type> ids, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);
         /// <summary>
-        /// 
+        /// Find method
         /// </summary>
-        /// <param name="expression"></param>
-        /// <returns></returns>
+        /// <param name="expression">Expression(Func(T, bool))</param>
+        /// <returns>Found object</returns>
         IEnumerable<T> Find(Expression<Func<T, bool>> expression);
         /// <summary>
-        /// 
+        /// Add method
         /// </summary>
         /// <param name="obj"></param>
-        /// <returns></returns>
+        /// <returns>Added object</returns>
         T Add(T obj);
         /// <summary>
-        /// 
+        /// Add objects method
         /// </summary>
         /// <param name="obj"></param>
-        /// <returns></returns>
+        /// <returns>Added objects</returns>
         IEnumerable<T> AddRange(IEnumerable<T> obj);
         /// <summary>
-        /// 
+        /// Update method
         /// </summary>
         /// <param name="obj"></param>
-        /// <returns></returns>
+        /// <returns>Updated method</returns>
         T Update(T obj);
         /// <summary>
-        /// 
+        /// Add or update method
         /// </summary>
         /// <param name="obj"></param>
         void AddOrUpdate(T obj);
         /// <summary>
-        /// 
+        /// Add or updated objects method
         /// </summary>
         /// <param name="obj"></param>
         void AddOrUpdateRange(IEnumerable<T> obj);
         /// <summary>
-        /// 
+        /// Add, update or delete objects
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="existing"></param>
         void AddUpdateDeleteRange(IEnumerable<T> obj, IEnumerable<T> existing);
         /// <summary>
-        /// 
+        /// Delete object
         /// </summary>
         /// <param name="obj"></param>
         void Delete(T obj);
         /// <summary>
-        /// 
+        /// Delete object by id
         /// </summary>
         /// <param name="id"></param>
         void Delete(object id);
         /// <summary>
-        /// 
+        /// Delete objects
         /// </summary>
         /// <param name="obj"></param>
         void DeleteRange(IEnumerable<T> obj);
         /// <summary>
-        /// 
+        /// Save method
         /// </summary>
         void Save();        
         /// <summary>
-        /// 
+        /// Is object being tracked
         /// </summary>
         /// <typeparam name="TType"></typeparam>
         /// <param name="entity"></param>

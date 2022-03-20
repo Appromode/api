@@ -16,19 +16,19 @@ namespace marking_api.Global.Repositories
     public interface IGenericMethodRepository
     {
         /// <summary>
-        /// 
+        /// Begin db transaction
         /// </summary>
         void BeginTransaction();
         /// <summary>
-        /// 
+        /// Commit db transaction
         /// </summary>
         void CommitTransaction();        
         /// <summary>
-        /// 
+        /// Reverse db transaction
         /// </summary>
         void RollBackTransaction();
         /// <summary>
-        /// 
+        /// Execute direct db query
         /// </summary>
         /// <param name="sql"></param>
         /// <returns></returns>
