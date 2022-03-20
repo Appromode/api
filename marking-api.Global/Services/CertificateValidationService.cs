@@ -11,7 +11,7 @@ namespace marking_api.Global.Services
         /// <summary>
         /// Checks if the thumbprint of a newly generated certificate is the same as one parsed in.
         /// </summary>
-        /// <param name="clientCertificate">X509Certificate2 </param>
+        /// <param name="clientCertificate">X509Certificate2 - certificate to validate</param>
         /// <returns>True if certificate has the same thumbprint</returns>
         public bool ValidateCertificate(X509Certificate2 clientCertificate)
         {

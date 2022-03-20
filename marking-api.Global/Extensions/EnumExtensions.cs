@@ -18,7 +18,7 @@ namespace marking_api.Global.Extensions
         /// <summary>
         /// Get the displayname of an enum
         /// </summary>
-        /// <param name="enumType">Enum extended from</param>
+        /// <param name="enumType">Enum - Enum extended from</param>
         /// <returns>Enum displayname</returns>
         public static string GetEnumDisplayName(this Enum enumType)
         {
@@ -49,7 +49,7 @@ namespace marking_api.Global.Extensions
         /// Generically get select list of items in an enum with selected value
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="value">Value of selected item in the list</param>
+        /// <param name="value">T - Value of selected item in the list</param>
         /// <returns>Select list of enum items</returns>
         public static IEnumerable<SelectListItem> GetEnumSelectList<T>(T value)
         {

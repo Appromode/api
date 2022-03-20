@@ -42,7 +42,8 @@ namespace marking_api.API.Models.Identity
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
                     new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName),
                     new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName),
-                    // new Claim("PhoneNumber", user.PhoneNumber),
+                    //new Claim(ClaimTypes.MobilePhone, user.PhoneNumber),
+                    new Claim(ClaimTypes.OtherPhone, user.ProfilePicture?.ToString()),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 }),
                 Expires = DateTime.Now.AddMonths(6),

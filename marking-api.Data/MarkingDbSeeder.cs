@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace marking_api.Data
 {
+    /// <summary>
+    /// Database seeder class. Seeds data into the database using the database context
+    /// </summary>
     public class MarkingDbSeeder
     {
         //Database context
@@ -18,8 +21,10 @@ namespace marking_api.Data
         //Bool for if database is already seeded
         private bool _seeded = false;
 
+        private byte[] profilePic = Encoding.ASCII.GetBytes("iVBORw0KGgoAAAANSUhEUgAAADIAAAAyBAMAAADsEZWCAAAAElBMVEXR0dGqqqrCwsKysrK5ubnKysqGpJ8RAAAAtUlEQVQ4y72TMQ7CMAxFTaAH+CnsKRI7QepOBvZWgvtfBaESSv1jKRKob32K/W238iOP40lKuATAC9NEvLiy6TBxoSdvwa+2WVCrER+USbMJSxNhNcLMeW3D2UwTzEkHWnXG3FsrtdVg760qdW22nXltSRSNyolmVIPyZ+XJNOo6HGEQo9xeLOP/ZDZmH9t0VmqHiZ5WkNThWKBdKBfxxa1wUP3n34GycmD6vH4m5CbEIc/OyBPDUSvwZuB80QAAAABJRU5ErkJggg");
+
         /// <summary>
-        /// 
+        /// Database seeder constructor
         /// </summary>
         /// <param name="dbContext">Database context</param>
         /// <param name="signInManager">Identity signinmanager</param>
@@ -62,6 +67,7 @@ namespace marking_api.Data
                 user.PasswordHash = _signInManager.UserManager.PasswordHasher.HashPassword(user, "Tester!2");
                 user.ConcurrencyStamp = Guid.NewGuid().ToString();
                 user.SecurityStamp = Guid.NewGuid().ToString();
+                user.ProfilePicture = profilePic;
 
                 var x = _dbContext.IdUsers.Find(user.Id);
                 _dbContext.Entry(x).CurrentValues.SetValues(user);
@@ -94,7 +100,7 @@ namespace marking_api.Data
                 PhoneNumberConfirmed = false,
                 SecurityStamp = Convert.ToString(Guid.NewGuid()),
                 ConcurrencyStamp = Convert.ToString(Guid.NewGuid()),
-                ProfilePicture = null,
+                ProfilePicture = profilePic,
                 AccessFailedCount = 0,
                 TwoFactorEnabled = false
             };
@@ -120,7 +126,7 @@ namespace marking_api.Data
                 PhoneNumberConfirmed = false,
                 SecurityStamp = Convert.ToString(Guid.NewGuid()),
                 ConcurrencyStamp = Convert.ToString(Guid.NewGuid()),
-                ProfilePicture = null,
+                ProfilePicture = profilePic,
                 AccessFailedCount = 0,
                 TwoFactorEnabled = false
             };
@@ -146,7 +152,7 @@ namespace marking_api.Data
                 PhoneNumberConfirmed = false,
                 SecurityStamp = Convert.ToString(Guid.NewGuid()),
                 ConcurrencyStamp = Convert.ToString(Guid.NewGuid()),
-                ProfilePicture = null,
+                ProfilePicture = profilePic,
                 AccessFailedCount = 0,
                 TwoFactorEnabled = false
             };

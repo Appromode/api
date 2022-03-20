@@ -15,7 +15,7 @@ namespace marking_api.Global.Extensions
         /// <summary>
         /// Get error messages from modelstate of MVC model
         /// </summary>
-        /// <param name="dictionary">Modelstate of the MVC model</param>
+        /// <param name="dictionary">ModelStateDictionary - Modelstate of the MVC model</param>
         /// <returns>String list of error messages of the modelstate</returns>
         public static List<string> GetErrorMessages(this ModelStateDictionary dictionary)
         {

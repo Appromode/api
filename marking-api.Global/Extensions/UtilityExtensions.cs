@@ -15,8 +15,8 @@ namespace marking_api.Global.Extensions
         /// <summary>
         /// Check if an object contains a property
         /// </summary>
-        /// <param name="obj">Object to check for property</param>
-        /// <param name="propertyName">Name of property within object</param>
+        /// <param name="obj">Type - Object to check for property</param>
+        /// <param name="propertyName">string - Name of property within object</param>
         /// <returns>True if object has property</returns>
         public static bool HasProperty(this Type obj, string propertyName)
         {
@@ -27,8 +27,8 @@ namespace marking_api.Global.Extensions
         /// Get value of a property from an object generically
         /// </summary>
         /// <typeparam name="T">Generic object to extend from</typeparam>
-        /// <param name="obj">Object to get property value from</param>
-        /// <param name="propertyName">Name of the property</param>
+        /// <param name="obj">object - Object to get property value from</param>
+        /// <param name="propertyName">string - Name of the property</param>
         /// <returns>Property value</returns>
         public static T GetPropertyValue<T>(this object obj, string propertyName)
         {
@@ -61,7 +61,7 @@ namespace marking_api.Global.Extensions
         /// <summary>
         /// Convert a unix time stamp to date time datatype
         /// </summary>
-        /// <param name="unixTimeStamp">Unix time stamp to convert</param>
+        /// <param name="unixTimeStamp">long - Unix time stamp to convert</param>
         /// <returns>Converted unix time stamp</returns>
         public static DateTime UnixTimeStampToDateTime(long unixTimeStamp)
         {

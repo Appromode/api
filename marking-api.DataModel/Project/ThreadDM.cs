@@ -20,11 +20,11 @@ namespace marking_api.DataModel.Project
 
         public string ThreadTitle { get; set; }
 
-        public string ThreadDesc { get; set; }
+        public string ThreadContent { get; set; }
 
         public bool ThreadStatus { get; set; }
 
-        public int Replies {get; set; }
+        public int ReplyCount {get; set; }
 
         [ForeignKey("UserId")]
         public virtual string UserId { get; set;}
@@ -36,13 +36,13 @@ namespace marking_api.DataModel.Project
         [SwaggerExclude]
         public virtual ProjectDM LinkedProject { get; set;}
 
-        public List<CommentDM> Comments { get; set; }
-
         public int? TotalMembers { get; set; }
         
         [SwaggerExclude]
         [InverseProperty("LinkedThread")]
         public virtual ICollection<ProjectDM> LinkedProjects { get; set; }
+
+        public ICollection<CommentDM> Comments { get; set; }
 
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using marking_api.Data;
 
@@ -10,9 +11,10 @@ using marking_api.Data;
 namespace marking_api.Data.Migrations
 {
     [DbContext(typeof(MarkingDbContext))]
-    partial class MarkingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220302154047_UpdateThreadCommentDMs")]
+    partial class UpdateThreadCommentDMs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,23 +82,14 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("createdBy")
-                        .HasColumnType("longtext");
-
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("deletedBy")
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("updatedBy")
-                        .HasColumnType("longtext");
 
                     b.HasKey("FileId");
 
@@ -127,23 +120,14 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("createdBy")
-                        .HasColumnType("longtext");
-
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("deletedBy")
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("updatedBy")
-                        .HasColumnType("longtext");
 
                     b.HasKey("FileStateId");
 
@@ -187,23 +171,14 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("createdBy")
-                        .HasColumnType("longtext");
-
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("deletedBy")
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("updatedBy")
-                        .HasColumnType("longtext");
 
                     b.HasKey("FileVersionId");
 
@@ -240,23 +215,14 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("createdBy")
-                        .HasColumnType("longtext");
-
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("deletedBy")
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("updatedBy")
-                        .HasColumnType("longtext");
 
                     b.HasKey("FolderId");
 
@@ -286,23 +252,14 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("createdBy")
-                        .HasColumnType("longtext");
-
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("deletedBy")
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("updatedBy")
-                        .HasColumnType("longtext");
 
                     b.HasKey("FolderFileId");
 
@@ -334,23 +291,14 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("createdBy")
-                        .HasColumnType("longtext");
-
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("deletedBy")
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("updatedBy")
-                        .HasColumnType("longtext");
 
                     b.HasKey("FolderRoleId");
 
@@ -394,23 +342,14 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("createdBy")
-                        .HasColumnType("longtext");
-
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("deletedBy")
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("updatedBy")
-                        .HasColumnType("longtext");
 
                     b.HasKey("LinkId");
 
@@ -525,23 +464,14 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("createdBy")
-                        .HasColumnType("longtext");
-
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("deletedBy")
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("updatedBy")
-                        .HasColumnType("longtext");
 
                     b.HasKey("RolePermissionId");
 
@@ -570,23 +500,14 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("createdBy")
-                        .HasColumnType("longtext");
-
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("deletedBy")
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("updatedBy")
-                        .HasColumnType("longtext");
 
                     b.HasKey("SiteAreaId");
 
@@ -798,23 +719,14 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("createdBy")
-                        .HasColumnType("longtext");
-
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("deletedBy")
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("updatedBy")
-                        .HasColumnType("longtext");
 
                     b.HasKey("AuditId");
 
@@ -882,23 +794,14 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("createdBy")
-                        .HasColumnType("longtext");
-
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("deletedBy")
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("updatedBy")
-                        .HasColumnType("longtext");
 
                     b.HasKey("CommentId");
 
@@ -953,23 +856,14 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("createdBy")
-                        .HasColumnType("longtext");
-
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("deletedBy")
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("updatedBy")
-                        .HasColumnType("longtext");
 
                     b.HasKey("FeedbackId");
 
@@ -1011,23 +905,14 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("createdBy")
-                        .HasColumnType("longtext");
-
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("deletedBy")
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("updatedBy")
-                        .HasColumnType("longtext");
 
                     b.HasKey("GradeId");
 
@@ -1062,23 +947,14 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("createdBy")
-                        .HasColumnType("longtext");
-
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("deletedBy")
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("updatedBy")
-                        .HasColumnType("longtext");
 
                     b.HasKey("GroupId");
 
@@ -1109,23 +985,14 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("createdBy")
-                        .HasColumnType("longtext");
-
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("deletedBy")
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("updatedBy")
-                        .HasColumnType("longtext");
 
                     b.HasKey("GroupMarkerId");
 
@@ -1154,9 +1021,6 @@ namespace marking_api.Data.Migrations
                     b.Property<bool>("IsClosed")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<long?>("LinkedThreadId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("ProjectName")
                         .HasColumnType("longtext");
 
@@ -1166,29 +1030,18 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("createdBy")
-                        .HasColumnType("longtext");
-
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("deletedBy")
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("updatedBy")
-                        .HasColumnType("longtext");
 
                     b.HasKey("ProjectId");
 
                     b.HasIndex("EthicsFormId");
-
-                    b.HasIndex("LinkedThreadId");
 
                     b.ToTable("Projects", "dbo");
                 });
@@ -1226,23 +1079,14 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("createdBy")
-                        .HasColumnType("longtext");
-
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("deletedBy")
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("updatedBy")
-                        .HasColumnType("longtext");
 
                     b.HasKey("TagId");
 
@@ -1267,7 +1111,7 @@ namespace marking_api.Data.Migrations
                     b.Property<int>("AccessRole")
                         .HasColumnType("int");
 
-                    b.Property<long?>("LinkedProjectId")
+                    b.Property<long>("LinkedProjectId")
                         .HasColumnType("bigint");
 
                     b.Property<int>("ReplyCount")
@@ -1294,23 +1138,14 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("createdBy")
-                        .HasColumnType("longtext");
-
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("deletedBy")
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("updatedBy")
-                        .HasColumnType("longtext");
 
                     b.HasKey("ThreadId");
 
@@ -1345,23 +1180,14 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("createdBy")
-                        .HasColumnType("longtext");
-
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("deletedBy")
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("updatedBy")
-                        .HasColumnType("longtext");
 
                     b.HasKey("UserGradeId");
 
@@ -1395,23 +1221,14 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("createdBy")
-                        .HasColumnType("longtext");
-
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("deletedBy")
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("updatedBy")
-                        .HasColumnType("longtext");
 
                     b.HasKey("UserGroupId");
 
@@ -1420,45 +1237,6 @@ namespace marking_api.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserGroups", "dbo");
-                });
-
-            modelBuilder.Entity("marking_api.DataModel.Project.UserTagsDM", b =>
-                {
-                    b.Property<long>("UserTagId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("AccessRole")
-                        .HasColumnType("int");
-
-                    b.Property<long>("TagId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<bool>("canDelete")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime>("createdAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("deleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime?>("deletedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("updatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("UserTagId");
-
-                    b.HasIndex("TagId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserTags", "dbo");
                 });
 
             modelBuilder.Entity("marking_api.DataModel.API.RefreshTokenDM", b =>
@@ -1764,14 +1542,7 @@ namespace marking_api.Data.Migrations
                         .HasForeignKey("EthicsFormId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("marking_api.DataModel.Project.ThreadDM", "LinkedThread")
-                        .WithMany("LinkedProjects")
-                        .HasForeignKey("LinkedThreadId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.Navigation("EthicsForm");
-
-                    b.Navigation("LinkedThread");
                 });
 
             modelBuilder.Entity("marking_api.DataModel.Project.TagDM", b =>
@@ -1801,9 +1572,10 @@ namespace marking_api.Data.Migrations
             modelBuilder.Entity("marking_api.DataModel.Project.ThreadDM", b =>
                 {
                     b.HasOne("marking_api.DataModel.Project.ProjectDM", "LinkedProject")
-                        .WithMany("LinkedThreads")
+                        .WithMany()
                         .HasForeignKey("LinkedProjectId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("marking_api.DataModel.Identity.User", "User")
                         .WithMany()
@@ -1855,24 +1627,6 @@ namespace marking_api.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Group");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("marking_api.DataModel.Project.UserTagsDM", b =>
-                {
-                    b.HasOne("marking_api.DataModel.Project.TagDM", "Tag")
-                        .WithMany()
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("marking_api.DataModel.Identity.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Tag");
 
                     b.Navigation("User");
                 });
@@ -1936,9 +1690,12 @@ namespace marking_api.Data.Migrations
                 {
                     b.Navigation("Comments");
 
-                    b.Navigation("LinkedThreads");
-
                     b.Navigation("ProjectTags");
+                });
+
+            modelBuilder.Entity("marking_api.DataModel.Project.ThreadDM", b =>
+                {
+                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }

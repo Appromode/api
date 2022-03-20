@@ -32,6 +32,7 @@ namespace marking_api.API
             //var user = _userManager.GetUserAsync(context.HttpContext.User.I).Result;
 
             var token = context.HttpContext.Request.Headers["authorization"].FirstOrDefault()?.Split(" ").Last();
+            //var token = context.HttpContext.Request.Cookies;
             var jwtuserId = _utilService.ValidateToken(token);
 
 

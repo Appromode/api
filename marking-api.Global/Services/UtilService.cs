@@ -23,7 +23,8 @@ namespace marking_api.Global.Services
         /// <summary>
         /// Setup unitofwork
         /// </summary>
-        /// <param name="unitOfWork">Injected to access the database and include extra methods</param>
+        /// <param name="unitOfWork">IUnitOfWork - Injected to access the database and include extra methods</param>
+        /// <param name="config">IConfiguration - To get appsetting config strings</param>
         public UtilService(IUnitOfWork unitOfWork, IConfiguration config)
         {
             _unitOfWork = unitOfWork;
@@ -101,6 +102,12 @@ namespace marking_api.Global.Services
             }
         }
 
+        /// <summary>
+        /// Get userid from JWT token to use when saving data in the database
+        /// Replaces automatic claim generation in dotnet Identity
+        /// </summary>
+        /// <param name="token">string - JWT token</param>
+        /// <returns>Return validated userId of the toekn</returns>
         public string ValidateToken(string token)
         {
             if (token == null)

@@ -16,7 +16,7 @@ namespace marking_api.Global.Extensions
         /// <summary>
         /// Convert User object to userdto object
         /// </summary>
-        /// <param name="user">Extended User object</param>
+        /// <param name="user">User - Extended User object</param>
         /// <returns>Converted UserDTO object</returns>
         public static UserDTO ToUserDTO(this User user)
         {
@@ -35,7 +35,7 @@ namespace marking_api.Global.Extensions
         /// <summary>
         /// Convert UserDTO object to User object
         /// </summary>
-        /// <param name="user">Extended UserDTO object</param>
+        /// <param name="user">UserDTO - Extended UserDTO object</param>
         /// <returns>Converted user object</returns>
         public static User ToUser(this UserDTO user)
         {
@@ -54,7 +54,7 @@ namespace marking_api.Global.Extensions
         /// <summary>
         /// Converts list of user objects to userdto objects
         /// </summary>
-        /// <param name="users">Extended list of user objects</param>
+        /// <param name="users">List(User) - Extended list of user objects</param>
         /// <returns>Converted list of userdto objects</returns>
         public static List<UserDTO> ToUserDTOList(this List<User> users)
         {
@@ -69,7 +69,7 @@ namespace marking_api.Global.Extensions
         /// <summary>
         /// Converts list of UserDTO objects to list of User objects
         /// </summary>
-        /// <param name="users">Extended list of UserDTO objects</param>
+        /// <param name="users">List(UserDTO) - Extended list of UserDTO objects</param>
         /// <returns>Converted list of user objects</returns>
         public static List<User> ToUserList(this List<UserDTO> users)
         {
@@ -84,7 +84,7 @@ namespace marking_api.Global.Extensions
         /// <summary>
         /// Convert LinkDM object to a linkDTO object
         /// </summary>
-        /// <param name="link">Extended LinkDM object</param>
+        /// <param name="link">LinkDM - Extended LinkDM object</param>
         /// <returns>Converted LinkDTO object</returns>
         public static LinkDTO ToLinkDTO(this LinkDM link)
         {
@@ -103,7 +103,7 @@ namespace marking_api.Global.Extensions
         /// <summary>
         /// Convert LinkDTO object to a linkDM object
         /// </summary>
-        /// <param name="link">Extended LinkDTO object</param>
+        /// <param name="link">LinkDTO - Extended LinkDTO object</param>
         /// <returns>Converted LinkDM object</returns>
         public static LinkDM ToLinkDM(this LinkDTO link)
         {
@@ -122,7 +122,7 @@ namespace marking_api.Global.Extensions
         /// <summary>
         /// Convert a list of LinkDM objects to LinkDTO objects
         /// </summary>
-        /// <param name="links">Extended list of LinkDM objects</param>
+        /// <param name="links">ICollection(LinkDM) - Extended list of LinkDM objects</param>
         /// <returns>List of converted LinkDTO objects</returns>
         public static List<LinkDTO> ToLinkDTOList(this ICollection<LinkDM> links)
         {
@@ -137,7 +137,7 @@ namespace marking_api.Global.Extensions
         /// <summary>
         /// Convert a list of LinkDTO objects to LinkDM objects
         /// </summary>
-        /// <param name="links">Extended list of linkDTO objects</param>
+        /// <param name="links">ICollection(LinkDTO) - Extended list of linkDTO objects</param>
         /// <returns>List of converted LinkDM objects</returns>
         public static List<LinkDM> ToLinkDMList(this ICollection<LinkDTO> links)
         {

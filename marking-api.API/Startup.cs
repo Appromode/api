@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace marking_api.API
 {
@@ -171,10 +172,11 @@ namespace marking_api.API
             //JWT authorisation for API requests
             services.AddAuthentication(options =>
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme; //JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             }).AddJwtBearer(options =>
+
             {
                 options.SaveToken = true;
                 options.TokenValidationParameters = tokenValidationParameters;
@@ -188,7 +190,7 @@ namespace marking_api.API
                         }
                         return Task.CompletedTask;
                     };
-                }                
+                }
             });
 
             services.AddAuthorization(options =>

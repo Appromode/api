@@ -15,8 +15,11 @@ namespace marking_api.DataModel
         public bool canDelete { get; set; }
         public bool deleted { get; set; }
         public DateTime createdAt { get; set; }
+        public string createdBy {get; set;}
         public DateTime updatedAt { get; set; }
+        public string updatedBy { get; set; }
         public DateTime? deletedAt { get; set; }
+        public string deletedBy { get; set; }
         public RoleType AccessRole { get; set; } = RoleType.Guest;
 
         public virtual bool Delete()
@@ -24,6 +27,7 @@ namespace marking_api.DataModel
             if (canDelete)
             {
                 deleted = true;
+                deletedAt = DateTime.Now;
                 return true;
             }
             return false;

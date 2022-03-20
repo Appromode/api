@@ -19,8 +19,8 @@ namespace marking_api.Global.Extensions
         /// Get object from json generically
         /// </summary>
         /// <typeparam name="T">Returns any object generically that was set from Json</typeparam>
-        /// <param name="session">Session object</param>
-        /// <param name="key">Id of the session</param>
+        /// <param name="session">ISession - Session object</param>
+        /// <param name="key">string - Id of the session</param>
         /// <returns>Deserialised Json object</returns>
         public static T GetObjectFromJson<T>(this ISession session, string key)
         {
@@ -31,9 +31,9 @@ namespace marking_api.Global.Extensions
         /// <summary>
         /// Convert object to Json generically
         /// </summary>
-        /// <param name="session">Session object</param>
-        /// <param name="key">Id of the session</param>
-        /// <param name="value">Value that is going to be serialised to Json</param>
+        /// <param name="session">ISession - Session object</param>
+        /// <param name="key">string - Id of the session</param>
+        /// <param name="value">object - Value that is going to be serialised to Json</param>
         public static void SetObjectAsJson(this ISession session, string key, object value)
         {
             session.SetString(key, JsonConvert.SerializeObject(value, _settings));

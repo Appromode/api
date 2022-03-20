@@ -1,15 +1,13 @@
-﻿using marking_api.API.Config;
-using marking_api.API.Models.Identity;
-using marking_api.Data;
+﻿using marking_api.API.Models.Identity;
 using marking_api.DataModel.API;
 using marking_api.DataModel.Identity;
 using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System.Threading.Tasks;
 
 namespace marking_api.API.Controllers.Identity
 {
@@ -29,10 +27,10 @@ namespace marking_api.API.Controllers.Identity
             _jwt = optionsMonitor.CurrentValue;
             _tokenValidationParameters = tokenValidationParameters;
         }
-        
+
         [HttpPost]
         [AllowAnonymous]
-        public IActionResult Login([FromBody]LoginRequest userLogin)
+        public IActionResult Login([FromBody] LoginRequest userLogin)
         {
             if (ModelState.IsValid)
             {
@@ -51,8 +49,19 @@ namespace marking_api.API.Controllers.Identity
 
                     var cm = new LoginCM(_unitOfWork, _signInManager, _jwt, _tokenValidationParameters);
 
+                    //Response.Cookies.Append(
+                    //    "t",
+                    //    cm.GenerateJwtToken(user).Token,
+                    //    new CookieOptions()
+                    //    {
+                    //        HttpOnly = true,
+                    //        Secure = true,
+                    //        SameSite = SameSiteMode.None,
+                    //    }
+                    //);
+
                     return Ok(cm.GenerateJwtToken(user));
-                }            
+                }
             }
             return BadRequest("Invalid payload");
         }

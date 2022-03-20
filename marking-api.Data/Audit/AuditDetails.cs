@@ -19,8 +19,8 @@ namespace marking_api.Data.Audit
         /// <summary>
         /// Set database entry and userid as well as converting the entry to AuditDM
         /// </summary>
-        /// <param name="entry"></param>
-        /// <param name="userId"></param>
+        /// <param name="entry">EntityEntry - Database entry</param>
+        /// <param name="userId">String - UserId</param>
         public AuditDetails(EntityEntry entry, string userId)
         {
             Entry = entry;
