@@ -177,6 +177,10 @@ namespace marking_api.Data
         /// Role Links Table
         /// </summary>
         public DbSet<RoleLinkDM> RoleLinks { get; set; }
+        /// <summary>
+        /// Invites Table
+        /// </summary>
+         public DbSet<InviteDM> Invites { get; set; } 
 
         /// <summary>
         /// Configures the DbContext

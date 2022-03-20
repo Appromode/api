@@ -141,6 +141,10 @@ namespace marking_api.Global.Repositories
         /// User tag repository interface
         /// </summary>
         IUserTagRepository UserTags { get; }  
+        /// <summary>
+        /// Invites repository interface
+        /// </summary>
+        IInvitesRepository Invites { get; }
 
         //Views
 
@@ -205,6 +209,7 @@ namespace marking_api.Global.Repositories
             UserRoles = new UserRoleRepository(dbContext);
             UserTokens = new UserTokenRepository(dbContext);
             UserTags = new UserTagRepository(dbContext);
+            Invites = new InvitesRepository(dbContext);
 
             GenericMethods = new GenericMethodRepository(dbContext, config);
 
@@ -244,6 +249,7 @@ namespace marking_api.Global.Repositories
         public IUserTokenRepository UserTokens { get; private set; }
         public IUserTagRepository UserTags { get; private set; }
         public IGenericMethodRepository GenericMethods { get; private set; }
+        public IInvitesRepository Invites { get; private set; }
 
         //Views
         public int Save() => _dbContext.SaveChanges();
