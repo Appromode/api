@@ -80,7 +80,6 @@ namespace marking_api.API.Models.Identity
             var handler = new JwtSecurityTokenHandler();
             try
             {
-                Console.WriteLine("Hit validate");
                 var tokenVerification = handler.ValidateToken(tokenRequest.BearerToken, _tokenValidationParameters, out var validatedToken);
                 if (validatedToken is JwtSecurityToken jwtSecurityToken)
                 {
