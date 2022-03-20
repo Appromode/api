@@ -29,8 +29,6 @@ namespace marking_api.API.Models.Recommend
 
             var tags = userTags.ToList().Select((userTag) => userTag.Tag).ToList();
 
-            tags.ForEach((list) => Console.WriteLine(list));
-
             var results = _unitOfWork.UserTags.Get(
               include: (table) => (
                 table
