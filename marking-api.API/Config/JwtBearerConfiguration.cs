@@ -8,8 +8,18 @@ using System.Text.Json;
 
 namespace marking_api.API.Config
 {
+    /// <summary>
+    /// Swagger jwt bearer configuration class
+    /// </summary>
     public static class JwtBearerConfiguration
     {
+        /// <summary>
+        /// Add jwt bearer configuration to the application
+        /// </summary>
+        /// <param name="builder">AuthenticationBuilder</param>
+        /// <param name="issuer">string</param>
+        /// <param name="audience">string</param>
+        /// <returns></returns>
         public static AuthenticationBuilder AddJwtBearerConfiguration(this AuthenticationBuilder builder, string issuer, string audience)
         {
             return builder.AddJwtBearer(options =>
@@ -24,6 +34,7 @@ namespace marking_api.API.Config
                 {
                     OnChallenge = context =>
                     {
+                        //Return 401 unauthorised if the request has not got a valid jwt token
                         context.HandleResponse();
                         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                         context.Response.ContentType = "application/json";

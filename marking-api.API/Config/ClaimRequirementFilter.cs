@@ -10,17 +10,29 @@ using System.Security.Claims;
 
 namespace marking_api.API.Config
 {
+    /// <summary>
+    /// Claim requirement filter used as attribute
+    /// </summary>
     public class ClaimRequirementFilter : IAuthorizationFilter
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly Claim _claim;
         private readonly UtilService _utilService;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="unitOfWork">IUnitOfWork</param>
         public ClaimRequirementFilter(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
+        /// <summary>
+        /// Checks if user is authorised to the controller
+        /// Creates unauthorised result if they don't
+        /// </summary>
+        /// <param name="context">AuthorizationFilterContext</param>
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             var hasClaim = HasAccess(context.HttpContext.User);
@@ -31,6 +43,11 @@ namespace marking_api.API.Config
             }
         }
 
+        /// <summary>
+        /// Checks the user's links and role permissions for if they have access to the controller
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns>True if the user has access</returns>
         public bool HasAccess(ClaimsPrincipal user)
         {
             if (user.IsInRole("Admin"))
