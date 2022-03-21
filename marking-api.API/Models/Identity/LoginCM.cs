@@ -120,7 +120,6 @@ namespace marking_api.API.Models.Identity
             var handler = new JwtSecurityTokenHandler();
             try
             {
-                Console.WriteLine("Hit validate");
                 //Test jwt token
                 var tokenVerification = handler.ValidateToken(tokenRequest.BearerToken, _tokenValidationParameters, out var validatedToken);
                 //If token is valid
