@@ -123,7 +123,7 @@ namespace marking_api.API
                 }); 
             });
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
 
             //Swagger Configuration
             services.AddSwaggerGen(c =>

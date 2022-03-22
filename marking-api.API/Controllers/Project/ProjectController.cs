@@ -2,6 +2,8 @@
 using marking_api.Global.Extensions;
 using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -100,5 +102,30 @@ namespace marking_api.API.Controllers.Project
 
             return Ok(project);
         }
+
+        [HttpPatch("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(ProjectDM)))]
+        public IActionResult Patch(long id, [FromBody] JsonPatchDocument<ProjectDM> patchEntity)
+        {
+            if (patchEntity != null)
+            {
+                var project = _unitOfWork.Projects.GetById(id);
+
+                patchEntity.ApplyTo(project, ModelState);
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                
+                _unitOfWork.Projects.Update(project);
+                _unitOfWork.Save();
+                return Ok(project);
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
     }
+}
 }
