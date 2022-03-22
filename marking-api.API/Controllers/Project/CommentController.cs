@@ -34,7 +34,9 @@ namespace marking_api.API.Controllers.Project
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(CommentDM)))]
         public IActionResult Get()
         {
-            return Ok(_unitOfWork.Comments.Get());
+            return Ok(_unitOfWork.Comments.Get(
+                include: (comment) => comment.Include((comment) => comment.QuotedComment)
+            ));
         }
 
         /// <summary>

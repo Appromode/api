@@ -51,6 +51,9 @@ namespace marking_api.API.Controllers.Project
              var threadComments = _unitOfWork.Threads.Get(
                  include: (threadDM) => threadDM
                      .Include((threadDM) => threadDM.Comments)
+                     .ThenInclude((threadComments) => threadComments.QuotedComment)
+                     .ThenInclude((threadComments) => threadComments.User)
+                     .Include((threadDM) => threadDM.Comments)
                      .ThenInclude((threadComments) => threadComments.User),
                  filter: (threadDM) => threadDM.ThreadId == threadId);
 
