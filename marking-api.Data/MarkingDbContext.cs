@@ -151,6 +151,10 @@ namespace marking_api.Data
         /// User Tags Table
         /// </summary>
         public DbSet<UserTagsDM> UserTags { get; set; }
+        /// <summary>
+        /// Group Tags Table
+        /// </summary>
+        public DbSet<GroupTagDM> GroupTags { get; set; }
 
         //API Database Tables
         /// <summary>
