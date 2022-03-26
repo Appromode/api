@@ -67,6 +67,7 @@ namespace marking_api.API
             var serverVersion = new MySqlServerVersion(new Version(8, 0, 27));
 
             //Switch database connection strings depending on the application environment
+            //Ignore schema information due to the difference between MySQL and MSSQL
             if (Env.IsDevelopment())
             {                
                 services.AddDbContext<MarkingDbContext>(options => options.UseMySql(Configuration.GetConnectionString("DbConnection"), serverVersion, o => 
@@ -83,6 +84,7 @@ namespace marking_api.API
                 }));
             }
 
+            //Configure local language
             services.Configure<RequestLocalizationOptions>(o =>
             {
                 var supportedCultures = new[]
@@ -121,7 +123,7 @@ namespace marking_api.API
                 }); 
             });
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
 
             //Swagger Configuration
             services.AddSwaggerGen(c =>

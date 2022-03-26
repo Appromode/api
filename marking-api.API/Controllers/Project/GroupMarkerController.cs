@@ -6,16 +6,27 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace marking_api.API.Controllers.Project
 {
+    /// <summary>
+    /// GroupMarker API Controller
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class GroupMarkerController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
+        /// <summary>
+        /// Constructor initialising unitofwork
+        /// </summary>
+        /// <param name="unitOfWork">IUnitOfWork</param>
         public GroupMarkerController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
+        /// <summary>
+        /// Get GroupMarkers
+        /// </summary>
+        /// <returns>List of GroupMarkerDM</returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(GroupMarkerDM)))]
         public IActionResult Get()
@@ -23,6 +34,11 @@ namespace marking_api.API.Controllers.Project
             return Ok(_unitOfWork.GroupMarkers.Get());
         }
 
+        /// <summary>
+        /// Get groupmarker by id
+        /// </summary>
+        /// <param name="id">long</param>
+        /// <returns>GroupMarkerDM</returns>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(GroupMarkerDM)))]
         public IActionResult Get(long id)
@@ -34,6 +50,11 @@ namespace marking_api.API.Controllers.Project
                 return Ok(groupMarker);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="groupMarker"></param>
+        /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(GroupMarkerDM)))]
         public IActionResult Post([FromBody] GroupMarkerDM groupMarker)
