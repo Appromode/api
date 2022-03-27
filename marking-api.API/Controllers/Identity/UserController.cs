@@ -103,7 +103,7 @@ namespace marking_api.API.Controllers.Identity
 
         [HttpGet("{id}/Recommended")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserGroupDM)))]
-        public IActionResult GetRecommended(string id)
+        public IActionResult GetRecommendedUsers(string id)
         {
             var cm = new RecommendCM(_unitOfWork);
 
@@ -111,6 +111,18 @@ namespace marking_api.API.Controllers.Identity
                 return NotFound();
             else
                 return Ok(cm.GetRecommendUsers(id));
+        }
+
+        [HttpGet("{id}/Recommended/Groups")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(GroupTagDM)))]
+        public IActionResult GetRecommendedGroups(string id)
+        {
+            var cm = new RecommendCM(_unitOfWork);
+
+            if (cm == null)
+                return NotFound();
+            else
+                return Ok(cm.GetRecommendGroups(id));
         }
 
         [HttpPost]
