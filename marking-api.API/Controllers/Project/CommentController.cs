@@ -73,7 +73,15 @@ namespace marking_api.API.Controllers.Project
             _unitOfWork.Comments.AddOrUpdate(comment);
             _unitOfWork.Save();
 
-            return Ok(comment);
+            var comentId = comment.CommentId;
+
+            var commentThread = _unitOfWork.Comments.GetById(comentId);
+
+            return Ok(_unitOfWork.Comments.Get(
+            include: (comment) => comment.Include((comment) => comment.ParentThread),
+            filter: (comment) => comment.CommentId == comentId
+            ));
+
         }
 
         /// <summary>

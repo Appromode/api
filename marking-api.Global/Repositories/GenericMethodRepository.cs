@@ -16,6 +16,10 @@ namespace marking_api.Global.Repositories
     public interface IGenericMethodRepository
     {
         /// <summary>
+        /// CreateExecutionStrategy
+        /// </summary>
+        Microsoft.EntityFrameworkCore.Storage.IExecutionStrategy CreateExecutionStrategy();
+        /// <summary>
         /// Begin db transaction
         /// </summary>
         void BeginTransaction();
@@ -54,6 +58,13 @@ namespace marking_api.Global.Repositories
         {
             _dbContext = dbContext;
             _config = config;
+        }
+
+        /// <summary>
+        /// Return execution strategy
+        /// </summary>
+        public Microsoft.EntityFrameworkCore.Storage.IExecutionStrategy CreateExecutionStrategy() {
+            return _dbContext.Database.CreateExecutionStrategy();
         }
 
         /// <summary>
