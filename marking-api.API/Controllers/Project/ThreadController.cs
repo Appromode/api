@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace marking_api.API.Controllers.Project
 {
@@ -109,6 +110,31 @@ namespace marking_api.API.Controllers.Project
 
             return Ok(thread);
         }
+
+        [HttpPatch("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(ThreadDM)))]
+        public IActionResult Patch(long id, [FromBody] JsonPatchDocument<ThreadDM> patchEntity)
+        {
+            if (patchEntity != null)
+            {
+                var thread = _unitOfWork.Threads.GetById(id);
+
+                patchEntity.ApplyTo(thread, ModelState);
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                
+                _unitOfWork.Threads.Update(thread);
+                _unitOfWork.Save();
+                return Ok(thread);
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+    }
 
         [HttpGet("WholeThread/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(ThreadDM)))]
