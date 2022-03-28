@@ -1,8 +1,6 @@
 ﻿using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Http;
 using marking_api.DataModel.Project;
-using marking_api.API.Models.Recommend;
-using marking_api.API.Models.Invites;
 using Microsoft.AspNetCore.Mvc;
 using marking_api.DataModel.API;
 using marking_api.Global.Extensions;
@@ -11,6 +9,8 @@ using marking_api.DataModel.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System;
+using marking_api.API.Models.Identity;
+
 namespace marking_api.API.Controllers.Identity
 {
     [ApiController]
@@ -35,7 +35,7 @@ namespace marking_api.API.Controllers.Identity
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserDTO)))]
         public IActionResult GetInvites(string id)
         {
-            var cm = new InvitesCM(_unitOfWork);
+            var cm = new UserCM(_unitOfWork);
 
             if (cm != null) {
                 return Ok(cm.GetInvites(id));
@@ -47,7 +47,7 @@ namespace marking_api.API.Controllers.Identity
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(GroupDM)))]
         public IActionResult AcceptInvite([FromBody] AcceptInvite acceptInvite)
         {
-            var cm = new InvitesCM(_unitOfWork);
+            var cm = new UserCM(_unitOfWork);
 
             var group = cm.AcceptInvite(acceptInvite.InviteId);
 
@@ -105,7 +105,7 @@ namespace marking_api.API.Controllers.Identity
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserGroupDM)))]
         public IActionResult GetRecommendedUsers(string id)
         {
-            var cm = new RecommendCM(_unitOfWork);
+            var cm = new UserCM(_unitOfWork);
 
             if (cm == null)
                 return NotFound();
@@ -117,7 +117,7 @@ namespace marking_api.API.Controllers.Identity
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(GroupTagDM)))]
         public IActionResult GetRecommendedGroups(string id)
         {
-            var cm = new RecommendCM(_unitOfWork);
+            var cm = new UserCM(_unitOfWork);
 
             if (cm == null)
                 return NotFound();

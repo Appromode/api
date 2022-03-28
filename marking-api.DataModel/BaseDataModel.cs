@@ -48,7 +48,7 @@ namespace marking_api.DataModel
         /// </summary>
         public string deletedBy { get; set; }
         /// <summary>
-        /// What role has access to this entry
+        /// What type of role has access to this entry
         /// </summary>
         public RoleType AccessRole { get; set; } = RoleType.Guest;
 

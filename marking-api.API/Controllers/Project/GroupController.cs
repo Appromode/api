@@ -59,7 +59,7 @@ namespace marking_api.API.Controllers.Project
         /// Post group
         /// </summary>
         /// <param name="groupReq">GroupRequest</param>
-        /// <returns>Saved GroupDM</returns>
+        /// <returns>Saved or updated GroupDM</returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(GroupDM)))]
         public IActionResult Post(GroupRequest groupReq)

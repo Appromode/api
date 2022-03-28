@@ -7,17 +7,28 @@ using System;
 
 namespace marking_api.API.Controllers.Project
 {
+    /// <summary>
+    /// Mark API Controller
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class MarkController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
 
+        /// <summary>
+        /// Constructor initialising unitofwork
+        /// </summary>
+        /// <param name="unitOfWork">IUnitOfWork</param>
         public MarkController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
+        /// <summary>
+        /// GET FeedbackDMs
+        /// </summary>
+        /// <returns>List of FeedbackDMs</returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(FeedbackDM)))]
         public IActionResult Get()
@@ -25,6 +36,11 @@ namespace marking_api.API.Controllers.Project
             return Ok(_unitOfWork.Feedback.Get());
         }
 
+        /// <summary>
+        /// GET FeedbackDM by id
+        /// </summary>
+        /// <param name="id">long</param>
+        /// <returns>FeedbackDM</returns>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(FeedbackDM)))]
         public IActionResult Get(long id)
@@ -36,6 +52,11 @@ namespace marking_api.API.Controllers.Project
                 return Ok(mark);
         }
 
+        /// <summary>
+        /// POST FeedbackDM
+        /// </summary>
+        /// <param name="mark">FeedbackDM</param>
+        /// <returns>Saved FeedbackDM</returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(FeedbackDM)))]
         public IActionResult Post([FromBody] FeedbackDM mark)
@@ -52,6 +73,12 @@ namespace marking_api.API.Controllers.Project
             return Ok(mark);
         }
 
+        /// <summary>
+        /// PUT FeedbackDM by id
+        /// </summary>
+        /// <param name="id">Int64</param>
+        /// <param name="mark">FeedbackDM</param>
+        /// <returns>Updated FeedbackDM</returns>
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(FeedbackDM)))]
         public IActionResult Put(long id, [FromBody] FeedbackDM mark)
@@ -71,6 +98,11 @@ namespace marking_api.API.Controllers.Project
             return Ok(mark);
         }
 
+        /// <summary>
+        /// DELETE FeedbackDM
+        /// </summary>
+        /// <param name="id">Int64</param>
+        /// <returns>Deleted FeedbackDM</returns>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(FeedbackDM)))]
         public IActionResult Delete(long id)

@@ -24,7 +24,7 @@ namespace marking_api.API.Controllers.Project
         }
 
         /// <summary>
-        /// Get GroupMarkers
+        /// GET GroupMarkers
         /// </summary>
         /// <returns>List of GroupMarkerDM</returns>
         [HttpGet]
@@ -35,7 +35,7 @@ namespace marking_api.API.Controllers.Project
         }
 
         /// <summary>
-        /// Get groupmarker by id
+        /// GET groupmarker by id
         /// </summary>
         /// <param name="id">long</param>
         /// <returns>GroupMarkerDM</returns>
@@ -51,10 +51,10 @@ namespace marking_api.API.Controllers.Project
         }
 
         /// <summary>
-        /// 
+        /// POST a GroupMarker
         /// </summary>
-        /// <param name="groupMarker"></param>
-        /// <returns></returns>
+        /// <param name="groupMarker">GroupMarkerDM</param>
+        /// <returns>Saved GroupMarkerDM</returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(GroupMarkerDM)))]
         public IActionResult Post([FromBody] GroupMarkerDM groupMarker)
@@ -71,6 +71,12 @@ namespace marking_api.API.Controllers.Project
             return Ok(groupMarker);
         }
 
+        /// <summary>
+        /// PUT a GroupMarkerDM by id
+        /// </summary>
+        /// <param name="id">Int64 GroupMarker id</param>
+        /// <param name="groupMarker">GroupMarkerDM</param>
+        /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(GroupMarkerDM)))]
         public IActionResult Put(long id, [FromBody] GroupMarkerDM groupMarker)
@@ -90,6 +96,11 @@ namespace marking_api.API.Controllers.Project
             return Ok(groupMarker);
         }
 
+        /// <summary>
+        /// DELETE a GroupMarkerDM by id
+        /// </summary>
+        /// <param name="id">long</param>
+        /// <returns>Deleted GroupMarkerDM</returns>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(GroupMarkerDM)))]
         public IActionResult Delete(long id)
