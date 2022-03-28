@@ -16,14 +16,52 @@ namespace marking_api.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("ProductVersion", "6.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            modelBuilder.Entity("marking_api.DataModel.API.RefreshTokenDM", b =>
+                {
+                    b.Property<long>("RefreshTokenId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("JwtId")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("UserId");
+
+                    b.HasKey("RefreshTokenId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens", "dbo");
+                });
 
             modelBuilder.Entity("marking_api.DataModel.FileSystem.FSFileDM", b =>
                 {
                     b.Property<long>("FileId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
+
+                    b.Property<int>("AccessRole")
+                        .HasColumnType("int");
 
                     b.Property<string>("FileDescription")
                         .HasMaxLength(255)
@@ -42,14 +80,23 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("createdBy")
+                        .HasColumnType("longtext");
+
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("deletedBy")
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("longtext");
 
                     b.HasKey("FileId");
 
@@ -64,6 +111,9 @@ namespace marking_api.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
+                    b.Property<int>("AccessRole")
+                        .HasColumnType("int");
+
                     b.Property<string>("FileStateDescription")
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
@@ -77,14 +127,23 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("createdBy")
+                        .HasColumnType("longtext");
+
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("deletedBy")
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("longtext");
 
                     b.HasKey("FileStateId");
 
@@ -96,6 +155,9 @@ namespace marking_api.Data.Migrations
                     b.Property<long>("FileVersionId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
+
+                    b.Property<int>("AccessRole")
+                        .HasColumnType("int");
 
                     b.Property<byte[]>("FileData")
                         .HasColumnType("longblob");
@@ -125,14 +187,23 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("createdBy")
+                        .HasColumnType("longtext");
+
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("deletedBy")
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("longtext");
 
                     b.HasKey("FileVersionId");
 
@@ -148,6 +219,9 @@ namespace marking_api.Data.Migrations
                     b.Property<long>("FolderId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
+
+                    b.Property<int>("AccessRole")
+                        .HasColumnType("int");
 
                     b.Property<string>("FolderDescription")
                         .HasMaxLength(255)
@@ -166,14 +240,23 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("createdBy")
+                        .HasColumnType("longtext");
+
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("deletedBy")
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("longtext");
 
                     b.HasKey("FolderId");
 
@@ -188,6 +271,9 @@ namespace marking_api.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
+                    b.Property<int>("AccessRole")
+                        .HasColumnType("int");
+
                     b.Property<long>("FileId")
                         .HasColumnType("bigint");
 
@@ -200,14 +286,23 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("createdBy")
+                        .HasColumnType("longtext");
+
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("deletedBy")
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("longtext");
 
                     b.HasKey("FolderFileId");
 
@@ -224,6 +319,9 @@ namespace marking_api.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
+                    b.Property<int>("AccessRole")
+                        .HasColumnType("int");
+
                     b.Property<long>("FolderId")
                         .HasColumnType("bigint");
 
@@ -236,14 +334,23 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("createdBy")
+                        .HasColumnType("longtext");
+
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("deletedBy")
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("longtext");
 
                     b.HasKey("FolderRoleId");
 
@@ -254,11 +361,72 @@ namespace marking_api.Data.Migrations
                     b.ToTable("FSFolderRoles", "dbo");
                 });
 
+            modelBuilder.Entity("marking_api.DataModel.Identity.LinkDM", b =>
+                {
+                    b.Property<long>("LinkId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("AccessRole")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LinkIcon")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("LinkName")
+                        .HasColumnType("longtext");
+
+                    b.Property<long?>("LinkParentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("LinkPosition")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("LinkSecurity")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("LinkUrl")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("canDelete")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("createdAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("createdBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("deleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("deletedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("deletedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("updatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("LinkId");
+
+                    b.HasIndex("LinkParentId");
+
+                    b.ToTable("Links", "dbo");
+                });
+
             modelBuilder.Entity("marking_api.DataModel.Identity.Role", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("varchar(255)")
                         .HasColumnName("RoleId");
+
+                    b.Property<int>("AccessRole")
+                        .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -309,11 +477,35 @@ namespace marking_api.Data.Migrations
                     b.ToTable("IdRoleClaims", "dbo");
                 });
 
+            modelBuilder.Entity("marking_api.DataModel.Identity.RoleLinkDM", b =>
+                {
+                    b.Property<long>("RoleLinkId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("LinkId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("RoleLinkId");
+
+                    b.HasIndex("LinkId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("RoleLinks", "dbo");
+                });
+
             modelBuilder.Entity("marking_api.DataModel.Identity.RolePermission", b =>
                 {
                     b.Property<long>("RolePermissionId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
+
+                    b.Property<int>("AccessRole")
+                        .HasColumnType("int");
 
                     b.Property<string>("PermissionSecurity")
                         .HasColumnType("longtext");
@@ -333,14 +525,23 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("createdBy")
+                        .HasColumnType("longtext");
+
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("deletedBy")
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("longtext");
 
                     b.HasKey("RolePermissionId");
 
@@ -357,6 +558,9 @@ namespace marking_api.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
+                    b.Property<int>("AccessRole")
+                        .HasColumnType("int");
+
                     b.Property<string>("Link")
                         .HasColumnType("longtext");
 
@@ -366,14 +570,23 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("createdBy")
+                        .HasColumnType("longtext");
+
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("deletedBy")
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("longtext");
 
                     b.HasKey("SiteAreaId");
 
@@ -545,25 +758,119 @@ namespace marking_api.Data.Migrations
                     b.ToTable("IdUserTokens", "dbo");
                 });
 
+            modelBuilder.Entity("marking_api.DataModel.Logging.AuditDM", b =>
+                {
+                    b.Property<long>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("AccessRole")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("AuditDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("AuditType")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ChangedColumns")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("KeyValues")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NewValues")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("OldValues")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("TableName")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("UserId");
+
+                    b.Property<bool>("canDelete")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("createdAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("createdBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("deleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("deletedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("deletedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("updatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("AuditId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Audit", "dbo");
+                });
+
+            modelBuilder.Entity("marking_api.DataModel.Logging.LogDM", b =>
+                {
+                    b.Property<long>("LogId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Exception")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Level")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Logger")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Thread")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("LogId");
+
+                    b.ToTable("Logs", "dbo");
+                });
+
             modelBuilder.Entity("marking_api.DataModel.Project.CommentDM", b =>
                 {
                     b.Property<long>("CommentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
+                    b.Property<int>("AccessRole")
+                        .HasColumnType("int");
+
                     b.Property<string>("CommentText")
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("CommentTime")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<long?>("ParentCommentId")
+                    b.Property<long>("ParentThreadId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("ProjectId")
+                    b.Property<long?>("ProjectDMProjectId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("Replies")
+                    b.Property<long?>("QuotedCommentId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("UserId")
@@ -575,150 +882,45 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("createdBy")
+                        .HasColumnType("longtext");
+
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("deletedBy")
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("longtext");
+
                     b.HasKey("CommentId");
 
-                    b.HasIndex("ParentCommentId");
+                    b.HasIndex("ParentThreadId");
 
-                    b.HasIndex("ProjectId");
+                    b.HasIndex("ProjectDMProjectId");
+
+                    b.HasIndex("QuotedCommentId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("Comments", "dbo");
                 });
 
-            modelBuilder.Entity("marking_api.DataModel.Project.GradeDM", b =>
+            modelBuilder.Entity("marking_api.DataModel.Project.FeedbackDM", b =>
                 {
-                    b.Property<long>("GradeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Comment")
-                        .HasColumnType("longtext");
-
                     b.Property<long>("FeedbackId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    b.Property<int>("Grade")
+                    b.Property<int>("AccessRole")
                         .HasColumnType("int");
-
-                    b.Property<long>("GroupId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<bool>("canDelete")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime>("createdAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("deleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime?>("deletedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("updatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("GradeId");
-
-                    b.HasIndex("FeedbackId");
-
-                    b.HasIndex("GroupId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Grades", "dbo");
-                });
-
-            modelBuilder.Entity("marking_api.DataModel.Project.GroupDM", b =>
-                {
-                    b.Property<long>("GroupId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("GroupName")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<bool>("IsClosed")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("canDelete")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime>("createdAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("deleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime?>("deletedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("updatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("GroupId");
-
-                    b.HasIndex("GroupName")
-                        .IsUnique();
-
-                    b.ToTable("Groups", "dbo");
-                });
-
-            modelBuilder.Entity("marking_api.DataModel.Project.GroupMarkerDM", b =>
-                {
-                    b.Property<long>("GroupMarkerId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("GroupId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<bool>("canDelete")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime>("createdAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("deleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime?>("deletedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("updatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("GroupMarkerId");
-
-                    b.HasIndex("GroupId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("GroupMarkers", "dbo");
-                });
-
-            modelBuilder.Entity("marking_api.DataModel.Project.MarkDM", b =>
-                {
-                    b.Property<long>("MarkId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
 
                     b.Property<int>("CriticalReflection")
                         .HasColumnType("int");
@@ -742,6 +944,163 @@ namespace marking_api.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("UserId");
+
+                    b.Property<bool>("canDelete")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("createdAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("createdBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("deleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("deletedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("deletedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("updatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("FeedbackId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Feedback", "dbo");
+                });
+
+            modelBuilder.Entity("marking_api.DataModel.Project.GradeDM", b =>
+                {
+                    b.Property<long>("GradeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("AccessRole")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("longtext");
+
+                    b.Property<long>("FeedbackId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Grade")
+                        .HasColumnType("int");
+
+                    b.Property<long>("GroupId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("UserId");
+
+                    b.Property<bool>("canDelete")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("createdAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("createdBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("deleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("deletedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("deletedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("updatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("GradeId");
+
+                    b.HasIndex("FeedbackId");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Grades", "dbo");
+                });
+
+            modelBuilder.Entity("marking_api.DataModel.Project.GroupDM", b =>
+                {
+                    b.Property<long>("GroupId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("AccessRole")
+                        .HasColumnType("int");
+
+                    b.Property<string>("GroupName")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<bool>("IsClosed")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("canDelete")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("createdAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("createdBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("deleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("deletedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("deletedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("updatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("GroupId");
+
+                    b.HasIndex("GroupName")
+                        .IsUnique();
+
+                    b.ToTable("Groups", "dbo");
+                });
+
+            modelBuilder.Entity("marking_api.DataModel.Project.GroupMarkerDM", b =>
+                {
+                    b.Property<long>("GroupMarkerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("AccessRole")
+                        .HasColumnType("int");
+
+                    b.Property<long>("GroupId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("UserId")
                         .HasColumnType("varchar(255)");
 
                     b.Property<bool>("canDelete")
@@ -750,22 +1109,135 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("createdBy")
+                        .HasColumnType("longtext");
+
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("deletedBy")
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.HasKey("MarkId");
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("longtext");
 
-                    b.HasIndex("ProjectId");
+                    b.HasKey("GroupMarkerId");
+
+                    b.HasIndex("GroupId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Marks", "dbo");
+                    b.ToTable("GroupMarkers", "dbo");
+                });
+
+            modelBuilder.Entity("marking_api.DataModel.Project.GroupTagDM", b =>
+                {
+                    b.Property<long>("GroupTagId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("AccessRole")
+                        .HasColumnType("int");
+
+                    b.Property<long>("GroupId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("TagId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("canDelete")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("createdAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("createdBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("deleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("deletedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("deletedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("updatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("GroupTagId");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("GroupTags", "dbo");
+                });
+
+            modelBuilder.Entity("marking_api.DataModel.Project.InviteDM", b =>
+                {
+                    b.Property<long>("InviteId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("AccessRole")
+                        .HasColumnType("int");
+
+                    b.Property<long>("GroupId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ReceiverId")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("SenderId")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<bool?>("Status")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("canDelete")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("createdAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("createdBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("deleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("deletedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("deletedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("updatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("InviteId");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("Invites", "dbo");
                 });
 
             modelBuilder.Entity("marking_api.DataModel.Project.ProjectDM", b =>
@@ -773,6 +1245,9 @@ namespace marking_api.Data.Migrations
                     b.Property<long>("ProjectId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
+
+                    b.Property<int>("AccessRole")
+                        .HasColumnType("int");
 
                     b.Property<bool>("EthicsAccepted")
                         .HasColumnType("tinyint(1)");
@@ -783,6 +1258,9 @@ namespace marking_api.Data.Migrations
                     b.Property<bool>("IsClosed")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<long?>("LinkedThreadId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("ProjectName")
                         .HasColumnType("longtext");
 
@@ -792,18 +1270,29 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("createdBy")
+                        .HasColumnType("longtext");
+
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("deletedBy")
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("longtext");
 
                     b.HasKey("ProjectId");
 
                     b.HasIndex("EthicsFormId");
+
+                    b.HasIndex("LinkedThreadId");
 
                     b.ToTable("Projects", "dbo");
                 });
@@ -813,6 +1302,9 @@ namespace marking_api.Data.Migrations
                     b.Property<long>("TagId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
+
+                    b.Property<int>("AccessRole")
+                        .HasColumnType("int");
 
                     b.Property<long?>("GroupId")
                         .HasColumnType("bigint");
@@ -829,11 +1321,17 @@ namespace marking_api.Data.Migrations
                     b.Property<string>("TagName")
                         .HasColumnType("varchar(255)");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(255)");
+
                     b.Property<bool>("canDelete")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("createdBy")
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
@@ -841,8 +1339,14 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("deletedBy")
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("longtext");
 
                     b.HasKey("TagId");
 
@@ -853,7 +1357,72 @@ namespace marking_api.Data.Migrations
                     b.HasIndex("TagName")
                         .IsUnique();
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Tags", "dbo");
+                });
+
+            modelBuilder.Entity("marking_api.DataModel.Project.ThreadDM", b =>
+                {
+                    b.Property<long>("ThreadId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("AccessRole")
+                        .HasColumnType("int");
+
+                    b.Property<long?>("LinkedProjectId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("ReplyCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ThreadContent")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("ThreadStatus")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("ThreadTitle")
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("TotalMembers")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<bool>("canDelete")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("createdAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("createdBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("deleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("deletedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("deletedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("updatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("ThreadId");
+
+                    b.HasIndex("LinkedProjectId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Threads", "dbo");
                 });
 
             modelBuilder.Entity("marking_api.DataModel.Project.UserGradeDM", b =>
@@ -861,6 +1430,9 @@ namespace marking_api.Data.Migrations
                     b.Property<long>("UserGradeId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
+
+                    b.Property<int>("AccessRole")
+                        .HasColumnType("int");
 
                     b.Property<long>("GroupId")
                         .HasColumnType("bigint");
@@ -877,14 +1449,23 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("createdBy")
+                        .HasColumnType("longtext");
+
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("deletedBy")
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("longtext");
 
                     b.HasKey("UserGradeId");
 
@@ -903,6 +1484,9 @@ namespace marking_api.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
+                    b.Property<int>("AccessRole")
+                        .HasColumnType("int");
+
                     b.Property<long>("GroupId")
                         .HasColumnType("bigint");
 
@@ -915,14 +1499,23 @@ namespace marking_api.Data.Migrations
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("createdBy")
+                        .HasColumnType("longtext");
+
                     b.Property<bool>("deleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("deletedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("deletedBy")
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("updatedAt")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("longtext");
 
                     b.HasKey("UserGroupId");
 
@@ -931,6 +1524,64 @@ namespace marking_api.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserGroups", "dbo");
+                });
+
+            modelBuilder.Entity("marking_api.DataModel.Project.UserTagsDM", b =>
+                {
+                    b.Property<long>("UserTagId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("AccessRole")
+                        .HasColumnType("int");
+
+                    b.Property<long>("TagId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<bool>("canDelete")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("createdAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("createdBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("deleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("deletedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("deletedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("updatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("UserTagId");
+
+                    b.HasIndex("TagId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserTags", "dbo");
+                });
+
+            modelBuilder.Entity("marking_api.DataModel.API.RefreshTokenDM", b =>
+                {
+                    b.HasOne("marking_api.DataModel.Identity.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("marking_api.DataModel.FileSystem.FSFileDM", b =>
@@ -1007,6 +1658,16 @@ namespace marking_api.Data.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("marking_api.DataModel.Identity.LinkDM", b =>
+                {
+                    b.HasOne("marking_api.DataModel.Identity.LinkDM", "LinkParent")
+                        .WithMany("LinkChildren")
+                        .HasForeignKey("LinkParentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("LinkParent");
+                });
+
             modelBuilder.Entity("marking_api.DataModel.Identity.RoleClaim", b =>
                 {
                     b.HasOne("marking_api.DataModel.Identity.Role", "Role")
@@ -1018,10 +1679,28 @@ namespace marking_api.Data.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("marking_api.DataModel.Identity.RoleLinkDM", b =>
+                {
+                    b.HasOne("marking_api.DataModel.Identity.LinkDM", "Link")
+                        .WithMany("RoleLinks")
+                        .HasForeignKey("LinkId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("marking_api.DataModel.Identity.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Link");
+
+                    b.Navigation("Role");
+                });
+
             modelBuilder.Entity("marking_api.DataModel.Identity.RolePermission", b =>
                 {
                     b.HasOne("marking_api.DataModel.Identity.Role", "Role")
-                        .WithMany()
+                        .WithMany("RolePermissions")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict);
 
@@ -1088,15 +1767,50 @@ namespace marking_api.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("marking_api.DataModel.Project.CommentDM", b =>
+            modelBuilder.Entity("marking_api.DataModel.Logging.AuditDM", b =>
                 {
-                    b.HasOne("marking_api.DataModel.Project.CommentDM", "ParentComment")
+                    b.HasOne("marking_api.DataModel.Identity.User", "User")
                         .WithMany()
-                        .HasForeignKey("ParentCommentId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("marking_api.DataModel.Project.ProjectDM", "Project")
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("marking_api.DataModel.Project.CommentDM", b =>
+                {
+                    b.HasOne("marking_api.DataModel.Project.ThreadDM", "ParentThread")
                         .WithMany("Comments")
+                        .HasForeignKey("ParentThreadId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("marking_api.DataModel.Project.ProjectDM", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("ProjectDMProjectId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("marking_api.DataModel.Project.CommentDM", "QuotedComment")
+                        .WithMany()
+                        .HasForeignKey("QuotedCommentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("marking_api.DataModel.Identity.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("ParentThread");
+
+                    b.Navigation("QuotedComment");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("marking_api.DataModel.Project.FeedbackDM", b =>
+                {
+                    b.HasOne("marking_api.DataModel.Project.ProjectDM", "Project")
+                        .WithMany()
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -1106,8 +1820,6 @@ namespace marking_api.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("ParentComment");
-
                     b.Navigation("Project");
 
                     b.Navigation("User");
@@ -1115,7 +1827,7 @@ namespace marking_api.Data.Migrations
 
             modelBuilder.Entity("marking_api.DataModel.Project.GradeDM", b =>
                 {
-                    b.HasOne("marking_api.DataModel.FileSystem.FSFileDM", "Feedback")
+                    b.HasOne("marking_api.DataModel.Project.FeedbackDM", "Feedback")
                         .WithMany()
                         .HasForeignKey("FeedbackId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1157,22 +1869,48 @@ namespace marking_api.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("marking_api.DataModel.Project.MarkDM", b =>
+            modelBuilder.Entity("marking_api.DataModel.Project.GroupTagDM", b =>
                 {
-                    b.HasOne("marking_api.DataModel.Project.ProjectDM", "Project")
+                    b.HasOne("marking_api.DataModel.Project.GroupDM", "Group")
                         .WithMany()
-                        .HasForeignKey("ProjectId")
+                        .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("marking_api.DataModel.Identity.User", "User")
+                    b.HasOne("marking_api.DataModel.Project.TagDM", "Tag")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Group");
+
+                    b.Navigation("Tag");
+                });
+
+            modelBuilder.Entity("marking_api.DataModel.Project.InviteDM", b =>
+                {
+                    b.HasOne("marking_api.DataModel.Project.GroupDM", "Group")
+                        .WithMany()
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("marking_api.DataModel.Identity.User", "Receiver")
+                        .WithMany()
+                        .HasForeignKey("ReceiverId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("Project");
+                    b.HasOne("marking_api.DataModel.Identity.User", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("User");
+                    b.Navigation("Group");
+
+                    b.Navigation("Receiver");
+
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("marking_api.DataModel.Project.ProjectDM", b =>
@@ -1182,24 +1920,55 @@ namespace marking_api.Data.Migrations
                         .HasForeignKey("EthicsFormId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("marking_api.DataModel.Project.ThreadDM", "LinkedThread")
+                        .WithMany("LinkedProjects")
+                        .HasForeignKey("LinkedThreadId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.Navigation("EthicsForm");
+
+                    b.Navigation("LinkedThread");
                 });
 
             modelBuilder.Entity("marking_api.DataModel.Project.TagDM", b =>
                 {
                     b.HasOne("marking_api.DataModel.Project.GroupDM", "Group")
-                        .WithMany("Tags")
+                        .WithMany("GroupTags")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("marking_api.DataModel.Project.ProjectDM", "Project")
-                        .WithMany()
+                        .WithMany("ProjectTags")
                         .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("marking_api.DataModel.Identity.User", "User")
+                        .WithMany("UserTags")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Group");
 
                     b.Navigation("Project");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("marking_api.DataModel.Project.ThreadDM", b =>
+                {
+                    b.HasOne("marking_api.DataModel.Project.ProjectDM", "LinkedProject")
+                        .WithMany("LinkedThreads")
+                        .HasForeignKey("LinkedProjectId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("marking_api.DataModel.Identity.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("LinkedProject");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("marking_api.DataModel.Project.UserGradeDM", b =>
@@ -1210,7 +1979,7 @@ namespace marking_api.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("marking_api.DataModel.Project.MarkDM", "Mark")
+                    b.HasOne("marking_api.DataModel.Project.FeedbackDM", "Mark")
                         .WithMany()
                         .HasForeignKey("MarkId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1246,6 +2015,24 @@ namespace marking_api.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("marking_api.DataModel.Project.UserTagsDM", b =>
+                {
+                    b.HasOne("marking_api.DataModel.Project.TagDM", "Tag")
+                        .WithMany()
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("marking_api.DataModel.Identity.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Tag");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("marking_api.DataModel.FileSystem.FSFileDM", b =>
                 {
                     b.Navigation("FileVersions");
@@ -1265,9 +2052,18 @@ namespace marking_api.Data.Migrations
                     b.Navigation("FolderFiles");
                 });
 
+            modelBuilder.Entity("marking_api.DataModel.Identity.LinkDM", b =>
+                {
+                    b.Navigation("LinkChildren");
+
+                    b.Navigation("RoleLinks");
+                });
+
             modelBuilder.Entity("marking_api.DataModel.Identity.Role", b =>
                 {
                     b.Navigation("RoleClaims");
+
+                    b.Navigation("RolePermissions");
 
                     b.Navigation("UserRoles");
                 });
@@ -1280,19 +2076,32 @@ namespace marking_api.Data.Migrations
 
                     b.Navigation("UserRoles");
 
+                    b.Navigation("UserTags");
+
                     b.Navigation("UserTokens");
                 });
 
             modelBuilder.Entity("marking_api.DataModel.Project.GroupDM", b =>
                 {
-                    b.Navigation("GroupUsers");
+                    b.Navigation("GroupTags");
 
-                    b.Navigation("Tags");
+                    b.Navigation("GroupUsers");
                 });
 
             modelBuilder.Entity("marking_api.DataModel.Project.ProjectDM", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("LinkedThreads");
+
+                    b.Navigation("ProjectTags");
+                });
+
+            modelBuilder.Entity("marking_api.DataModel.Project.ThreadDM", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("LinkedProjects");
                 });
 #pragma warning restore 612, 618
         }

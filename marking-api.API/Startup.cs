@@ -1,11 +1,10 @@
-using Hangfire;
-using Hangfire.SqlServer;
-using marking_api.API.Config;
 using marking_api.Data;
+using marking_api.DataModel.API;
 using marking_api.DataModel.Identity;
 using marking_api.Global.Repositories;
 using marking_api.Global.Services;
-using Microsoft.AspNetCore.Authentication.Certificate;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -13,39 +12,62 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace marking_api.API
 {
+    /// <summary>
+    /// Startup class which configures and sets up services for the application to run correctly
+    /// </summary>
     public class Startup
     {
         private readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
+        /// <summary>
+        /// Initiate configuration and environment for use in ConfigureServices and Configure
+        /// </summary>
+        /// <param name="configuration">IConfiguration</param>
+        /// <param name="env">IWebHostEnvironment</param>
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
             Env = env;
         }
 
+        /// <summary>
+        /// Contains configuration properties for the application such as appsettings
+        /// </summary>
         public IConfiguration Configuration { get; }
+
+        /// <summary>
+        /// IWebHostEnvironment contains information about the environment settings that the application is running in
+        /// </summary>
         public IWebHostEnvironment Env { get; set; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to add services to the container.
+        /// </summary>
+        /// <param name="services">IServiceCollection</param>
         public void ConfigureServices(IServiceCollection services)
         {
-            //var hangfireConnection = "";
             var serverVersion = new MySqlServerVersion(new Version(8, 0, 27));
 
+            //Switch database connection strings depending on the application environment
+            //Ignore schema information due to the difference between MySQL and MSSQL
             if (Env.IsDevelopment())
             {                
                 services.AddDbContext<MarkingDbContext>(options => options.UseMySql(Configuration.GetConnectionString("DbConnection"), serverVersion, o => 
@@ -53,7 +75,6 @@ namespace marking_api.API
                     o.SchemaBehavior(MySqlSchemaBehavior.Ignore);
                     o.EnableRetryOnFailure();
                 }));
-                //hangfireConnection = "DbConnection";
             } else
             {
                 services.AddDbContext<MarkingDbContext>(options => options.UseMySql(Configuration.GetConnectionString("DbConnection"), serverVersion, o => 
@@ -61,9 +82,9 @@ namespace marking_api.API
                     o.SchemaBehavior(MySqlSchemaBehavior.Ignore);
                     o.EnableRetryOnFailure(); 
                 }));
-                //hangfireConnection = "DbConnection";
             }
 
+            //Configure local language
             services.Configure<RequestLocalizationOptions>(o =>
             {
                 var supportedCultures = new[]
@@ -90,18 +111,7 @@ namespace marking_api.API
 
             services.AddHttpContextAccessor();
 
-            //services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme).AddCertificate(options =>
-            //{
-            //    options.Events = new CertificateAuthenticationEvents
-            //    {
-            //        OnCertificateValidated = context =>
-            //        {
-            //            var validationService = context.HttpContext.RequestServices.GetRequiredService<CertificateValidationService>();
-            //        }
-            //    };
-            //});
-
-
+            //Cors authentication
             services.AddCors(options => 
             {
                 options.AddPolicy(name: MyAllowSpecificOrigins, (builder) => 
@@ -113,77 +123,120 @@ namespace marking_api.API
                 }); 
             });
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
+
+            //Swagger Configuration
             services.AddSwaggerGen(c =>
             {
+                //Swagger API name
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "marking_api.API", Version = "v1" });
+                //Exclusion filter for DataModel properties
                 c.SchemaFilter<SwaggerExcludeFilter>();
                 c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
-                //c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                //{
-                //    Description = "JWT Authorisation header using the bearer scheme",
-                //    Name = "Authorisation",
-                //    In = ParameterLocation.Header,
-                //    Type = SecuritySchemeType.ApiKey
-                //});
-                //c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                //{
-                //    { new OpenApiSecurityScheme
-                //    {
-                //        Reference = new OpenApiReference
-                //        {
-                //            Id = "Bearer",
-                //            Type = ReferenceType.SecurityScheme
-                //        }
-                //    }, new List<string>() }
-                //});
+                //Add JWT Authorisation to Swagger testing page 
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorisation header using the bearer scheme",
+                    Name = "Authorisation",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    { new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Id = "Bearer",
+                            Type = ReferenceType.SecurityScheme
+                        }
+                    }, new List<string>() }
+                });
             });
 
-            //services.AddHangfire(configuration => configuration.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
-            //.UseSimpleAssemblyNameTypeSerializer()
-            //.UseSerializerSettings(new JsonSerializerSettings 
-            //{
-            //    ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
-            //    PreserveReferencesHandling = PreserveReferencesHandling.Objects
-            //})
-            //.UseSqlServerStorage(Configuration.GetConnectionString(hangfireConnection), new SqlServerStorageOptions 
-            //{
-            //    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
-            //    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
-            //    QueuePollInterval = TimeSpan.Zero,
-            //    UseRecommendedIsolationLevel = true,
-            //    DisableGlobalLocks = true
-            //}));
+            services.Configure<Jwt>(Configuration.GetSection("Jwt"));
 
-            //services.AddHangfireServer();
+            var key = Encoding.ASCII.GetBytes(Configuration["Jwt:Secret"]);
 
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateLifetime = true,
+                RequireExpirationTime = false,
+                ClockSkew = TimeSpan.Zero
+            };
+
+            services.AddSingleton(tokenValidationParameters);
+
+            //JWT authorisation for API requests
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme; //JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+
+            {
+                options.SaveToken = true;
+                options.TokenValidationParameters = tokenValidationParameters;
+                if (options.Events != null)
+                {
+                    options.Events.OnMessageReceived = context =>
+                    {
+                        if (context.Request.Cookies.ContainsKey("accesstoken") && !(context.Request.Path.ToUriComponent().Contains("login", StringComparison.OrdinalIgnoreCase) || context.Request.Path.ToUriComponent().Contains("refreshtoken", StringComparison.OrdinalIgnoreCase)))
+                        {
+                            context.Token = context.Request.Cookies["accesstoken"];
+                        }
+                        return Task.CompletedTask;
+                    };
+                }
+            });
+
+            services.AddAuthorization(options =>
+            {
+                var authPolicyBuilder = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme);
+                authPolicyBuilder = authPolicyBuilder.RequireAuthenticatedUser();
+                options.DefaultPolicy = authPolicyBuilder.Build();
+                options.FallbackPolicy = new AuthorizationPolicyBuilder().AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme).RequireAuthenticatedUser().Build();
+            });
+
+            //Database seeder
             services.AddScoped<MarkingDbSeeder>();
 
+            //Global services
+            services.AddScoped<UtilService>();
+
+            //UnitOfWork and two main inherited repositories
             services.AddTransient(typeof(IGenericModelRepository<>), typeof(GenericModelRepository<>));
             services.AddTransient(typeof(IGenericViewRepository<>), typeof(GenericViewRepository<>));
             services.AddTransient<IUnitOfWork, UnitOfWork>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, MarkingDbSeeder dbSeeder)
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// </summary>
+        /// <param name="app">IApplicationBuilder</param>
+        /// <param name="env">IWebHostEnvironment</param>
+        /// <param name="dbSeeder">MarkingDbSeeder</param>
+        /// <param name="loggerFactory">ILoggerFactory</param>
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, MarkingDbSeeder dbSeeder, ILoggerFactory loggerFactory)
         {
-            if (env.IsDevelopment())
+            //Swagger API package
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
             {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => 
-                { 
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "marking_api.API v1"); 
-                });
-            } else
-            {
-                app.UseExceptionHandler("/Error");
-                app.UseHsts();
-            }
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "marking_api.API v1");
+            });
 
+            //Seed data into the database
             if (dbSeeder != null)
             {
+                //Execute outstanding migrations against the database
                 dbSeeder.Migrate();
+                //Add data to the database
                 dbSeeder.SeedData();
             }
 
@@ -194,10 +247,12 @@ namespace marking_api.API
                 await context.Response.WriteAsJsonAsync(response);
             }));
 
+            //Redirect to HTTPS from HTTP
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
+            //Authorisation middleware
             app.UseCors(MyAllowSpecificOrigins);
             
             app.UseAuthorization();
@@ -208,6 +263,10 @@ namespace marking_api.API
             {
                 endpoints.MapControllers();
             });
+
+            //Setup log4net as the logging provider
+            var loggingOptions = this.Configuration.GetSection("Log4NetCore").Get<Log4NetProviderOptions>();
+            loggerFactory.AddLog4Net(loggingOptions);
         }
     }
 }

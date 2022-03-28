@@ -6,16 +6,27 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace marking_api.API.Controllers.Project
 {
+    /// <summary>
+    /// Grade API Controller
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class GradeController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
+        /// <summary>
+        /// Constructor initialising unitofwork
+        /// </summary>
+        /// <param name="unitOfWork">IUnitOfWork</param>
         public GradeController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
+        /// <summary>
+        /// Get grades
+        /// </summary>
+        /// <returns>List of grades</returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(GradeDM)))]
         public IActionResult Get()
@@ -23,6 +34,11 @@ namespace marking_api.API.Controllers.Project
             return Ok(_unitOfWork.Grades.Get());
         }
 
+        /// <summary>
+        /// Get grade by id
+        /// </summary>
+        /// <param name="id">long</param>
+        /// <returns>List of grades</returns>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(GradeDM)))]
         public IActionResult Get(long id)
@@ -34,6 +50,11 @@ namespace marking_api.API.Controllers.Project
                 return Ok(grade);
         }
 
+        /// <summary>
+        /// Post grade
+        /// </summary>
+        /// <param name="grade">GradeDM</param>
+        /// <returns>Saved GradeDM</returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(GradeDM)))]
         public IActionResult Post([FromBody] GradeDM grade)
@@ -50,6 +71,12 @@ namespace marking_api.API.Controllers.Project
             return Ok(grade);
         }
 
+        /// <summary>
+        /// Put grade by id
+        /// </summary>
+        /// <param name="id">long</param>
+        /// <param name="grade">GradeDM</param>
+        /// <returns>Saved GradeDM</returns>
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(GradeDM)))]
         public IActionResult Put(long id, [FromBody] GradeDM grade)
@@ -69,6 +96,11 @@ namespace marking_api.API.Controllers.Project
             return Ok(grade);
         }
 
+        /// <summary>
+        /// Delete grade
+        /// </summary>
+        /// <param name="id">long</param>
+        /// <returns>Deleted GradeDM</returns>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(GradeDM)))]
         public IActionResult Delete(long id)

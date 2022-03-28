@@ -1,10 +1,16 @@
 ﻿using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Http;
+using marking_api.DataModel.Project;
+using marking_api.API.Models.Recommend;
+using marking_api.API.Models.Invites;
 using Microsoft.AspNetCore.Mvc;
+using marking_api.DataModel.API;
 using marking_api.Global.Extensions;
 using marking_api.DataModel.DTOs;
 using marking_api.DataModel.Identity;
-
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System;
 namespace marking_api.API.Controllers.Identity
 {
     [ApiController]
@@ -23,6 +29,53 @@ namespace marking_api.API.Controllers.Identity
         public IActionResult Get()
         {
             return Ok(_unitOfWork.Users.Get());
+        }
+
+        [HttpGet("{id}/Invites")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserDTO)))]
+        public IActionResult GetInvites(string id)
+        {
+            var cm = new InvitesCM(_unitOfWork);
+
+            if (cm != null) {
+                return Ok(cm.GetInvites(id));
+            }
+            return NoContent();
+        }
+
+        [HttpPost("{inviteId}/Invite/Accept")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(GroupDM)))]
+        public IActionResult AcceptInvite([FromBody] AcceptInvite acceptInvite)
+        {
+            var cm = new InvitesCM(_unitOfWork);
+
+            var group = cm.AcceptInvite(acceptInvite.InviteId);
+
+            if (cm == null) {
+                return NoContent();
+            }
+            return Ok(group);
+        }
+
+        [HttpGet("{userId}/Group")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(GroupDM)))]
+        public IActionResult UserGroup(string userId)
+        {
+            var user = _unitOfWork.Users.GetById(userId);
+
+            if (user == null) {
+                return NotFound();
+            }
+
+            var group = _unitOfWork.UserGroups
+                .Get(
+                    include: (table) => table.Include(table => table.Group),
+                    filter: (table) => table.UserId == userId
+                )
+                .Select((table) => table.Group);
+
+
+            return Ok(group);
         }
 
         [HttpGet("{id}")]
@@ -46,6 +99,30 @@ namespace marking_api.API.Controllers.Identity
                 };
                 return Ok(userConvert);
             }
+        }
+
+        [HttpGet("{id}/Recommended")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserGroupDM)))]
+        public IActionResult GetRecommendedUsers(string id)
+        {
+            var cm = new RecommendCM(_unitOfWork);
+
+            if (cm == null)
+                return NotFound();
+            else
+                return Ok(cm.GetRecommendUsers(id));
+        }
+
+        [HttpGet("{id}/Recommended/Groups")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(GroupTagDM)))]
+        public IActionResult GetRecommendedGroups(string id)
+        {
+            var cm = new RecommendCM(_unitOfWork);
+
+            if (cm == null)
+                return NotFound();
+            else
+                return Ok(cm.GetRecommendGroups(id));
         }
 
         [HttpPost]

@@ -6,8 +6,16 @@ using System.Reflection;
 
 namespace marking_api.API
 {
+    /// <summary>
+    /// Swagger exclude filter class. Excludes properties marked with this attribute from the swagger tool
+    /// </summary>
     public class SwaggerExcludeFilter : ISchemaFilter
     {
+        /// <summary>
+        /// Apply the filter to properties shown on swagger
+        /// </summary>
+        /// <param name="schema"></param>
+        /// <param name="context"></param>
         public void Apply(OpenApiSchema schema, SchemaFilterContext context)
         {
             if (schema?.Properties == null)

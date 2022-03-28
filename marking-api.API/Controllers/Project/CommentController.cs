@@ -9,34 +9,41 @@ using Microsoft.EntityFrameworkCore;
 
 namespace marking_api.API.Controllers.Project
 {
+    /// <summary>
+    /// Comment API Controller
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class CommentController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
+        /// <summary>
+        /// Constructor initialising unitofwork
+        /// </summary>
+        /// <param name="unitOfWork">IUnitOfWork</param>
         public CommentController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
+        /// <summary>
+        /// Get comments method
+        /// </summary>
+        /// <returns>List of comments</returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(CommentDM)))]
         public IActionResult Get()
         {
-            List<Object> projectComments = new List<Object>();
-
-            foreach(CommentDM comment in _unitOfWork.Comments.Get()) {
-                var project = _unitOfWork.Projects.GetById(comment.ProjectId);
-
-                projectComments.Add(new {
-                    project,
-                    comment
-                });
-            }
-
-            return Ok(projectComments);
+            return Ok(_unitOfWork.Comments.Get(
+                include: (comment) => comment.Include((comment) => comment.QuotedComment)
+            ));
         }
 
+        /// <summary>
+        /// Get comment by id method
+        /// </summary>
+        /// <param name="id">long</param>
+        /// <returns>CommentDM</returns>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(CommentDM)))]
         public IActionResult Get(long id)
@@ -48,6 +55,11 @@ namespace marking_api.API.Controllers.Project
                 return Ok(comment);
         }
 
+        /// <summary>
+        /// Post comment method to save in the database
+        /// </summary>
+        /// <param name="comment">CommentDM</param>
+        /// <returns>Saved CommentDM</returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(CommentDM)))]
         public IActionResult Post([FromBody] CommentDM comment)
@@ -61,9 +73,23 @@ namespace marking_api.API.Controllers.Project
             _unitOfWork.Comments.AddOrUpdate(comment);
             _unitOfWork.Save();
 
-            return Ok(comment);
+            var comentId = comment.CommentId;
+
+            var commentThread = _unitOfWork.Comments.GetById(comentId);
+
+            return Ok(_unitOfWork.Comments.Get(
+            include: (comment) => comment.Include((comment) => comment.ParentThread),
+            filter: (comment) => comment.CommentId == comentId
+            ));
+
         }
 
+        /// <summary>
+        /// Put comment method by id
+        /// </summary>
+        /// <param name="id">long</param>
+        /// <param name="comment">CommentDM</param>
+        /// <returns>Saved CommentDM</returns>
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(CommentDM)))]
         public IActionResult Put(long id, [FromBody] CommentDM comment)
@@ -83,6 +109,11 @@ namespace marking_api.API.Controllers.Project
             return Ok(comment);
         }
 
+        /// <summary>
+        /// Delete comment by id
+        /// </summary>
+        /// <param name="id">long</param>
+        /// <returns>Deleted comment</returns>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(CommentDM)))]
         public IActionResult Delete(long id)

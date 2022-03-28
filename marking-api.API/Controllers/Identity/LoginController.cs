@@ -1,61 +1,76 @@
 ﻿using marking_api.API.Models.Identity;
-using marking_api.DataModel.DTOs;
+using marking_api.DataModel.API;
 using marking_api.DataModel.Identity;
 using marking_api.Global.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace marking_api.API.Controllers.Identity
 {
-    public class Login {
-        public string Email;
-        public string Password;
-    }
     [ApiController]
     [Route("api/[controller]")]
     public class LoginController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
-        private SignInManager<User> _signInManager;
+        private readonly SignInManager<User> _signInManager;
+        private readonly Jwt _jwt;
+        private readonly TokenValidationParameters _tokenValidationParameters;
 
-        public LoginController(IUnitOfWork unitOfWork, SignInManager<User> signInManager)
+        public LoginController(IUnitOfWork unitOfWork, SignInManager<User> signInManager, IOptionsMonitor<Jwt> optionsMonitor, TokenValidationParameters tokenValidationParameters)
         {
             _unitOfWork = unitOfWork;
             _signInManager = signInManager;
+            _jwt = optionsMonitor.CurrentValue;
+            _tokenValidationParameters = tokenValidationParameters;
         }
-        
+
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserDTO)))]
-        public IActionResult Logon(Login userLogin)
+        [AllowAnonymous]
+        public IActionResult Login([FromBody] LoginRequest userLogin)
         {
-            var cm = new LoginCM(_signInManager, _unitOfWork);
-            if (cm.Login(userLogin.Email, userLogin.Password))
+            if (ModelState.IsValid)
             {
-                //cm.GenerateLogin(cm.user);
-                return Ok(cm.user);
+                User user = _signInManager.UserManager.FindByEmailAsync(userLogin.Email).Result;
+                if (user == null)
+                    return BadRequest("Invalid Authentication Request");
+                else
+                {
+                    var result = _signInManager.PasswordSignInAsync(user.UserName, userLogin.Password, false, false).Result;
+                    if (!result.Succeeded)
+                        return BadRequest("Invalid Authentication Request");
+                    if (user.IsDisabled)
+                        return BadRequest($"Account for '{userLogin.Email}' is disabled");
+                    if (result.IsLockedOut)
+                        return BadRequest($"Account for '{userLogin.Email}' is locked out");
+
+                    var cm = new LoginCM(_unitOfWork, _signInManager, _jwt, _tokenValidationParameters);
+
+                    return Ok(cm.GenerateJwtToken(user));
+                }
             }
-            return Unauthorized();
+            return BadRequest("Invalid payload");
         }
 
-        [HttpPut("logout")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(bool)))]
-        public bool Logout()
+        [HttpPost]
+        [Route("RefreshToken")]
+        public IActionResult RefreshToken([FromBody] TokenRequest tokenRequest)
         {
-            var cm = new LoginCM(_signInManager, _unitOfWork);
-            cm.Logout();
-            return true;
-        }
+            if (ModelState.IsValid)
+            {
+                var cm = new LoginCM(_unitOfWork, _signInManager, _jwt, _tokenValidationParameters);
+                var result = cm.VerifyAndGenerateToken(tokenRequest).Result;
 
-        [HttpPut("verify")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(bool)))]
-        public IActionResult Verify(Login userLogin)
-        {
-            var cm = new LoginCM(_signInManager, _unitOfWork);
-            if (cm.VerifyUser(userLogin.Email, userLogin.Password))
-                return Ok(true);
-            return Ok(false);
+                if (result == null)
+                    return BadRequest("Invalid Tokens");
+
+                return Ok(result);
+            }
+
+            return BadRequest("Invalid payload");
         }
     }
 }
