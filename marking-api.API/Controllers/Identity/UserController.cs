@@ -34,9 +34,9 @@ namespace marking_api.API.Controllers.Identity
 
         [HttpGet("{id}/Users")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserDTO)))]
-        public IActionResult GetUsers(string userId)
+        public IActionResult GetUsers(string id)
         {
-            var users = _unitOfWork.Users.Get(filter: (table) => table.Id != userId);
+            var users = _unitOfWork.Users.Get(filter: (table) => table.Id != id);
 
             return Ok(users);
         }
