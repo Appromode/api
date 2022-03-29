@@ -1,4 +1,5 @@
-﻿using marking_api.API.Config;
+﻿using log4net.Core;
+using marking_api.API.Config;
 using marking_api.DataModel.FileSystem;
 using marking_api.Global.Extensions;
 using marking_api.Global.Repositories;
@@ -9,10 +10,10 @@ namespace marking_api.API.Controllers.FileSystem
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class FSFileStateController : ControllerBase
+    public class FSFileStateController : BaseController
     {
         private readonly IUnitOfWork _unitOfWork;
-        public FSFileStateController(IUnitOfWork unitOfWork)
+        public FSFileStateController(IUnitOfWork unitOfWork, ILogger logger) : base(logger)
         {
             _unitOfWork = unitOfWork;
         }

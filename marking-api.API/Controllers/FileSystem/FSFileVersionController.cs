@@ -1,4 +1,5 @@
-﻿using marking_api.API.Config;
+﻿using log4net.Core;
+using marking_api.API.Config;
 using marking_api.DataModel.FileSystem;
 using marking_api.Global.Extensions;
 using marking_api.Global.Repositories;
@@ -13,10 +14,10 @@ namespace marking_api.API.Controllers.FileSystem
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class FSFileVersionController : ControllerBase
+    public class FSFileVersionController : BaseController
     {
         private readonly IUnitOfWork _unitOfWork;
-        public FSFileVersionController(IUnitOfWork unitOfWork)
+        public FSFileVersionController(IUnitOfWork unitOfWork, ILogger logger) : base(logger)
         {
             _unitOfWork = unitOfWork;
         }
@@ -52,7 +53,7 @@ namespace marking_api.API.Controllers.FileSystem
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            var cm = new FileCM(_unitOfWork);
+            var cm = new FileCM(_unitOfWork, _logger);
 
             Dictionary<FSFileDM, bool> result = cm.SaveFile(fileRequest);
 

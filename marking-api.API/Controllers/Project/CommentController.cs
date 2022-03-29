@@ -1,4 +1,5 @@
 ﻿using System;
+using log4net.Core;
 using marking_api.DataModel.Project;
 using marking_api.Global.Extensions;
 using marking_api.Global.Repositories;
@@ -15,14 +16,14 @@ namespace marking_api.API.Controllers.Project
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
-    public class CommentController : ControllerBase
+    public class CommentController : BaseController
     {
         private readonly IUnitOfWork _unitOfWork;
         /// <summary>
         /// Constructor initialising unitofwork
         /// </summary>
         /// <param name="unitOfWork">IUnitOfWork</param>
-        public CommentController(IUnitOfWork unitOfWork)
+        public CommentController(IUnitOfWork unitOfWork, ILogger logger) : base(logger)
         {
             _unitOfWork = unitOfWork;
         }

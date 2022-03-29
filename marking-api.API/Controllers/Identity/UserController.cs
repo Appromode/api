@@ -1,4 +1,5 @@
-﻿using marking_api.Global.Repositories;
+﻿using log4net.Core;
+using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Http;
 using marking_api.DataModel.Project;
 using Microsoft.AspNetCore.Mvc;
@@ -15,11 +16,11 @@ namespace marking_api.API.Controllers.Identity
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UserController : ControllerBase
+    public class UserController : BaseController
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public UserController(IUnitOfWork unitOfWork)
+        public UserController(IUnitOfWork unitOfWork, ILogger logger) : base(logger)
         {
             _unitOfWork = unitOfWork;
         }
@@ -44,7 +45,7 @@ namespace marking_api.API.Controllers.Identity
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserDTO)))]
         public IActionResult GetInvites(string id)
         {
-            var cm = new UserCM(_unitOfWork);
+            var cm = new UserCM(_unitOfWork, _logger);
 
             if (cm != null) {
                 return Ok(cm.GetInvites(id));
@@ -56,7 +57,7 @@ namespace marking_api.API.Controllers.Identity
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(GroupDM)))]
         public IActionResult AcceptInvite([FromBody] AcceptInvite acceptInvite)
         {
-            var cm = new UserCM(_unitOfWork);
+            var cm = new UserCM(_unitOfWork, _logger);
 
             var group = cm.AcceptInvite(acceptInvite.InviteId);
 
@@ -114,7 +115,7 @@ namespace marking_api.API.Controllers.Identity
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserGroupDM)))]
         public IActionResult GetRecommendedUsers(string id)
         {
-            var cm = new UserCM(_unitOfWork);
+            var cm = new UserCM(_unitOfWork, _logger);
 
             if (cm == null)
                 return NotFound();
@@ -126,7 +127,7 @@ namespace marking_api.API.Controllers.Identity
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(GroupTagDM)))]
         public IActionResult GetRecommendedGroups(string id)
         {
-            var cm = new UserCM(_unitOfWork);
+            var cm = new UserCM(_unitOfWork, _logger);
 
             if (cm == null)
                 return NotFound();

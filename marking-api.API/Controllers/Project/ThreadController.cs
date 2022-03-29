@@ -1,10 +1,10 @@
 ﻿using System;
+using log4net.Core;
 using marking_api.DataModel.Project;
 using marking_api.Global.Extensions;
 using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.JsonPatch;
 
@@ -15,7 +15,7 @@ namespace marking_api.API.Controllers.Project
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
-    public class ThreadController : ControllerBase
+    public class ThreadController : BaseController
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -23,7 +23,7 @@ namespace marking_api.API.Controllers.Project
         /// Constructor initialising unitofwork
         /// </summary>
         /// <param name="unitOfWork"></param>
-        public ThreadController(IUnitOfWork unitOfWork)
+        public ThreadController(IUnitOfWork unitOfWork, ILogger logger) : base(logger)
         {
             _unitOfWork = unitOfWork;
         }

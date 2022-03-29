@@ -1,4 +1,5 @@
-﻿using marking_api.DataModel.Project;
+﻿using log4net.Core;
+using marking_api.DataModel.Project;
 using marking_api.Global.Extensions;
 using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Http;
@@ -12,7 +13,7 @@ namespace marking_api.API.Controllers.Project
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
-    public class MarkController : ControllerBase
+    public class MarkController : BaseController
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -20,7 +21,7 @@ namespace marking_api.API.Controllers.Project
         /// Constructor initialising unitofwork
         /// </summary>
         /// <param name="unitOfWork">IUnitOfWork</param>
-        public MarkController(IUnitOfWork unitOfWork)
+        public MarkController(IUnitOfWork unitOfWork, ILogger logger) : base(logger)
         {
             _unitOfWork = unitOfWork;
         }

@@ -1,4 +1,5 @@
-﻿using marking_api.Global.Repositories;
+﻿using log4net.Core;
+using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using marking_api.DataModel.Identity;
@@ -9,10 +10,10 @@ namespace marking_api.API.Controllers.Identity
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UserTokenController : ControllerBase
+    public class UserTokenController : BaseController
     {
         private readonly IUnitOfWork _unitOfWork;
-        public UserTokenController(IUnitOfWork unitOfWork)
+        public UserTokenController(IUnitOfWork unitOfWork, ILogger logger) : base(logger)
         {
             _unitOfWork = unitOfWork;
         }

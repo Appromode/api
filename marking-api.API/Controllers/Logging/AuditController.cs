@@ -1,4 +1,5 @@
-﻿using marking_api.API.Config;
+﻿using log4net.Core;
+using marking_api.API.Config;
 using marking_api.DataModel.Logging;
 using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Http;
@@ -8,11 +9,11 @@ namespace marking_api.API.Controllers.Logging
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuditController : ControllerBase
+    public class AuditController : BaseController
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public AuditController(IUnitOfWork unitOfWork)
+        public AuditController(IUnitOfWork unitOfWork, ILogger logger) : base(logger)
         {
             _unitOfWork = unitOfWork;
         }

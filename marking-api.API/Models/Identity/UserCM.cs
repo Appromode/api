@@ -1,4 +1,5 @@
-﻿using marking_api.DataModel.DTOs;
+﻿using log4net.Core;
+using marking_api.DataModel.DTOs;
 using marking_api.DataModel.Identity;
 using marking_api.DataModel.Project;
 using marking_api.Global.Extensions;
@@ -24,7 +25,7 @@ namespace marking_api.API.Models.Identity
         /// Constructor initialising unitofwork
         /// </summary>
         /// <param name="unitOfWork"></param>
-        public UserCM(IUnitOfWork unitOfWork)
+        public UserCM(IUnitOfWork unitOfWork, ILogger logger) : base(logger)
         {
             _unitOfWork = unitOfWork;
         }

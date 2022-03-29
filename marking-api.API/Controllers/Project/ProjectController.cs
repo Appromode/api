@@ -1,9 +1,9 @@
-﻿using marking_api.DataModel.Project;
+﻿using log4net.Core;
+using marking_api.DataModel.Project;
 using marking_api.Global.Extensions;
 using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,14 +14,14 @@ namespace marking_api.API.Controllers.Project
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
-    public class ProjectController : ControllerBase
+    public class ProjectController : BaseController
     {
         private readonly IUnitOfWork _unitOfWork;
         /// <summary>
         /// Constructor initialising unitofwork
         /// </summary>
         /// <param name="unitOfWork"></param>
-        public ProjectController(IUnitOfWork unitOfWork)
+        public ProjectController(IUnitOfWork unitOfWork, ILogger logger) : base(logger)
         {
             _unitOfWork = unitOfWork;
         }

@@ -1,64 +1,16 @@
-﻿using marking_api.Global.Repositories;
+﻿using log4net.Core;
+using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace marking_api.API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class BaseController<T> : ControllerBase where T : class
+    public abstract class BaseController : ControllerBase
     {
-        protected IGenericModelRepository<T> _genericModelRepository;
+        protected ILogger _logger;
 
-        public BaseController(IGenericModelRepository<T> genericModelRepository)
+        public BaseController(ILogger logger)
         {
-            _genericModelRepository = genericModelRepository;
-        }
-
-        [HttpGet]
-        public IActionResult Get()
-        {
-            return new ObjectResult(_genericModelRepository.Get());
-        }
-
-        [HttpGet("{id}")]
-        public IActionResult Get(string id)
-        {
-            var obj = _genericModelRepository.GetById(id);
-            if (obj == null)
-                return NotFound();
-            else
-                return new ObjectResult(obj);
-        }
-
-        [HttpPost]
-        public IActionResult Post([FromBody] T obj)
-        {
-            if (obj == null)
-                return BadRequest();
-            _genericModelRepository.Add(obj);
-            _genericModelRepository.Save();
-
-            return Ok();
-        }
-
-        [HttpPut]
-        public IActionResult Put([FromBody] T obj)
-        {
-            if (obj == null)
-                return BadRequest();
-
-            _genericModelRepository.Update(obj);
-            _genericModelRepository.Save();
-            return Ok();
-        }
-
-        [HttpDelete("{id}")]
-        public IActionResult Delete(string id)
-        {
-            _genericModelRepository.Delete(id);
-            _genericModelRepository.Save();
-
-            return Ok();
-        }
+            _logger = logger;
+        }        
     }
 }

@@ -1,4 +1,5 @@
-﻿using marking_api.DataModel.DTOs;
+﻿using log4net.Core;
+using marking_api.DataModel.DTOs;
 using marking_api.DataModel.Identity;
 using marking_api.Global.Extensions;
 using marking_api.Global.Repositories;
@@ -13,12 +14,12 @@ namespace marking_api.API.Controllers.Identity
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class LinkController : ControllerBase
+    public class LinkController : BaseController
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly UtilService _utilService;
 
-        public LinkController(IUnitOfWork unitOfWork, UtilService utilService)
+        public LinkController(IUnitOfWork unitOfWork, UtilService utilService, ILogger logger) : base(logger)
         {
             _unitOfWork = unitOfWork;
             _utilService = utilService;

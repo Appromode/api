@@ -1,9 +1,9 @@
-﻿using marking_api.API.Models.Identity;
+﻿using log4net.Core;
+using marking_api.API.Models.Identity;
 using marking_api.DataModel.API;
 using marking_api.DataModel.Identity;
 using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -13,19 +13,20 @@ namespace marking_api.API.Controllers.Identity
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class LoginController : ControllerBase
+    public class LoginController : BaseController
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly SignInManager<User> _signInManager;
         private readonly Jwt _jwt;
         private readonly TokenValidationParameters _tokenValidationParameters;
 
-        public LoginController(IUnitOfWork unitOfWork, SignInManager<User> signInManager, IOptionsMonitor<Jwt> optionsMonitor, TokenValidationParameters tokenValidationParameters)
+        public LoginController(IUnitOfWork unitOfWork, SignInManager<User> signInManager, IOptionsMonitor<Jwt> optionsMonitor, TokenValidationParameters tokenValidationParameters, ILogger logger) : base(logger)
         {
             _unitOfWork = unitOfWork;
             _signInManager = signInManager;
             _jwt = optionsMonitor.CurrentValue;
             _tokenValidationParameters = tokenValidationParameters;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -47,7 +48,7 @@ namespace marking_api.API.Controllers.Identity
                     if (result.IsLockedOut)
                         return BadRequest($"Account for '{userLogin.Email}' is locked out");
 
-                    var cm = new LoginCM(_unitOfWork, _signInManager, _jwt, _tokenValidationParameters);
+                    var cm = new LoginCM(_unitOfWork, _signInManager, _jwt, _tokenValidationParameters, _logger);
 
                     return Ok(cm.GenerateJwtToken(user));
                 }
@@ -61,7 +62,7 @@ namespace marking_api.API.Controllers.Identity
         {
             if (ModelState.IsValid)
             {
-                var cm = new LoginCM(_unitOfWork, _signInManager, _jwt, _tokenValidationParameters);
+                var cm = new LoginCM(_unitOfWork, _signInManager, _jwt, _tokenValidationParameters, _logger);
                 var result = cm.VerifyAndGenerateToken(tokenRequest).Result;
 
                 if (result == null)
