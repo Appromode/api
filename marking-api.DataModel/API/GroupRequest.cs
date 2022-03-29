@@ -9,6 +9,10 @@ namespace marking_api.DataModel.API
     public class GroupRequest
     {
         /// <summary>
+        /// Id of the sender/logged in user
+        /// </summary>
+        public string SenderId;
+        /// <summary>
         /// Name of the group
         /// </summary>
         public string GroupName;

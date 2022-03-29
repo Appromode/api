@@ -208,6 +208,7 @@ namespace marking_api.API
 
             //Global services
             services.AddScoped<UtilService>();
+            services.AddScoped<DataFilterService>();
 
             //UnitOfWork and two main inherited repositories
             services.AddTransient(typeof(IGenericModelRepository<>), typeof(GenericModelRepository<>));

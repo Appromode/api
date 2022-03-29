@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace marking_api.API.Controllers.Project
 {
@@ -83,6 +84,31 @@ namespace marking_api.API.Controllers.Project
             ));
 
         }
+
+        [HttpPatch("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(CommentDM)))]
+        public IActionResult Patch(long id, [FromBody] JsonPatchDocument<CommentDM> patchEntity)
+        {
+            if (patchEntity != null)
+            {
+                var comment = _unitOfWork.Comments.GetById(id);
+
+                patchEntity.ApplyTo(comment, ModelState);
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                
+                _unitOfWork.Comments.Update(comment);
+                _unitOfWork.Save();
+                return Ok(comment);
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+    }
 
         /// <summary>
         /// Put comment method by id
