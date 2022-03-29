@@ -1,6 +1,7 @@
 ﻿using marking_api.Data;
 using marking_api.DataModel.Identity;
 using marking_api.Global.Repositories.Models;
+using marking_api.Global.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -166,6 +167,7 @@ namespace marking_api.Global.Repositories
         private readonly MarkingDbContext _dbContext;
         private readonly SignInManager<User> _signInManager;
         private readonly IConfiguration _config;
+        private readonly DataFilterService _dfService;
 
         /// <summary>
         /// Initiate repositories, database context, signin manager and config
@@ -173,46 +175,47 @@ namespace marking_api.Global.Repositories
         /// <param name="dbContext">Database context</param>
         /// <param name="signInManager">Identity signin manager</param>
         /// <param name="config">Application configuration</param>
-        public UnitOfWork(MarkingDbContext dbContext, SignInManager<User> signInManager, IConfiguration config)
+        public UnitOfWork(MarkingDbContext dbContext, SignInManager<User> signInManager, IConfiguration config, DataFilterService dfService)
         {
             _dbContext = dbContext;
             _signInManager = signInManager;
             _config = config;
+            _dfService = dfService;
 
             //Models
-            Audits = new AuditRepository(dbContext);
-            Comments = new CommentRepository(dbContext);
-            FSFiles = new FSFileRepository(dbContext);
-            FSFileStates = new FSFileStateRepository(dbContext);
-            FSFileVersions = new FSFileVersionRepository(dbContext);
-            FSFolderFiles = new FSFolderFileRepository(dbContext);
-            FSFolders = new FSFolderRepository(dbContext);
-            FSFolderRoles = new FSFolderRoleRepository(dbContext);
-            Grades = new GradeRepository(dbContext);
-            GroupMarkers = new GroupMarkerRepository(dbContext);
-            Groups = new GroupRepository(dbContext);
-            Links = new LinkRepository(dbContext);
-            Logs = new LogRepository(dbContext);
-            Feedback = new FeedbackRepository(dbContext);
-            Projects = new ProjectRepository(dbContext);
-            RefreshTokens = new RefreshTokenRepository(dbContext);
-            RoleClaims = new RoleClaimRepository(dbContext);
-            RoleLinks = new RoleLinkRepository(dbContext);
-            RolePermissions = new RolePermissionRepository(dbContext);
-            Roles = new RoleRepository(dbContext);
-            SiteAreas = new SiteAreaRepository(dbContext);
-            Tags = new TagRepository(dbContext);
-            Threads = new ThreadRepository(dbContext);
-            UserClaims = new UserClaimRepository(dbContext);
-            UserGrades = new UserGradeRepository(dbContext);
-            UserGroups = new UserGroupRepository(dbContext);
-            UserLogins = new UserLoginRepository(dbContext);
-            Users = new UserRepository(dbContext);
-            UserRoles = new UserRoleRepository(dbContext);
-            UserTokens = new UserTokenRepository(dbContext);
-            UserTags = new UserTagRepository(dbContext);
-            Invites = new InvitesRepository(dbContext);
-            GroupTags = new GroupTagRepository(dbContext);
+            Audits = new AuditRepository(dbContext, dfService);
+            Comments = new CommentRepository(dbContext, dfService);
+            FSFiles = new FSFileRepository(dbContext, dfService);
+            FSFileStates = new FSFileStateRepository(dbContext, dfService);
+            FSFileVersions = new FSFileVersionRepository(dbContext, dfService);
+            FSFolderFiles = new FSFolderFileRepository(dbContext, dfService);
+            FSFolders = new FSFolderRepository(dbContext, dfService);
+            FSFolderRoles = new FSFolderRoleRepository(dbContext, dfService);
+            Grades = new GradeRepository(dbContext, dfService);
+            GroupMarkers = new GroupMarkerRepository(dbContext, dfService);
+            Groups = new GroupRepository(dbContext, dfService);
+            Links = new LinkRepository(dbContext, dfService);
+            Logs = new LogRepository(dbContext, dfService);
+            Feedback = new FeedbackRepository(dbContext, dfService);
+            Projects = new ProjectRepository(dbContext, dfService);
+            RefreshTokens = new RefreshTokenRepository(dbContext, dfService);
+            RoleClaims = new RoleClaimRepository(dbContext, dfService);
+            RoleLinks = new RoleLinkRepository(dbContext, dfService);
+            RolePermissions = new RolePermissionRepository(dbContext, dfService);
+            Roles = new RoleRepository(dbContext, dfService);
+            SiteAreas = new SiteAreaRepository(dbContext, dfService);
+            Tags = new TagRepository(dbContext, dfService);
+            Threads = new ThreadRepository(dbContext, dfService);
+            UserClaims = new UserClaimRepository(dbContext, dfService);
+            UserGrades = new UserGradeRepository(dbContext, dfService);
+            UserGroups = new UserGroupRepository(dbContext, dfService);
+            UserLogins = new UserLoginRepository(dbContext, dfService);
+            Users = new UserRepository(dbContext, dfService);
+            UserRoles = new UserRoleRepository(dbContext, dfService);
+            UserTokens = new UserTokenRepository(dbContext, dfService);
+            UserTags = new UserTagRepository(dbContext, dfService);
+            Invites = new InvitesRepository(dbContext, dfService);
+            GroupTags = new GroupTagRepository(dbContext, dfService);
 
             GenericMethods = new GenericMethodRepository(dbContext, config);
 

@@ -1,5 +1,6 @@
 using marking_api.Data;
 using marking_api.DataModel.Project;
+using marking_api.Global.Services;
 
 namespace marking_api.Global.Repositories.Models
 {
@@ -7,6 +8,6 @@ namespace marking_api.Global.Repositories.Models
 
     public class GroupTagRepository : GenericModelRepository<GroupTagDM>, IGroupTagRepository
     {
-        public GroupTagRepository(MarkingDbContext dbContext) : base(dbContext) { }
+        public GroupTagRepository(MarkingDbContext dbContext, DataFilterService dfService) : base(dbContext, dfService) { }
     }
 }

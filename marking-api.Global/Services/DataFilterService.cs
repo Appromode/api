@@ -35,22 +35,25 @@ namespace marking_api.Global.Services
             _dbContext = dbContext;
             _context = context;
             user = signInManager.UserManager.GetUserAsync(_context.HttpContext.User).Result;
-            user.UserRoles = _dbContext.UserRoles.Where(x => x.UserId.Equals(user.Id)).Include(y => y.Role).ToList();
-            userRolePermissions = new List<RolePermission>();
-            //Need a different solution to the below if / foreach block as this will eventually get really slow as the system database expands
-            if (user.UserRoles?.Any() == true)
+            if (user != null)
             {
-                foreach (var userRole in user.UserRoles)
+                user.UserRoles = _dbContext.UserRoles.Where(x => x.UserId.Equals(user.Id)).Include(y => y.Role).ToList();
+                userRolePermissions = new List<RolePermission>();
+                //Need a different solution to the below if / foreach block as this will eventually get really slow as the system database expands
+                if (user.UserRoles?.Any() == true)
                 {
-                    if (Convert.ToInt32(userRole.Role.AccessRole) > Convert.ToInt32(userAccessRole))
-                        userAccessRole = userRole.Role.AccessRole;
+                    foreach (var userRole in user.UserRoles)
+                    {
+                        if (Convert.ToInt32(userRole.Role.AccessRole) > Convert.ToInt32(userAccessRole))
+                            userAccessRole = userRole.Role.AccessRole;
 
-                    if (userRole.Role.RolePermissions?.Any() == true)
-                        userRolePermissions.AddRange(userRole.Role.RolePermissions);                    
+                        if (userRole.Role.RolePermissions?.Any() == true)
+                            userRolePermissions.AddRange(userRole.Role.RolePermissions);
+                    }
+                    userRolePermissions.Distinct();
+                    accessRoleFound = true;
                 }
-                userRolePermissions.Distinct();
-                accessRoleFound = true;
-            }            
+            }                      
         }
 
         /// <summary>

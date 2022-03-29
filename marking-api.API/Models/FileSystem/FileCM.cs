@@ -43,7 +43,7 @@ namespace marking_api.API.Models.FileSystem
             //Save file data as a version to be able to create drafts and retire old versions of a file
             //This is where versioning is introduced.
             //Gets existing file if one exists. If not then one is created.
-            List<FSFileDM> existingFiles = _unitOfWork.FSFiles.Get(filter: x => x.FileName == fileDM.FileName, include: x => x.Include(y => y.FileVersions).ThenInclude(y => y.FileState)).ToList();
+            List<FSFileDM> existingFiles = _unitOfWork.FSFiles.Get(filter: x => x.FileName == fileRequest.File.UploadFileName, include: x => x.Include(y => y.FileVersions).ThenInclude(y => y.FileState)).ToList();
 
             //If there are no existing files
             if (existingFiles != null)

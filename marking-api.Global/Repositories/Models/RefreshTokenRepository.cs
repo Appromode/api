@@ -1,5 +1,6 @@
 ﻿using marking_api.Data;
 using marking_api.DataModel.API;
+using marking_api.Global.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,6 @@ namespace marking_api.Global.Repositories.Models
 
     public class RefreshTokenRepository : GenericModelRepository<RefreshTokenDM>, IRefreshTokenRepository
     {
-        public RefreshTokenRepository(MarkingDbContext dbContext) : base(dbContext) { }
+        public RefreshTokenRepository(MarkingDbContext dbContext, DataFilterService dfService) : base(dbContext, dfService) { }
     }
 }
