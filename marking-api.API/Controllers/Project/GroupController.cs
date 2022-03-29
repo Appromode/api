@@ -78,6 +78,13 @@ namespace marking_api.API.Controllers.Project
             });
             _unitOfWork.Save();
 
+            _unitOfWork.UserGroups.Add(new UserGroupDM() {
+                UserId = groupReq.SenderId,
+                GroupId = group.GroupId
+            });
+
+            _unitOfWork.Save();
+
             List<InviteDM> userInvites = new List<InviteDM>();
 
             if (groupReq.GroupMembers != null)
