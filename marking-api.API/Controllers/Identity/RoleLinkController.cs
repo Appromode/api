@@ -1,4 +1,4 @@
-﻿using log4net.Core;
+﻿using log4net;
 using marking_api.API.Config;
 using marking_api.DataModel.Identity;
 using marking_api.Global.Extensions;
@@ -14,7 +14,7 @@ namespace marking_api.API.Controllers.Identity
     public class RoleLinkController : BaseController
     {
         private readonly IUnitOfWork _unitOfWork;
-        public RoleLinkController(IUnitOfWork unitOfWork, ILogger logger) : base(logger)
+        public RoleLinkController(IUnitOfWork unitOfWork, ILog logger) : base(logger)
         {
             _unitOfWork = unitOfWork;
         }

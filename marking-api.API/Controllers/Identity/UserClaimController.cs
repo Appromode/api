@@ -1,4 +1,4 @@
-﻿using log4net.Core;
+﻿using log4net;
 using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +13,7 @@ namespace marking_api.API.Controllers.Identity
     public class UserClaimController : BaseController
     {
         private readonly IUnitOfWork _unitOfWork;
-        public UserClaimController(IUnitOfWork unitOfWork, ILogger logger) : base(logger)
+        public UserClaimController(IUnitOfWork unitOfWork, ILog logger) : base(logger)
         {
             _unitOfWork = unitOfWork;
         }

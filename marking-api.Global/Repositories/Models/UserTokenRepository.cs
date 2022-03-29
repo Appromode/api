@@ -1,4 +1,5 @@
-﻿using marking_api.Data;
+﻿using log4net;
+using marking_api.Data;
 using marking_api.Global.Services;
 using Microsoft.AspNetCore.Identity;
 
@@ -10,6 +11,6 @@ namespace marking_api.Global.Repositories.Models
     }
     public class UserTokenRepository : GenericModelRepository<IdentityUserToken<string>>, IUserTokenRepository
     {
-        public UserTokenRepository(MarkingDbContext dbContext, DataFilterService dfService) : base(dbContext, dfService) { }
+        public UserTokenRepository(MarkingDbContext dbContext, DataFilterService dfService, ILog logger) : base(dbContext, dfService, logger) { }
     }
 }

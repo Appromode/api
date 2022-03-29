@@ -1,4 +1,4 @@
-﻿using log4net.Core;
+﻿using log4net;
 using marking_api.API.Models.Identity;
 using marking_api.DataModel.API;
 using marking_api.DataModel.Identity;
@@ -20,7 +20,7 @@ namespace marking_api.API.Controllers.Identity
         private readonly Jwt _jwt;
         private readonly TokenValidationParameters _tokenValidationParameters;
 
-        public LoginController(IUnitOfWork unitOfWork, SignInManager<User> signInManager, IOptionsMonitor<Jwt> optionsMonitor, TokenValidationParameters tokenValidationParameters, ILogger logger) : base(logger)
+        public LoginController(IUnitOfWork unitOfWork, SignInManager<User> signInManager, IOptionsMonitor<Jwt> optionsMonitor, TokenValidationParameters tokenValidationParameters, ILog logger) : base(logger)
         {
             _unitOfWork = unitOfWork;
             _signInManager = signInManager;

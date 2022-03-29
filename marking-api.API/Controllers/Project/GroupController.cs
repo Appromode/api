@@ -1,4 +1,4 @@
-﻿using log4net.Core;
+﻿using log4net;
 using marking_api.API.Models.Project;
 using marking_api.DataModel.API;
 using marking_api.DataModel.Identity;
@@ -24,7 +24,7 @@ namespace marking_api.API.Controllers.Project
         /// Constructor initialising unitofowork
         /// </summary>
         /// <param name="unitOfWork">IUnitOfWork</param>
-        public GroupController(IUnitOfWork unitOfWork, ILogger logger) : base(logger)
+        public GroupController(IUnitOfWork unitOfWork, ILog logger) : base(logger)
         {
             _unitOfWork = unitOfWork;
         }
@@ -118,7 +118,7 @@ namespace marking_api.API.Controllers.Project
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            var cm = new GroupCM(_unitOfWork);
+            var cm = new GroupCM(_unitOfWork, _logger);
 
             cm.GenerateGroup(group);
             //_unitOfWork.Groups.Update(group);

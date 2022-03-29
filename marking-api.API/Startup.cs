@@ -27,6 +27,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using log4net;
 
 namespace marking_api.API
 {
@@ -202,6 +203,8 @@ namespace marking_api.API
                 options.DefaultPolicy = authPolicyBuilder.Build();
                 options.FallbackPolicy = new AuthorizationPolicyBuilder().AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme).RequireAuthenticatedUser().Build();
             });
+
+            services.AddSingleton<ILog>(LogManager.GetLogger(GetType()));
 
             //Database seeder
             services.AddScoped<MarkingDbSeeder>();

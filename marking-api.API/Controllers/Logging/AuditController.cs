@@ -1,4 +1,4 @@
-﻿using log4net.Core;
+﻿using log4net;
 using marking_api.API.Config;
 using marking_api.DataModel.Logging;
 using marking_api.Global.Repositories;
@@ -13,7 +13,7 @@ namespace marking_api.API.Controllers.Logging
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public AuditController(IUnitOfWork unitOfWork, ILogger logger) : base(logger)
+        public AuditController(IUnitOfWork unitOfWork, ILog logger) : base(logger)
         {
             _unitOfWork = unitOfWork;
         }

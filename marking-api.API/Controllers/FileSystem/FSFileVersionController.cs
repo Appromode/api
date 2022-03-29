@@ -1,4 +1,4 @@
-﻿using log4net.Core;
+﻿using log4net;
 using marking_api.API.Config;
 using marking_api.DataModel.FileSystem;
 using marking_api.Global.Extensions;
@@ -17,7 +17,7 @@ namespace marking_api.API.Controllers.FileSystem
     public class FSFileVersionController : BaseController
     {
         private readonly IUnitOfWork _unitOfWork;
-        public FSFileVersionController(IUnitOfWork unitOfWork, ILogger logger) : base(logger)
+        public FSFileVersionController(IUnitOfWork unitOfWork, ILog logger) : base(logger)
         {
             _unitOfWork = unitOfWork;
         }

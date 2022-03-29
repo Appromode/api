@@ -1,4 +1,5 @@
-﻿using marking_api.Data;
+﻿using log4net;
+using marking_api.Data;
 using marking_api.DataModel.FileSystem;
 using marking_api.Global.Services;
 using System;
@@ -16,6 +17,6 @@ namespace marking_api.Global.Repositories.Models
 
     public class FSFolderRepository : GenericModelRepository<FSFolderDM>, IFSFolderRepository
     {
-        public FSFolderRepository(MarkingDbContext dbContext, DataFilterService dfService) : base(dbContext, dfService) { }
+        public FSFolderRepository(MarkingDbContext dbContext, DataFilterService dfService, ILog logger) : base(dbContext, dfService, logger) { }
     }
 }

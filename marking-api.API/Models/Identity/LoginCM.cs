@@ -1,4 +1,4 @@
-﻿using log4net.Core;
+﻿using log4net;
 using marking_api.Data;
 using marking_api.DataModel.API;
 using marking_api.DataModel.Identity;
@@ -48,7 +48,7 @@ namespace marking_api.API.Models.Identity
         /// <param name="signInManager">SignInManager(User)</param>
         /// <param name="jwt">Jwt</param>
         /// <param name="tokenValidationParameters">TokenValidationParameters</param>
-        public LoginCM(IUnitOfWork unitOfWork, SignInManager<User> signInManager, Jwt jwt, TokenValidationParameters tokenValidationParameters, ILogger logger) : base(logger)
+        public LoginCM(IUnitOfWork unitOfWork, SignInManager<User> signInManager, Jwt jwt, TokenValidationParameters tokenValidationParameters, ILog logger) : base(logger)
         {
             _unitOfWork = unitOfWork;
             _signInManager = signInManager;

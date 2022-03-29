@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using marking_api.DataModel.API;
-using log4net.Core;
+using log4net;
 
 namespace marking_api.API.Models.FileSystem
 {
@@ -18,14 +18,14 @@ namespace marking_api.API.Models.FileSystem
     public class FileCM : BaseModel
     {
         private IUnitOfWork _unitOfWork;
-        private ILogger _logger;
+        private ILog _logger;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="unitOfWork">IUnitOfWork</param>
         /// <param name="logger">ILogger</param>
-        public FileCM(IUnitOfWork unitOfWork, ILogger logger) : base(logger)
+        public FileCM(IUnitOfWork unitOfWork, ILog logger) : base(logger)
         {
             _logger = logger;
             _unitOfWork = unitOfWork;
@@ -67,7 +67,7 @@ namespace marking_api.API.Models.FileSystem
                         }
                         catch (Exception ex)
                         {
-                            _logger.Log(null, Level.Error, "Error saving File Version",  ex);
+                            _logger.Error(ex);
                             result.Add(null, false);
                             return result;
                         }
@@ -91,7 +91,7 @@ namespace marking_api.API.Models.FileSystem
                 }
                 catch (Exception ex)
                 {
-                    _logger.Log(null, Level.Error, "Error saving File", ex);
+                    _logger.Error(ex);
                     result.Add(null, false);
                     return result;
                 }
@@ -113,7 +113,7 @@ namespace marking_api.API.Models.FileSystem
                 }
                 catch (Exception ex)
                 {
-                    _logger.Log(null, Level.Error, "Error saving File state", ex);
+                    _logger.Error(ex);
                     result.Add(null, false);
                     return result;
                 }
@@ -150,7 +150,7 @@ namespace marking_api.API.Models.FileSystem
                     }
                     catch (Exception ex)
                     {
-                        _logger.Log(null, Level.Error, "Error saving Folder", ex);
+                        _logger.Error(ex);
                         result.Add(null, false);
                         return result;
                     }
@@ -178,7 +178,7 @@ namespace marking_api.API.Models.FileSystem
                     }
                     catch (Exception ex)
                     {
-                        _logger.Log(null, Level.Error, "Error saving Folder file", ex);
+                        _logger.Error(ex);
                         result.Add(null, false);
                         return result;
                     }
@@ -209,7 +209,7 @@ namespace marking_api.API.Models.FileSystem
                     }
                     catch (Exception ex)
                     {
-                        _logger.Log(null, Level.Error, "Error saving Folder role", ex);
+                        _logger.Error(ex);
                         result.Add(null, false);
                         return result;
                     }

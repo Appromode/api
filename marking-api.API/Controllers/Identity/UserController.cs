@@ -1,4 +1,4 @@
-﻿using log4net.Core;
+﻿using log4net;
 using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Http;
 using marking_api.DataModel.Project;
@@ -20,7 +20,7 @@ namespace marking_api.API.Controllers.Identity
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public UserController(IUnitOfWork unitOfWork, ILogger logger) : base(logger)
+        public UserController(IUnitOfWork unitOfWork, ILog logger) : base(logger)
         {
             _unitOfWork = unitOfWork;
         }

@@ -7,7 +7,7 @@ using marking_api.Global.Extensions;
 using marking_api.Global.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
-using Microsoft.Extensions.Logging;
+using log4net;
 
 namespace marking_api.Global.Repositories
 {
@@ -117,7 +117,7 @@ namespace marking_api.Global.Repositories
     {
         private readonly MarkingDbContext _dbContext;
         private readonly DataFilterService _dfService;
-        private ILogger _logger;
+        private ILog _logger;
         private readonly DbSet<T> _entities;
 
         /// <summary>
@@ -125,11 +125,12 @@ namespace marking_api.Global.Repositories
         /// </summary>
         /// <param name="dbContext">MarkingDbContext</param>
         /// <param name="dfService">DataFilterService</param>
-        public GenericModelRepository(MarkingDbContext dbContext, DataFilterService dfService, ILogger logger)
+        public GenericModelRepository(MarkingDbContext dbContext, DataFilterService dfService, ILog logger)
         {
             this._dbContext = dbContext;
             _entities = _dbContext.Set<T>();
             _dfService = dfService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -395,7 +396,7 @@ namespace marking_api.Global.Repositories
                 return isTracked;
             } catch (Exception ex)
             {
-                _logger.LogError(ex, "Error checking if entity is being tracked");
+                _logger.Error(ex);
                 return true;
             }
         }

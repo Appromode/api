@@ -1,4 +1,4 @@
-﻿using log4net.Core;
+﻿using log4net;
 using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,9 +6,9 @@ namespace marking_api.API.Controllers
 {
     public abstract class BaseController : ControllerBase
     {
-        protected ILogger _logger;
+        protected ILog _logger;
 
-        public BaseController(ILogger logger)
+        public BaseController(ILog logger)
         {
             _logger = logger;
         }        

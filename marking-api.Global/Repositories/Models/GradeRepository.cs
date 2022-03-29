@@ -1,4 +1,5 @@
-﻿using marking_api.Data;
+﻿using log4net;
+using marking_api.Data;
 using marking_api.DataModel.Project;
 using marking_api.Global.Services;
 using System;
@@ -13,6 +14,6 @@ namespace marking_api.Global.Repositories.Models
 
     public class GradeRepository : GenericModelRepository<GradeDM>, IGradeRepository
     {
-        public GradeRepository(MarkingDbContext dbContext, DataFilterService dfService) : base(dbContext, dfService) { }
+        public GradeRepository(MarkingDbContext dbContext, DataFilterService dfService, ILog logger) : base(dbContext, dfService, logger) { }
     }
 }

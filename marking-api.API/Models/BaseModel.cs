@@ -1,4 +1,4 @@
-﻿using log4net.Core;
+﻿using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +8,8 @@ namespace marking_api.API.Models
 {
     public class BaseModel
     {
-        private ILogger _logger;
-        public BaseModel(ILogger logger)
+        private ILog _logger;
+        public BaseModel(ILog logger)
         {
             _logger = logger;
         }

@@ -15,10 +15,10 @@ namespace marking_api.API.Config
             var dataModelAssembly = Assembly.Load("marking-api.DataModel");
             var candidates = dataModelAssembly.GetExportedTypes().Where(x => x.GetCustomAttributes<GeneratedControllerAttribute>().Any());
 
-            foreach (var candidate in candidates)
-            {
-                feature.Controllers.Add(typeof(BaseController<>).MakeGenericType(candidate).GetTypeInfo());
-            }
+            //foreach (var candidate in candidates)
+            //{
+            //    feature.Controllers.Add(typeof(BaseController<>).MakeGenericType(candidate).GetTypeInfo());
+            //}
         }
     }
 }

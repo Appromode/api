@@ -1,4 +1,4 @@
-﻿using log4net.Core;
+﻿using log4net;
 using marking_api.DataModel.Project;
 using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +19,7 @@ namespace marking_api.API.Models.Project
         /// Constructor initialising unitofwork
         /// </summary>
         /// <param name="unitOfWork">UnitOfWork</param>
-        public GroupCM(IUnitOfWork unitOfWork, ILogger logger) : base(logger)
+        public GroupCM(IUnitOfWork unitOfWork, ILog logger) : base(logger)
         {
             _unitOfWork = unitOfWork;
         }

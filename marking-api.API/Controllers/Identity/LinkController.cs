@@ -1,4 +1,4 @@
-﻿using log4net.Core;
+﻿using log4net;
 using marking_api.DataModel.DTOs;
 using marking_api.DataModel.Identity;
 using marking_api.Global.Extensions;
@@ -19,7 +19,7 @@ namespace marking_api.API.Controllers.Identity
         private readonly IUnitOfWork _unitOfWork;
         private readonly UtilService _utilService;
 
-        public LinkController(IUnitOfWork unitOfWork, UtilService utilService, ILogger logger) : base(logger)
+        public LinkController(IUnitOfWork unitOfWork, UtilService utilService, ILog logger) : base(logger)
         {
             _unitOfWork = unitOfWork;
             _utilService = utilService;

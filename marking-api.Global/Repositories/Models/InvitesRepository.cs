@@ -1,3 +1,4 @@
+using log4net;
 using marking_api.Data;
 using marking_api.DataModel.Project;
 using marking_api.Global.Services;
@@ -13,6 +14,6 @@ namespace marking_api.Global.Repositories.Models
 
     public class InvitesRepository : GenericModelRepository<InviteDM>, IInvitesRepository
     {
-        public InvitesRepository(MarkingDbContext dbContext, DataFilterService dfService) : base(dbContext, dfService) { }
+        public InvitesRepository(MarkingDbContext dbContext, DataFilterService dfService, ILog logger) : base(dbContext, dfService, logger) { }
     }
 }
