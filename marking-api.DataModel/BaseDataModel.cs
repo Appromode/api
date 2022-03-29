@@ -39,17 +39,10 @@ namespace marking_api.DataModel
         /// Who the entry was last updated by
         /// </summary>
         public string updatedBy { get; set; }
+        
         /// <summary>
         /// When the entry was deleted
-        /// </summary>
-        public DateTime? deletedAt { get; set; }
-        /// <summary>
-        /// Who the entry was deleted by
-        /// </summary>
-        public string deletedBy { get; set; }
-        /// <summary>
-        /// What type of role has access to this entry
-        /// </summary>
+        /// </summary>        
         public RoleType AccessRole { get; set; } = RoleType.Guest;
 
         /// <summary>
@@ -61,7 +54,6 @@ namespace marking_api.DataModel
             if (canDelete)
             {
                 deleted = true;
-                deletedAt = DateTime.Now;
                 return true;
             }
             return false;

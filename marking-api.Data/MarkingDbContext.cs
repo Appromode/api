@@ -387,12 +387,6 @@ namespace marking_api.Data
                         var field = t.GetProperty("updatedBy");
                         field.SetValue(entry.Entity, UserId);
                     }
-                    //Currently Errors \/\/\/
-                    //if (entry.OriginalValues.Properties.FirstOrDefault(x => x.Name.Equals("Deleted")). .EntityType.GetType().GetProperty("Deleted").GetValue(entry.Entity) != entry.CurrentValues.EntityType.GetType().GetProperty("Deleted").GetValue(entry.Entity))
-                    //{
-                    //    var field = t.GetProperty("deletedBy");
-                    //    field.SetValue(entry.Entity, UserId);
-                    //}
                 }              
             }
             return base.SaveChanges();
