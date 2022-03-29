@@ -1,10 +1,13 @@
 ﻿using marking_api.DataModel.FileSystem;
 using marking_api.DataModel.Identity;
+using marking_api.DataModel.Project;
 using marking_api.Global.Repositories;
-using Microsoft.AspNetCore.Mvc;
+using marking_api.DataModel.Enums;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using marking_api.DataModel.API;
 
 namespace marking_api.API.Models.FileSystem
 {
@@ -26,30 +29,184 @@ namespace marking_api.API.Models.FileSystem
         /// <summary>
         /// Save file method that creates all the necessary files and objects around a file
         /// </summary>
-        /// <param name="file">FSFileDM</param>
-        /// <param name="groupId">Int64</param>
-        /// <param name="userId">String</param>
+        /// <param name="fileRequest">FileRequest - File + GroupId + UserId</param>
         /// <returns>Saved FSFileDM with versions and folder</returns>
-        public FSFileDM SaveFile(FSFileVersionDM file, long groupId, string userId)
+        public Dictionary<FSFileDM, bool> SaveFile(FileRequest fileRequest)
         {
-            FSFileDM fileDM = new FSFileDM()
+            Dictionary<FSFileDM, bool> result = new Dictionary<FSFileDM, bool>();
+
+            GroupDM group = _unitOfWork.Groups.GetById(fileRequest.GroupId);
+
+            //Save file to generate an id
+            FSFileDM fileDM;                        
+
+            //Save file data as a version to be able to create drafts and retire old versions of a file
+            //This is where versioning is introduced.
+            //Gets existing file if one exists. If not then one is created.
+            List<FSFileDM> existingFiles = _unitOfWork.FSFiles.Get(filter: x => x.FileName == fileDM.FileName, include: x => x.Include(y => y.FileVersions).ThenInclude(y => y.FileState)).ToList();
+
+            //If there are no existing files
+            if (existingFiles != null)
             {
+                //Go through each file version and set to archived
+                foreach (var existingFile in existingFiles)
+                {
+                    if (existingFile.FileVersions.Any(x => x.FileState.FileStateType == FileState.Current))
+                    {
+                        List<FSFileVersionDM> currentFiles = existingFile.FileVersions.Where(x => x.FileState.FileStateType == FileState.Current).ToList();
+                        currentFiles.ForEach(x => x.FileState.FileStateType = FileState.Archived);
+                        try
+                        {
+                            _unitOfWork.FSFileVersions.AddRange(currentFiles);
+                            _unitOfWork.Save();
+                        }
+                        catch (Exception ex)
+                        {
+                            result.Add(null, false);
+                            return result;
+                        }
+                    }
+                }
 
-            };
-
-            FSFileStateDM fileState = new FSFileStateDM()
+                //Should only be one FileDM so if there is an existing one, assign it
+                fileDM = existingFiles.FirstOrDefault();
+            } else
             {
+                //Create new filedm
+                fileDM = new FSFileDM()
+                {
+                    FileName = fileRequest.File.UploadFileName
+                };
 
-            };
+                try
+                {
+                    _unitOfWork.FSFiles.Add(fileDM);
+                    _unitOfWork.Save();
+                }
+                catch (Exception ex)
+                {
+                    result.Add(null, false);
+                    return result;
+                }
+            }            
 
-            FSFolderDM folder = new FSFolderDM()
+            //Create file state. This determines in what state the file is. Current, Draft, Retired.            
+            if (fileRequest.File.FileState == null)
             {
+                fileRequest.File.FileState = new FSFileStateDM()
+                {
+                    FileStateType = FileState.Current,
+                    FileStateDescription = fileRequest.File.UploadFileName + " " + fileRequest.File.FileVersionId
+                };
 
-            };
+                try
+                {
+                    _unitOfWork.FSFileStates.Add(fileRequest.File.FileState);
+                    _unitOfWork.Save();
+                }
+                catch (Exception ex)
+                {
+                    result.Add(null, false);
+                    return result;
+                }
+            }
 
-            List<UserRole> userRoles = _unitOfWork.UserRoles.Get(filter: x => x.UserId == userId ).ToList();
+            fileRequest.File.FileId = fileDM.FileId;
+            fileDM.FileVersions = new List<FSFileVersionDM>() { fileRequest.File };
 
-            return null;
+            if (fileRequest.File.FileStateId == 0)
+                fileRequest.File.FileStateId = fileRequest.File.FileState.FileStateId;
+
+            //Attach folder for file if one isn't attached
+            if (fileDM.Folder == null)
+            {
+                //Check if a folder exists
+                if (_unitOfWork.FSFolders.Get(filter: x => x.FolderName == group.GroupName) != null)
+                {
+                    FSFolderDM folder = _unitOfWork.FSFolders.Get(filter: x => x.FolderName == group.GroupName).FirstOrDefault();
+                    fileDM.FolderID = folder.FolderId;
+                    fileDM.Folder = folder;
+                }
+                else
+                {
+                    fileDM.Folder = new FSFolderDM()
+                    {
+                        FolderName = group.GroupName,
+                        FolderDescription = group.GroupName + " Files"
+                    };
+
+                    try
+                    {
+                        _unitOfWork.FSFolders.Add(fileDM.Folder);
+                        _unitOfWork.Save();
+                    }
+                    catch (Exception ex)
+                    {
+                        result.Add(null, false);
+                        return result;
+                    }
+
+                    if (fileDM.FolderID == 0)
+                        fileDM.FolderID = fileDM.Folder.FolderId;
+                    
+                }
+                
+                //If a folder hasn't been created then there won't be any folderfiles
+                //Or there isn't an existing FolderFile for the FileDM
+                if ((_unitOfWork.FSFolders.Get(filter: x => x.FolderName == group.GroupName, include: x => x.Include(y => y.FolderFiles)).FirstOrDefault().FolderFiles == null)
+                    || _unitOfWork.FSFolderFiles.Get(filter: x => x.FolderId == fileDM.FolderID && x.FileId == fileDM.FileId) == null)
+                {
+                    fileDM.FolderFiles.Add(new FSFolderFileDM()
+                    {
+                        FileId = fileDM.FileId,
+                        FolderId = fileDM.FolderID.Value
+                    });
+
+                    try
+                    {
+                        _unitOfWork.FSFolderFiles.AddRange(fileDM.FolderFiles);
+                        _unitOfWork.Save();
+                    }
+                    catch (Exception ex)
+                    {
+                        result.Add(null, false);
+                        return result;
+                    }
+                }
+
+                //If a folder hasn't been created then there won't be any FolderRoleDMs
+                if (_unitOfWork.FSFolders.Get(filter: x => x.FolderName == group.GroupName, include: x => x.Include(y => y.FolderRoles)).FirstOrDefault().FolderRoles == null)
+                {
+                    List<UserRole> userRoles = _unitOfWork.UserRoles.Get(filter: x => x.UserId == fileRequest.UserId).ToList();
+
+                    List<FSFolderRoleDM> folderRoles = new List<FSFolderRoleDM>();
+
+                    foreach (var userrole in userRoles)
+                    {
+                        FSFolderRoleDM folderRole = new FSFolderRoleDM()
+                        {
+                            FolderId = fileDM.FolderID.Value,
+                            RoleId = userrole.RoleId
+                        };
+
+                        _unitOfWork.FSFolderRoles.Add(folderRole);
+                        folderRoles.Add(folderRole);
+                    }
+
+                    try
+                    {
+                        _unitOfWork.Save();
+                    }
+                    catch (Exception ex)
+                    {
+                        result.Add(null, false);
+                        return result;
+                    }
+                }
+            }                    
+
+            result.Add(fileDM, true);
+            return result;
         }
      }
 }

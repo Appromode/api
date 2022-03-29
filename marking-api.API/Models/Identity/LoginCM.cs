@@ -24,18 +24,22 @@ namespace marking_api.API.Models.Identity
         /// UnitOfWork database access
         /// </summary>
         public IUnitOfWork _unitOfWork;
+
         /// <summary>
         /// Identity sign in manager
         /// </summary>
         public SignInManager<User> _signInManager;
+
         /// <summary>
         /// Jwt secret string
         /// </summary>
         public Jwt _jwt;
+
         /// <summary>
         /// Jwt validation parameters
         /// </summary>
         public TokenValidationParameters _tokenValidationParameters;
+
         /// <summary>
         /// Login constructor
         /// </summary>

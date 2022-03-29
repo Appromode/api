@@ -50,6 +50,12 @@ namespace marking_api.DataModel.FileSystem
         public virtual ICollection<FSFolderFileDM> FolderFiles { get; set; }
 
         /// <summary>
+        /// List of roles that have access to this folder and the files contained within it
+        /// </summary>
+        [SwaggerExclude]
+        public virtual ICollection<FSFolderRoleDM> FolderRoles { get; set; }
+
+        /// <summary>
         /// List of child folders
         /// </summary>
         [SwaggerExclude]
