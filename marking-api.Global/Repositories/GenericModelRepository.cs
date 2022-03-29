@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using marking_api.Data;
 using marking_api.Global.Extensions;
+using marking_api.Global.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 
@@ -114,16 +115,19 @@ namespace marking_api.Global.Repositories
     public class GenericModelRepository<T> : IGenericModelRepository<T> where T : class
     {
         private readonly MarkingDbContext _dbContext;
+        private readonly DataFilterService _dfService;
         private readonly DbSet<T> _entities;
 
         /// <summary>
         /// GenericModelRepository constructor
         /// </summary>
         /// <param name="dbContext">MarkingDbContext</param>
-        public GenericModelRepository(MarkingDbContext dbContext)
+        /// <param name="dfService">DataFilterService</param>
+        public GenericModelRepository(MarkingDbContext dbContext, DataFilterService dfService)
         {
             this._dbContext = dbContext;
             _entities = _dbContext.Set<T>();
+            _dfService = dfService;
         }
 
         /// <summary>

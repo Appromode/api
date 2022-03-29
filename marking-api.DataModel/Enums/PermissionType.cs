@@ -31,6 +31,10 @@ namespace marking_api.DataModel.Enums
         /// <summary>
         /// Upload a file
         /// </summary>
-        Upload = 4
+        Upload = 4,
+        /// <summary>
+        /// Admin permission. Enables all actions
+        /// </summary>
+        Admin = 5
     }
 }
