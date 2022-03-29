@@ -31,6 +31,15 @@ namespace marking_api.API.Controllers.Identity
             return Ok(_unitOfWork.Users.Get());
         }
 
+        [HttpGet("{id}/Users")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserDTO)))]
+        public IActionResult GetUsers(string userId)
+        {
+            var users = _unitOfWork.Users.Get(filter: (table) => table.Id != userId);
+
+            return Ok(users);
+        }
+
         [HttpGet("{id}/Invites")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserDTO)))]
         public IActionResult GetInvites(string id)
