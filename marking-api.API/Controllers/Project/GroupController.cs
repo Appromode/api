@@ -73,21 +73,23 @@ namespace marking_api.API.Controllers.Project
 
             //Save group in the database
             GroupDM group = _unitOfWork.Groups.Add(new GroupDM {
-                GroupName = groupReq.GroupName
+                GroupName = groupReq.GroupName,
             });
             _unitOfWork.Save();
 
-            //Create list of users to add to the group
-            List<UserGroupDM> userGroups = new List<UserGroupDM>();
+            List<InviteDM> userInvites = new List<InviteDM>();
+
             foreach (var user in groupReq.GroupMembers)
             {
-                userGroups.Add(new UserGroupDM 
+                userInvites.Add(new InviteDM 
                 {
-                    UserId = user.Id,
+                    SenderId = groupReq.SenderId,
+                    ReceiverId = user.Id,
                     GroupId = group.GroupId
                 });
             }
-            _unitOfWork.UserGroups.AddRange(userGroups);
+
+            _unitOfWork.Invites.AddRange(userInvites);
             _unitOfWork.Save();
 
             //Assign and return group
