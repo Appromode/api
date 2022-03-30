@@ -164,5 +164,34 @@ namespace marking_api.API.Models.Identity
 
             return _unitOfWork.UserGroups.GetById(groupId);
         }
+
+        public InviteDM RejectInvite(Int64 inviteId)
+        {
+            var strategy = _unitOfWork.GenericMethods.CreateExecutionStrategy();
+
+            var invite = _unitOfWork.Invites.GetById(inviteId);
+
+            strategy.Execute(() => {
+                try
+                {
+                    _unitOfWork.GenericMethods.BeginTransaction();
+
+                    invite.Status = false;
+
+                    var updatedInvite = _unitOfWork.Invites.Update(invite);
+
+                    _unitOfWork.Save();
+
+                    _unitOfWork.GenericMethods.CommitTransaction();
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine(exception);
+                    _unitOfWork.GenericMethods.RollBackTransaction();
+                }
+            });
+
+            return invite;
+        }
     }
 }
