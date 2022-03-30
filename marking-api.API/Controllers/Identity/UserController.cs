@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System;
 using marking_api.API.Models.Identity;
+using System.Collections.Generic;
 
 namespace marking_api.API.Controllers.Identity
 {
@@ -65,6 +66,73 @@ namespace marking_api.API.Controllers.Identity
                 return NoContent();
             }
             return Ok(group);
+        }
+        
+        [HttpGet("{id}/Tags")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(TagDM)))]
+        public IActionResult GetTags(string id)
+        {
+            User user = _unitOfWork.Users.GetById(id);
+
+            if (user == null) {
+                NoContent();
+            }
+
+            var userTags = _unitOfWork.UserTags.Get(
+                include: (userTags) => userTags.Include((userTags) => userTags.Tag),
+                filter: (userTags) => userTags.UserId == id
+                ).ToList();
+
+            var tags = userTags.ToList().Select((userTag) => userTag.Tag).ToList();
+
+            var results = _unitOfWork.Tags.Get(
+                filter: (tag) => !tags.Contains(tag)
+            ).ToList();
+
+            if (results.Count() <= 0) {
+                return NoContent();
+            }
+
+            return Ok(results);
+        }
+
+        [HttpPost("Tags")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(TagDM)))]
+        public IActionResult AddTags([FromBody] AddTagRequest tagRequest)
+        {
+            var strategy = _unitOfWork.GenericMethods.CreateExecutionStrategy();
+
+            if (tagRequest.UserId == null)
+            {
+                return NoContent();
+            }
+
+            strategy.Execute(() => {
+                try {
+                    _unitOfWork.GenericMethods.BeginTransaction();
+
+                    List<UserTagsDM> tags = new List<UserTagsDM>();
+
+                    foreach (TagDM tag in tagRequest.tags)
+                    {
+                        tags.Add(new UserTagsDM() {
+                            UserId = tagRequest.UserId,
+                            TagId = tag.TagId
+                        });
+                    }
+
+                    _unitOfWork.UserTags.AddRange(tags);
+
+                    _unitOfWork.Save();
+
+                    _unitOfWork.GenericMethods.CommitTransaction();
+                } catch (Exception exception) {
+                    Console.WriteLine(exception);
+                    _unitOfWork.GenericMethods.RollBackTransaction();
+                }
+            });
+
+            return Ok(GetTags(tagRequest.UserId));
         }
 
         [HttpGet("{userId}/Group")]
