@@ -55,22 +55,21 @@ namespace marking_api.API.Controllers.Identity
         }
 
         [HttpPost("{inviteId}/Invite/Accept")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(GroupDM)))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(InviteDM)))]
         public IActionResult AcceptInvite([FromBody] AcceptInvite acceptInvite)
         {
             var cm = new UserCM(_unitOfWork, _logger);
 
             var group = cm.AcceptInvite(acceptInvite.InviteId);
 
-            if (cm == null) {
-                return NoContent();
-            }
-            return Ok(group);
+            var invite = _unitOfWork.Invites.GetById(acceptInvite.InviteId);
+
+            return Ok(invite);
         }
         
-        [HttpGet("{id}/Tags")]
+        [HttpGet("{id}/AvailableTags")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(TagDM)))]
-        public IActionResult GetTags(string id)
+        public IActionResult GetAvailableTags(string id)
         {
             User user = _unitOfWork.Users.GetById(id);
 
@@ -94,6 +93,53 @@ namespace marking_api.API.Controllers.Identity
             }
 
             return Ok(results);
+        }
+
+        [HttpGet("{id}/Tags")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(TagDM)))]
+        public IActionResult GetTags(string id)
+        {
+            User user = _unitOfWork.Users.GetById(id);
+
+            if (user == null) {
+                NoContent();
+            }
+
+            var userTags = _unitOfWork.UserTags.Get(
+                include: (userTags) => userTags.Include((userTags) => userTags.Tag),
+                filter: (userTags) => userTags.UserId == id
+                )
+                .Select((table) => table.Tag)
+                .ToList();
+
+            if (userTags.Count() <= 0) {
+                return NoContent();
+            }
+
+            return Ok(userTags);
+        }
+
+        [HttpDelete("{tagId}/Tag")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(UserDTO)))]
+        public IActionResult Delete(RemoveTagRequest removeTagRequest)
+        {
+            var user = _unitOfWork.Users.GetById(removeTagRequest.UserId);
+
+            if (user == null)
+                return NotFound();
+
+            var rowsToDelete = _unitOfWork.UserTags.Get(
+                filter: (table) => (
+                    table.TagId == removeTagRequest.TagId &&
+                    table.UserId == removeTagRequest.UserId
+                )
+            );
+
+            _unitOfWork.UserTags.DeleteRange(rowsToDelete);
+
+            _unitOfWork.Save();
+
+            return Ok(rowsToDelete);
         }
 
         [HttpPost("Tags")]
