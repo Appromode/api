@@ -56,15 +56,26 @@ namespace marking_api.API.Controllers.Identity
 
         [HttpPost("{inviteId}/Invite/Accept")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(InviteDM)))]
-        public IActionResult AcceptInvite([FromBody] AcceptInvite acceptInvite)
+        public IActionResult AcceptInvite([FromBody] Invite invite)
         {
             var cm = new UserCM(_unitOfWork, _logger);
 
-            var group = cm.AcceptInvite(acceptInvite.InviteId);
+            var group = cm.AcceptInvite(invite.InviteId);
 
-            var invite = _unitOfWork.Invites.GetById(acceptInvite.InviteId);
+            var acceptedInvite = _unitOfWork.Invites.GetById(invite.InviteId);
 
-            return Ok(invite);
+            return Ok(acceptedInvite);
+        }
+
+        [HttpPost("{inviteId}/Invite/Reject")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(InviteDM)))]
+        public IActionResult RejectInvite([FromBody] Invite invite)
+        {
+            var cm = new UserCM(_unitOfWork, _logger);
+
+            var rejectedInvite = cm.RejectInvite(invite.InviteId);
+
+            return Ok(rejectedInvite);
         }
         
         [HttpGet("{id}/AvailableTags")]
