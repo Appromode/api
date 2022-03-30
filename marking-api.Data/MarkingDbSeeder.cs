@@ -105,9 +105,11 @@ namespace marking_api.Data
                 ProfilePicture = profilePic,
                 AccessFailedCount = 0,
                 TwoFactorEnabled = false
-            };
-            user1.PasswordHash = _signInManager.UserManager.PasswordHasher.HashPassword(user1, "Tester!2");
+            };            
             _dbContext.Users.Add(user1);
+            _dbContext.SaveChanges();
+            user1.PasswordHash = _signInManager.UserManager.PasswordHasher.HashPassword(user1, "Tester!2");
+            _dbContext.Users.Update(user1);
             _dbContext.SaveChanges();
 
             User user2 = new User
@@ -131,9 +133,11 @@ namespace marking_api.Data
                 ProfilePicture = profilePic,
                 AccessFailedCount = 0,
                 TwoFactorEnabled = false
-            };
-            user2.PasswordHash = _signInManager.UserManager.PasswordHasher.HashPassword(user2, "Tester!2");
+            };            
             _dbContext.Users.Add(user2);
+            _dbContext.SaveChanges();
+            user2.PasswordHash = _signInManager.UserManager.PasswordHasher.HashPassword(user2, "Tester!2");
+            _dbContext.Users.Update(user2);
             _dbContext.SaveChanges();
 
             User user3 = new User
@@ -158,8 +162,10 @@ namespace marking_api.Data
                 AccessFailedCount = 0,
                 TwoFactorEnabled = false
             };
-            user3.PasswordHash = _signInManager.UserManager.PasswordHasher.HashPassword(user3, "Tester!2");
             _dbContext.Users.Add(user3);
+            _dbContext.SaveChanges();
+            user3.PasswordHash = _signInManager.UserManager.PasswordHasher.HashPassword(user3, "Tester!2");
+            _dbContext.Users.Update(user3);
             _dbContext.SaveChanges();
         }
 
