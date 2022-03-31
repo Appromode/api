@@ -1,4 +1,6 @@
-﻿using marking_api.DataModel.FileSystem;
+﻿using log4net;
+using marking_api.API.Config;
+using marking_api.DataModel.FileSystem;
 using marking_api.Global.Extensions;
 using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Http;
@@ -8,16 +10,17 @@ namespace marking_api.API.Controllers.FileSystem
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class FSFileController : ControllerBase
+    public class FSFileController : BaseController
     {
         private readonly IUnitOfWork _unitOfWork;
-        public FSFileController(IUnitOfWork unitOfWork)
+        public FSFileController(IUnitOfWork unitOfWork, ILog logger) :base(logger)
         {
             _unitOfWork = unitOfWork;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(FSFileDM)))]
+        [ClaimRequirement(MarkingClaimTypes.Permission, "FileSystem")]
         public IActionResult Get()
         {
             return Ok(_unitOfWork.FSFiles.Get());
@@ -25,6 +28,7 @@ namespace marking_api.API.Controllers.FileSystem
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(FSFileDM)))]
+        [ClaimRequirement(MarkingClaimTypes.Permission, "FileSystem")]
         public IActionResult Get(long id)
         {
             var file = _unitOfWork.FSFiles.GetById(id);
@@ -36,6 +40,7 @@ namespace marking_api.API.Controllers.FileSystem
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(FSFileDM)))]
+        [ClaimRequirement(MarkingClaimTypes.Permission, "FileSystem")]
         public IActionResult Post([FromBody] FSFileDM file)
         {
             if (file == null)
@@ -52,6 +57,7 @@ namespace marking_api.API.Controllers.FileSystem
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(FSFileDM)))]
+        [ClaimRequirement(MarkingClaimTypes.Permission, "FileSystem")]
         public IActionResult Put(long id, [FromBody] FSFileDM file)
         {
             if (file == null)
@@ -71,6 +77,7 @@ namespace marking_api.API.Controllers.FileSystem
 
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(FSFileDM)))]
+        [ClaimRequirement(MarkingClaimTypes.Permission, "FileSystem")]
         public IActionResult Delete(long id)
         {
             var file = _unitOfWork.FSFiles.GetById(id);

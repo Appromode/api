@@ -1,4 +1,6 @@
-﻿using marking_api.DataModel.FileSystem;
+﻿using log4net;
+using marking_api.API.Config;
+using marking_api.DataModel.FileSystem;
 using marking_api.Global.Extensions;
 using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Http;
@@ -8,16 +10,17 @@ namespace marking_api.API.Controllers.FileSystem
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class FSFileStateController : ControllerBase
+    public class FSFileStateController : BaseController
     {
         private readonly IUnitOfWork _unitOfWork;
-        public FSFileStateController(IUnitOfWork unitOfWork)
+        public FSFileStateController(IUnitOfWork unitOfWork, ILog logger) : base(logger)
         {
             _unitOfWork = unitOfWork;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(FSFileStateDM)))]
+        [ClaimRequirement(MarkingClaimTypes.Permission, "FileSystem")]
         public IActionResult Get()
         {
             return Ok(_unitOfWork.FSFileStates.Get());
@@ -25,6 +28,7 @@ namespace marking_api.API.Controllers.FileSystem
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(FSFileStateDM)))]
+        [ClaimRequirement(MarkingClaimTypes.Permission, "FileSystem")]
         public IActionResult Get(long id)
         {
             var fileState = _unitOfWork.FSFileStates.GetById(id);
@@ -36,6 +40,7 @@ namespace marking_api.API.Controllers.FileSystem
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(FSFileStateDM)))]
+        [ClaimRequirement(MarkingClaimTypes.Permission, "FileSystem")]
         public IActionResult Post([FromBody] FSFileStateDM fileState)
         {
             if (fileState == null)
@@ -52,6 +57,7 @@ namespace marking_api.API.Controllers.FileSystem
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(FSFileStateDM)))]
+        [ClaimRequirement(MarkingClaimTypes.Permission, "FileSystem")]
         public IActionResult Put(long id, [FromBody] FSFileStateDM fileState)
         {
             if (fileState == null)
@@ -71,6 +77,7 @@ namespace marking_api.API.Controllers.FileSystem
 
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(FSFileStateDM)))]
+        [ClaimRequirement(MarkingClaimTypes.Permission, "FileSystem")]
         public IActionResult Delete(long id)
         {
             var fileState = _unitOfWork.FSFileStates.GetById(id);

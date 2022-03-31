@@ -1,23 +1,26 @@
-﻿using marking_api.Global.Repositories;
+﻿using log4net;
+using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using marking_api.DataModel.Identity;
 using marking_api.Global.Extensions;
+using marking_api.API.Config;
 
 namespace marking_api.API.Controllers.Identity
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class RolePermissionController : ControllerBase
+    public class RolePermissionController : BaseController
     {
         private readonly IUnitOfWork _unitOfWork;
-        public RolePermissionController(IUnitOfWork unitOfWork)
+        public RolePermissionController(IUnitOfWork unitOfWork, ILog logger) : base(logger)
         {
             _unitOfWork = unitOfWork;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(RolePermission)))]
+        [ClaimRequirement(MarkingClaimTypes.Permission, "Identity")]
         public IActionResult Get()
         {
             return Ok(_unitOfWork.RolePermissions.Get());
@@ -25,6 +28,7 @@ namespace marking_api.API.Controllers.Identity
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(RolePermission)))]
+        [ClaimRequirement(MarkingClaimTypes.Permission, "Identity")]
         public IActionResult Get(string id)
         {
             var rolePermission = _unitOfWork.RolePermissions.GetById(id);
@@ -36,6 +40,7 @@ namespace marking_api.API.Controllers.Identity
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(RolePermission)))]
+        [ClaimRequirement(MarkingClaimTypes.Permission, "Identity")]
         public IActionResult Post([FromBody] RolePermission rolePermission)
         {
             if (rolePermission == null)
@@ -52,6 +57,7 @@ namespace marking_api.API.Controllers.Identity
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(RolePermission)))]
+        [ClaimRequirement(MarkingClaimTypes.Permission, "Identity")]
         public IActionResult Put(int id, [FromBody] RolePermission rolePermission)
         {
             if (rolePermission == null)
@@ -71,6 +77,7 @@ namespace marking_api.API.Controllers.Identity
 
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(RolePermission)))]
+        [ClaimRequirement(MarkingClaimTypes.Permission, "Identity")]
         public IActionResult Delete(string id)
         {
             var rolePermission = _unitOfWork.RolePermissions.GetById(id);

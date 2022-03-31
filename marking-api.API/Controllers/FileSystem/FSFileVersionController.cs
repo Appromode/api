@@ -1,23 +1,30 @@
-﻿using marking_api.DataModel.FileSystem;
+﻿using log4net;
+using marking_api.API.Config;
+using marking_api.DataModel.FileSystem;
 using marking_api.Global.Extensions;
 using marking_api.Global.Repositories;
+using marking_api.API.Models.FileSystem;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using marking_api.DataModel.API;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace marking_api.API.Controllers.FileSystem
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class FSFileVersionController : ControllerBase
+    public class FSFileVersionController : BaseController
     {
         private readonly IUnitOfWork _unitOfWork;
-        public FSFileVersionController(IUnitOfWork unitOfWork)
+        public FSFileVersionController(IUnitOfWork unitOfWork, ILog logger) : base(logger)
         {
             _unitOfWork = unitOfWork;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(FSFileVersionDM)))]
+        [ClaimRequirement(MarkingClaimTypes.Permission, "FileSystem")]
         public IActionResult Get()
         {
             return Ok(_unitOfWork.FSFileVersions.Get());
@@ -25,6 +32,7 @@ namespace marking_api.API.Controllers.FileSystem
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(FSFileVersionDM)))]
+        [ClaimRequirement(MarkingClaimTypes.Permission, "FileSystem")]
         public IActionResult Get(long id)
         {
             var fileVersion = _unitOfWork.FSFileVersions.GetById(id);
@@ -34,24 +42,30 @@ namespace marking_api.API.Controllers.FileSystem
                 return Ok(fileVersion);
         }
 
-        [HttpPost]
+        [HttpPost()]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(FSFileVersionDM)))]
-        public IActionResult Post([FromBody] FSFileVersionDM fileVersion)
+        [ClaimRequirement(MarkingClaimTypes.Permission, "FileSystem")]
+        public IActionResult Post([FromBody] FileRequest fileRequest)
         {
-            if (fileVersion == null)
+            if (fileRequest.File == null || fileRequest.GroupId == 0 || fileRequest.UserId == null)
                 return BadRequest();
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            _unitOfWork.FSFileVersions.AddOrUpdate(fileVersion);
-            _unitOfWork.Save();
+            var cm = new FileCM(_unitOfWork, _logger);
 
-            return Ok(fileVersion);
+            Dictionary<FSFileDM, bool> result = cm.SaveFile(fileRequest);
+
+            if (result.Values.FirstOrDefault() == true)
+                return Ok(result.Keys.FirstOrDefault());
+            else
+                return BadRequest("An error occured saving the file");
         }
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(FSFileVersionDM)))]
+        [ClaimRequirement(MarkingClaimTypes.Permission, "FileSystem")]
         public IActionResult Put(long id, [FromBody] FSFileVersionDM fileVersion)
         {
             if (fileVersion == null)
@@ -71,6 +85,7 @@ namespace marking_api.API.Controllers.FileSystem
 
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = (typeof(FSFileVersionDM)))]
+        [ClaimRequirement(MarkingClaimTypes.Permission, "FileSystem")]
         public IActionResult Delete(long id)
         {
             var fileVersion = _unitOfWork.FSFileVersions.GetById(id);
