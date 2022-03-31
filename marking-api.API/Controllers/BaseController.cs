@@ -1,23 +1,16 @@
-﻿using marking_api.Global.Repositories;
+﻿using log4net;
+using marking_api.Global.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace marking_api.API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class BaseController<T> : ControllerBase where T : class
+    public abstract class BaseController : ControllerBase
     {
-        protected IGenericModelRepository<T> _genericModelRepository;
-        protected IGenericViewRepository<T> _genericViewRepository;
+        protected ILog _logger;
 
-        public BaseController(IGenericModelRepository<T> genericModelRepository, IGenericViewRepository<T> genericViewRepository)
+        public BaseController(ILog logger)
         {
-            _genericModelRepository = genericModelRepository;
-            _genericViewRepository = genericViewRepository;
-        }
+            _logger = logger;
+        }        
     }
 }

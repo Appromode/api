@@ -1,18 +1,24 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using marking_api.DataModel.CustomAttributes;
 
 namespace marking_api.DataModel.Identity
 {
+    /// <summary>
+    /// User claim data model
+    /// </summary>
+    [GeneratedController("api/userclaim")]
     [Table("IdUserClaims", Schema = "dbo")]
     public class UserClaim : IdentityUserClaim<string>
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public UserClaim() : base() { }
 
+        /// <summary>
+        /// User object
+        /// </summary>
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
     }
